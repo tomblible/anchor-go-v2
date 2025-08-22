@@ -81,11 +81,8 @@ func (c *IdlSeedConst) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// pub struct IdlSeedArg {
 type IdlSeedArg struct {
-	//     pub path: String,
 	Path string `json:"path"`
-	// }
 }
 
 func (IdlSeedArg) _is_IdlSeed() {}
@@ -123,15 +120,9 @@ func (a *IdlSeedArg) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// pub struct IdlSeedAccount {
 type IdlSeedAccount struct {
-	//	    pub path: String,
-	Path string `json:"path"`
-
-	//	    #[serde(skip_serializing_if = "is_default")]
-	//	    pub account: Option<String>,
+	Path    string         `json:"path"`
 	Account Option[string] `json:"account,omitzero"`
-	//	}
 }
 
 func (IdlSeedAccount) _is_IdlSeed() {}

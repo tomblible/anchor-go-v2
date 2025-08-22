@@ -58,7 +58,7 @@ func OneOf[T any](data []byte, unmarshalers ...func([]byte) (T, error)) (T, erro
 }
 
 func getCallaPath() string {
-	paths := _callPath(10)
+	paths := _callPath(5)
 	if len(paths) == 0 {
 		return ""
 	}

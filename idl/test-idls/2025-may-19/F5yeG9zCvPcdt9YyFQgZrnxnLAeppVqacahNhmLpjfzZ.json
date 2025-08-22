@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9ffc734d64e5901be26ba5d0de6903467a9305f06f51a2c1461873250cd7a30a
-size 458
+{"version":"0.1.0","name":"token_mint_example","instructions":[{"name":"createMintWithFrozenDefault","accounts":[{"name":"mint","isMut":true,"isSigner":false},{"name":"authority","isMut":true,"isSigner":true},{"name":"mintAuthority","isMut":false,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false},{"name":"rent","isMut":false,"isSigner":false}],"args":[{"name":"decimals","type":"u8"},{"name":"freezeAuthority","type":"publicKey"}]}]}

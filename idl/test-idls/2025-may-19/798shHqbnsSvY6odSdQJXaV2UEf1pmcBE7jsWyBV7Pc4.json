@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:15d95d6b240f474bf46ff730021c24b0a8532f7ea852be10510e18a86715b4dd
-size 272
+{"address":"798shHqbnsSvY6odSdQJXaV2UEf1pmcBE7jsWyBV7Pc4","metadata":{"name":"securitytxt","version":"0.1.0","spec":"0.1.0","description":"Created with Anchor"},"instructions":[{"name":"initialize","discriminator":[175,175,109,31,13,152,155,237],"accounts":[],"args":[]}]}

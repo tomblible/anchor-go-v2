@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4eb1c2dd42bfc3e2d52d7e05cee02b794a9a609d37c606e690ffa25b0dddf498
-size 562
+{"address":"jg82rRko6Hu1KqZ47RR95Jrq1cfqBhaAPXStseajmfQ","metadata":{"name":"early_access","version":"0.1.0","spec":"0.1.0","description":"A simple program for early access"},"instructions":[{"name":"early_access","discriminator":[131,91,25,12,72,15,12,17],"accounts":[{"name":"signer","signer":true}],"args":[]}],"events":[{"name":"EarlyAccessEvent","discriminator":[144,229,195,161,250,75,206,251]}],"types":[{"name":"EarlyAccessEvent","type":{"kind":"struct","fields":[{"name":"hashed_pubkey","type":{"array":["u8",32]}},{"name":"timestamp","type":"i64"}]}}]}

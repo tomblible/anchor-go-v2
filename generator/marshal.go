@@ -44,7 +44,7 @@ func gen_MarshalWithEncoder_struct(
 				}
 				switch fields := fields.(type) {
 				case idl.IdlDefinedFieldsNamed:
-					gen_marshal_DefinedFieldsNamed(
+					genMarshalDefinedfieldsnamed(
 						body,
 						fields,
 						checkNil,
@@ -59,7 +59,7 @@ func gen_MarshalWithEncoder_struct(
 					)
 				case idl.IdlDefinedFieldsTuple:
 					convertedFields := tupleToFieldsNamed(fields)
-					gen_marshal_DefinedFieldsNamed(
+					genMarshalDefinedfieldsnamed(
 						body,
 						convertedFields,
 						checkNil,
@@ -82,21 +82,9 @@ func gen_MarshalWithEncoder_struct(
 				body.Return(Nil())
 			})
 	}
+
 	{
 		code.Line().Line()
-		// also generate a
-		// func (obj <type>) Marshal() ([]byte, error) {
-		// 	return obj.MarshalWithEncoder(bin.NewBorshEncoder(buf))
-		// }
-		// func (obj <type>) Marshal() ([]byte, error) {
-		// 	buf := new(bytes.Buffer)
-		// enc := bin.NewBorshEncoder(buf)
-		// err := enc.Encode(meta)
-		// if err != nil {
-		//   return nil, err
-		// }
-		// return buf.Bytes(), nil
-		// }
 		code.Func().Params(Id("obj").Id(receiverTypeName)).Id("Marshal").
 			Params(
 				ListFunc(func(results *Group) {
@@ -134,7 +122,7 @@ func gen_MarshalWithEncoder_struct(
 	return code
 }
 
-func gen_marshal_DefinedFieldsNamed(
+func genMarshalDefinedfieldsnamed(
 	body *Group,
 	fields idl.IdlDefinedFieldsNamed,
 	checkNil bool,
@@ -156,8 +144,9 @@ func gen_marshal_DefinedFieldsNamed(
 			case *idltype.Defined:
 				enumTypeName := field.Ty.(*idltype.Defined).Name
 				body.BlockFunc(func(argBody *Group) {
-					argBody.Err().Op(":=").Id(formatEnumEncoderName(enumTypeName)).Call(Id(encoderVariableName), nameFormatter(field))
+					// 转化思路信息
 					argBody.If(
+						Err().Op("=").Id(formatEnumEncoderName(enumTypeName)).Call(Id(encoderVariableName), nameFormatter(field)),
 						Err().Op("!=").Nil(),
 					).Block(
 						ReturnFunc(
@@ -165,8 +154,8 @@ func gen_marshal_DefinedFieldsNamed(
 								if returnNilErr {
 									returnBody.Nil()
 								}
-								returnBody.Qual(PkgAnchorGoErrors, "NewField").Call(
-									Lit(exportedArgName),
+								returnBody.Qual("fmt", "Errorf").Call(
+									Lit("error while marshaling"+exportedArgName+":%w"),
 									Err(),
 								)
 							},
@@ -175,18 +164,17 @@ func gen_marshal_DefinedFieldsNamed(
 				})
 			case *idltype.Array:
 				enumTypeName := field.Ty.(*idltype.Array).Type.(*idltype.Defined).Name
-				// TODO: handle array length, which is defined in the type.
 				body.BlockFunc(func(argBody *Group) {
 					argBody.For(
 						Id("i").Op(":=").Lit(0),
 						Id("i").Op("<").Len(nameFormatter(field)),
 						Id("i").Op("++"),
 					).BlockFunc(func(forBody *Group) {
-						forBody.Err().Op(":=").Id(formatEnumEncoderName(enumTypeName)).Call(
-							Id(encoderVariableName),
-							nameFormatter(field).Index(Id("i")),
-						)
 						forBody.If(
+							forBody.Err().Op("=").Id(formatEnumEncoderName(enumTypeName)).Call(
+								Id(encoderVariableName),
+								nameFormatter(field).Index(Id("i")),
+							),
 							Err().Op("!=").Nil(),
 						).Block(
 							ReturnFunc(
@@ -194,12 +182,10 @@ func gen_marshal_DefinedFieldsNamed(
 									if returnNilErr {
 										returnBody.Nil()
 									}
-									returnBody.Qual(PkgAnchorGoErrors, "NewField").Call(
-										Lit(exportedArgName),
-										Qual(PkgAnchorGoErrors, "NewIndex").Call(
-											Id("i"),
-											Err(),
-										),
+									returnBody.Qual("fmt", "Errorf").Call(
+										Lit("error while marshaling "+exportedArgName+"-%d: %w"),
+										Id("i"),
+										Err(),
 									)
 								},
 							),
@@ -209,10 +195,11 @@ func gen_marshal_DefinedFieldsNamed(
 			case *idltype.Vec:
 				enumTypeName := field.Ty.(*idltype.Vec).Vec.(*idltype.Defined).Name
 				body.BlockFunc(func(argBody *Group) {
-					argBody.Err().Op(":=").Id(encoderVariableName).Dot("WriteLength").Call(
-						Len(nameFormatter(field)),
-					)
+
 					argBody.If(
+						Err().Op("=").Id(encoderVariableName).Dot("WriteLength").Call(
+							Len(nameFormatter(field)),
+						),
 						Err().Op("!=").Nil(),
 					).Block(
 						ReturnFunc(
@@ -220,12 +207,9 @@ func gen_marshal_DefinedFieldsNamed(
 								if returnNilErr {
 									returnBody.Nil()
 								}
-								returnBody.Qual(PkgAnchorGoErrors, "NewField").Call(
-									Lit(exportedArgName),
-									Qual("fmt", "Errorf").Call(
-										Lit("error while writing vector length: %w"),
-										Err(),
-									),
+								returnBody.Qual("fmt", "Errorf").Call(
+									Lit("error while marshaling "+exportedArgName+" length: %w"),
+									Err(),
 								)
 							},
 						),
@@ -235,11 +219,11 @@ func gen_marshal_DefinedFieldsNamed(
 						Id("i").Op("<").Len(nameFormatter(field)),
 						Id("i").Op("++"),
 					).BlockFunc(func(forBody *Group) {
-						forBody.Err().Op(":=").Id(formatEnumEncoderName(enumTypeName)).Call(
-							Id(encoderVariableName),
-							nameFormatter(field).Index(Id("i")),
-						)
 						forBody.If(
+							Err().Op("=").Id(formatEnumEncoderName(enumTypeName)).Call(
+								Id(encoderVariableName),
+								nameFormatter(field).Index(Id("i")),
+							),
 							Err().Op("!=").Nil(),
 						).Block(
 							ReturnFunc(
@@ -247,12 +231,10 @@ func gen_marshal_DefinedFieldsNamed(
 									if returnNilErr {
 										returnBody.Nil()
 									}
-									returnBody.Qual(PkgAnchorGoErrors, "NewField").Call(
-										Lit(exportedArgName),
-										Qual(PkgAnchorGoErrors, "NewIndex").Call(
-											Id("i"),
-											Err(),
-										),
+									returnBody.Qual("fmt", "Errorf").Call(
+										Lit("error while marshaling "+exportedArgName+"-%d: %w"),
+										Id("i"),
+										Err(),
 									)
 								},
 							),
@@ -272,50 +254,47 @@ func gen_marshal_DefinedFieldsNamed(
 					body.BlockFunc(func(optGroup *Group) {
 						// if nil:
 						optGroup.If(nameFormatter(field).Op("==").Nil()).Block(
-							Err().Op("=").Id(encoderVariableName).Dot(optionalityWriterName).Call(False()),
-							If(Err().Op("!=").Nil()).Block(
+							If(
+								Err().Op("=").Id(encoderVariableName).Dot(optionalityWriterName).Call(False()),
+								Err().Op("!=").Nil()).Block(
 								ReturnFunc(
 									func(returnBody *Group) {
 										if returnNilErr {
 											returnBody.Nil()
 										}
-										returnBody.Qual(PkgAnchorGoErrors, "NewOption").Call(
-											Lit(exportedArgName),
-											Qual("fmt", "Errorf").Call(
-												Lit("error while encoding optionality: %w"),
-												Err(),
-											),
+										returnBody.Qual("fmt", "Errorf").Call(
+											Lit("error while marshaling "+exportedArgName+" optionality: %w"),
+											Err(),
 										)
 									},
 								),
 							),
 						).Else().Block(
-							Err().Op("=").Id(encoderVariableName).Dot(optionalityWriterName).Call(True()),
-							If(Err().Op("!=").Nil()).Block(
+							If(
+								Err().Op("=").Id(encoderVariableName).Dot(optionalityWriterName).Call(True()),
+								Err().Op("!=").Nil()).Block(
 								ReturnFunc(
 									func(returnBody *Group) {
 										if returnNilErr {
 											returnBody.Nil()
 										}
-										returnBody.Qual(PkgAnchorGoErrors, "NewOption").Call(
-											Lit(exportedArgName),
-											Qual("fmt", "Errorf").Call(
-												Lit("error while encoding optionality: %w"),
-												Err(),
-											),
+										returnBody.Qual("fmt", "Errorf").Call(
+											Lit("error while marshaling "+exportedArgName+" optionality: %w"),
+											Err(),
 										)
 									},
 								),
 							),
-							Err().Op("=").Id(encoderVariableName).Dot("Encode").Call(nameFormatter(field)),
-							If(Err().Op("!=").Nil()).Block(
+							If(
+								Err().Op("=").Id(encoderVariableName).Dot("Encode").Call(nameFormatter(field)),
+								Err().Op("!=").Nil()).Block(
 								ReturnFunc(
 									func(returnBody *Group) {
 										if returnNilErr {
 											returnBody.Nil()
 										}
-										returnBody.Qual(PkgAnchorGoErrors, "NewField").Call(
-											Lit(exportedArgName),
+										returnBody.Qual("fmt", "Errorf").Call(
+											Lit("error while marshaling "+exportedArgName+": %w"),
 											Err(),
 										)
 									},
@@ -325,34 +304,32 @@ func gen_marshal_DefinedFieldsNamed(
 					})
 				} else {
 					body.BlockFunc(func(optGroup *Group) {
-						// TODO: make optional fields of accounts a pointer.
 						// Write as if not nil:
-						optGroup.Err().Op("=").Id(encoderVariableName).Dot(optionalityWriterName).Call(True())
-						optGroup.If(Err().Op("!=").Nil()).Block(
+						optGroup.If(
+							Err().Op("=").Id(encoderVariableName).Dot(optionalityWriterName).Call(True()),
+							Err().Op("!=").Nil()).Block(
 							ReturnFunc(
 								func(returnBody *Group) {
 									if returnNilErr {
 										returnBody.Nil()
 									}
-									returnBody.Qual(PkgAnchorGoErrors, "NewOption").Call(
-										Lit(exportedArgName),
-										Qual("fmt", "Errorf").Call(
-											Lit("error while encoding optionality: %w"),
-											Err(),
-										),
+									returnBody.Qual("fmt", "Errorf").Call(
+										Lit("error while encoding marshaling"+exportedArgName+" option: %w"),
+										Err(),
 									)
 								},
 							),
 						)
-						optGroup.Err().Op("=").Id(encoderVariableName).Dot("Encode").Call(nameFormatter(field))
-						optGroup.If(Err().Op("!=").Nil()).Block(
+						optGroup.If(
+							Err().Op("=").Id(encoderVariableName).Dot("Encode").Call(nameFormatter(field)),
+							Err().Op("!=").Nil()).Block(
 							ReturnFunc(
 								func(returnBody *Group) {
 									if returnNilErr {
 										returnBody.Nil()
 									}
-									returnBody.Qual(PkgAnchorGoErrors, "NewField").Call(
-										Lit(exportedArgName),
+									returnBody.Qual("fmt", "Errorf").Call(
+										Lit("error while marshaling "+exportedArgName+":%w"),
 										Err(),
 									)
 								},
@@ -361,15 +338,16 @@ func gen_marshal_DefinedFieldsNamed(
 					})
 				}
 			} else {
-				body.Err().Op("=").Id(encoderVariableName).Dot("Encode").Call(nameFormatter(field))
-				body.If(Err().Op("!=").Nil()).Block(
+				body.If(
+					Err().Op("=").Id(encoderVariableName).Dot("Encode").Call(nameFormatter(field)),
+					Err().Op("!=").Nil()).Block(
 					ReturnFunc(
 						func(returnBody *Group) {
 							if returnNilErr {
 								returnBody.Nil()
 							}
-							returnBody.Qual(PkgAnchorGoErrors, "NewField").Call(
-								Lit(exportedArgName),
+							returnBody.Qual("fmt", "Errorf").Call(
+								Lit("error while marshaling "+exportedArgName+":%w"),
 								Err(),
 							)
 						},

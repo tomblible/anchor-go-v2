@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3e2b640016937dc8484dd797fb85949f6816c661afeb2d2dfbe6fe587fd3f91b
-size 320
+{"version":"0.1.0","name":"assert_program","instructions":[{"name":"assertBalanceGte","accounts":[{"name":"account","isMut":true,"isSigner":false}],"args":[{"name":"amount","type":"u64"}]},{"name":"assertBalanceLte","accounts":[{"name":"account","isMut":true,"isSigner":false}],"args":[{"name":"amount","type":"u64"}]}]}

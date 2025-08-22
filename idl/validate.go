@@ -300,32 +300,6 @@ func ValidateIDL(idl *Idl) *ValidationErrors {
 		}
 	}
 	{
-		// check that all account discriminators are 8 bytes long
-		for _, account := range idl.Accounts {
-			if len(account.Discriminator) != 8 {
-				errs.AddOtherError(
-					fmt.Errorf(
-						"Account %s has invalid discriminator length: %d, expected 8 bytes",
-						account.Name,
-						len(account.Discriminator),
-					),
-				)
-			}
-		}
-		// check that all event discriminators are 8 bytes long
-		for _, event := range idl.Events {
-			if len(event.Discriminator) != 8 {
-				errs.AddOtherError(
-					fmt.Errorf(
-						"Event %s has invalid discriminator length: %d, expected 8 bytes",
-						event.Name,
-						len(event.Discriminator),
-					),
-				)
-			}
-		}
-	}
-	{
 		// cannot have duplicate instruction names
 		instructionNames := new(Strings)
 		formattedInstructionNames := new(Strings)

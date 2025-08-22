@@ -16,7 +16,6 @@ type IdlInstructionAccountItem interface {
 	_is_IdlInstructionAccountItem()
 }
 
-// pub struct IdlInstructionAccount {
 type IdlInstructionAccount struct {
 	//	    pub name: String,
 	Name string `json:"name"`

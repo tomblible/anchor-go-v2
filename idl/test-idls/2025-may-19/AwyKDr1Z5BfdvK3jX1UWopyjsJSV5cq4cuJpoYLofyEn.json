@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3ac956b2f81757de4f7b3e56aa98dda68e905ca5b330f78c19361fe04eee0b2d
-size 844
+{"version":"0.1.0","name":"solana_validator_dao","instructions":[{"name":"stake","accounts":[{"name":"governanceId","isMut":false,"isSigner":false},{"name":"governanceNativeTreasuryAccount","isMut":true,"isSigner":true},{"name":"daoStakeAccount","isMut":true,"isSigner":false},{"name":"payer","isMut":true,"isSigner":true},{"name":"validatorVoteKey","isMut":false,"isSigner":false},{"name":"stakeConfig","isMut":false,"isSigner":false},{"name":"governanceProgram","isMut":false,"isSigner":false},{"name":"stakeProgram","isMut":false,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false},{"name":"rentProgram","isMut":false,"isSigner":false},{"name":"clockProgram","isMut":false,"isSigner":false},{"name":"stakeHistory","isMut":false,"isSigner":false}],"args":[{"name":"seed","type":"u8"},{"name":"lamports","type":"u64"}]}]}

@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d0ff26b631ac9ab0e851f3fd5a05a2f98c4952119fb4343981ce0e79b1ff6799
-size 691
+{"version":"0.1.0","name":"custom_program","instructions":[{"name":"abc","accounts":[{"name":"a","isMut":false,"isSigner":false},{"name":"b","isMut":false,"isSigner":false},{"name":"c","isMut":true,"isSigner":false},{"name":"d","isMut":false,"isSigner":false},{"name":"e","isMut":true,"isSigner":false},{"name":"f","isMut":true,"isSigner":false},{"name":"g","isMut":true,"isSigner":false},{"name":"h","isMut":true,"isSigner":true},{"name":"i","isMut":false,"isSigner":false},{"name":"j","isMut":false,"isSigner":false},{"name":"k","isMut":false,"isSigner":false},{"name":"l","isMut":false,"isSigner":false},{"name":"m","isMut":false,"isSigner":false}],"args":[{"name":"xyz","type":"u64"}]}]}

@@ -1,7 +1,10 @@
 package generator
 
 import (
+	"encoding/binary"
 	"fmt"
+	"github.com/gagliardetto/anchor-go/sighash"
+	bin "github.com/gagliardetto/binary"
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/anchor-go/idl"
@@ -13,21 +16,43 @@ var Debug = false // Set to true to enable debug logging.
 type Generator struct {
 	options *GeneratorOptions
 	idl     *idl.Idl
+	Pad     map[string]bool
 }
 
 type GeneratorOptions struct {
-	OutputDir   string            // Directory to write the generated code to.
-	Package     string            // Package name for the generated code.
-	ModPath     string            // Module path for the generated code. E.g. "github.com/gagliardetto/mysolana-program-go"
-	ProgramId   *solana.PublicKey // Program ID to use in the generated code.
-	ProgramName string            // Name of the program for the generated code.
-	SkipGoMod   bool              // If true, skip generating the go.mod file.
+	OutputDir                 string             // Directory to write the generated code to.
+	Package                   string             // Package name for the generated code.
+	ModPath                   string             // Module path for the generated code. E.g. "github.com/gagliardetto/mysolana-program-go"
+	ProgramId                 *solana.PublicKey  // Program ID to use in the generated code.
+	ProgramName               string             // Name of the program for the generated code.
+	SkipGoMod                 bool               // If true, skip generating the go.mod file.
+	InstructionTypeIDEncoding bin.TypeIDEncoding // 指令编码类型
 }
 
 func NewGenerator(idl *idl.Idl, options *GeneratorOptions) *Generator {
+	for i, instruction := range idl.Instructions {
+		if !instruction.Discriminator.IsEmpty() {
+			continue
+		}
+		switch options.InstructionTypeIDEncoding {
+		case bin.Uvarint32TypeIDEncoding:
+			binary.AppendUvarint(instruction.Discriminator, uint64(i))
+		case bin.Uint32TypeIDEncoding:
+			binary.LittleEndian.AppendUint32(instruction.Discriminator, uint32(i))
+		case bin.Uint8TypeIDEncoding:
+			instruction.Discriminator = []byte{uint8(i)}
+		case bin.AnchorTypeIDEncoding:
+			toBeHashed := sighash.ToSnakeForSighash(instruction.Name)
+			id := bin.SighashTypeID(bin.SIGHASH_GLOBAL_NAMESPACE, toBeHashed)
+			instruction.Discriminator = id[:]
+		case bin.NoTypeIDEncoding:
+			instruction.Discriminator = []byte{}
+		}
+	}
 	return &Generator{
 		idl:     idl,
 		options: options,
+		Pad:     make(map[string]bool),
 	}
 }
 
@@ -70,48 +95,57 @@ func (g *Generator) Generate() (*Output, error) {
 				registerComplexEnums(typ)
 			}
 		}
-		if len(g.idl.Docs) > 0 {
+		{
 			file, err := g.genfile_doc()
 			if err != nil {
 				return nil, err
 			}
 			output.Files = append(output.Files, file)
 		}
-		if len(g.idl.Accounts) > 0 {
-			file, err := g.genfile_accounts()
+		{
+			file, err := g.genfile_pda()
 			if err != nil {
 				return nil, err
 			}
 			output.Files = append(output.Files, file)
 		}
-		if len(g.idl.Events) > 0 {
-			file, err := g.genfile_events()
+
+		//if g.idl.Accounts != nil && len(g.idl.Accounts) > 0 {
+		//	file, err := g.genFileAccounts()
+		//	if err != nil {
+		//		return nil, err
+		//	}
+		//	output.Files = append(output.Files, file)
+		//}
+		//
+		//if g.idl.Events != nil && len(g.idl.Events) > 0 {
+		//	file, err := g.genfile_events()
+		//	if err != nil {
+		//		return nil, err
+		//	}
+		//	output.Files = append(output.Files, file)
+		//}
+		{
+			files, err := g.genfile_types()
 			if err != nil {
 				return nil, err
 			}
-			output.Files = append(output.Files, file)
+			output.Files = append(output.Files, files...)
 		}
 		{
-			file, err := g.genfile_types()
+			file, err := g.genDiscriminators()
 			if err != nil {
 				return nil, err
 			}
 			output.Files = append(output.Files, file)
 		}
-		{
-			file, err := g.gen_discriminators()
-			if err != nil {
-				return nil, err
-			}
-			output.Files = append(output.Files, file)
-		}
-		{
-			file, err := g.gen_fetchers()
-			if err != nil {
-				return nil, err
-			}
-			output.Files = append(output.Files, file)
-		}
+		//{
+		//	file, err := g.gen_fetchers()
+		//	if err != nil {
+		//		return nil, err
+		//	}
+		//	output.Files = append(output.Files, file)
+		//}
 		{
 			file, err := g.gen_errors()
 			if err != nil {
@@ -133,20 +167,21 @@ func (g *Generator) Generate() (*Output, error) {
 			}
 			output.Files = append(output.Files, file)
 		}
+
 		{
-			file, err := g.gen_instructions()
+			files, err := g.genInstructionFile()
 			if err != nil {
 				return nil, err
 			}
-			output.Files = append(output.Files, file)
+			output.Files = append(output.Files, files...)
 		}
-		if g.options.ProgramId != nil {
-			file, err := g.genfile_programID(*g.options.ProgramId)
-			if err != nil {
-				return nil, err
-			}
-			output.Files = append(output.Files, file)
+
+		file, err := g.genFileProgramId(g.options.ProgramId)
+		if err != nil {
+			return nil, err
 		}
+		output.Files = append(output.Files, file)
+
 		if !g.options.SkipGoMod {
 			goMod, err := g.gen_gomod()
 			if err != nil {

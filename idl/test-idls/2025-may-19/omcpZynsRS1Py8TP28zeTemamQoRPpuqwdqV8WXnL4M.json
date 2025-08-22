@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4bd4b3bbdd09a1c9dca2d39006ae3b4091f02271ad9666ebbe14950270a6110a
-size 664
+{"address":"omcpZynsRS1Py8TP28zeTemamQoRPpuqwdqV8WXnL4M","metadata":{"name":"3r0bre.accretion.xyz","version":"0.1.0","spec":"0.1.0"},"instructions":[{"name":"one","discriminator":[64],"accounts":[{"name":"three","writable":true},{"name":"asd","writable":true,"signer":true},{"name":"assss","writable":true,"signer":true}],"args":[{"name":"a","type":"bytes"}]},{"name":"two","discriminator":[255],"accounts":[{"name":"four"}],"args":[{"name":"a","type":"bytes"}]}],"accounts":[{"name":"dong","discriminator":[1,2,3,4,5,6,7,9]}],"errors":[{"code":6000,"name":"a","msg":"b"}],"types":[{"name":"dong","type":{"kind":"struct","fields":[{"name":"donk","type":"u64"}]}}]}

@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:637a23588d7c12a032866d212fdb3466bb834829a2b97adcc19b8b461a874285
-size 782
+{"version":"0.1.0","name":"whatsthememe","instructions":[{"name":"initialize","accounts":[{"name":"dataAccount","isMut":true,"isSigner":true},{"name":"user","isMut":true,"isSigner":true},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"data","type":"string"}]},{"name":"setData","accounts":[{"name":"user","isMut":true,"isSigner":true},{"name":"dataAccount","isMut":true,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false},{"name":"receiverAccount","isMut":true,"isSigner":false}],"args":[{"name":"data","type":"string"}]}],"accounts":[{"name":"DataAccount","type":{"kind":"struct","fields":[{"name":"data","type":"string"}]}}],"errors":[{"code":6000,"name":"InvalidReceivingAddress","msg":"Incorrect receiving address for the fee."}]}

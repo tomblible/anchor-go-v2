@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fbd6639271c40869e9b6f7ca59528fdd6ddb9b25a82eecb12fd889343a0993e0
-size 745
+{"version":"0.1.0","name":"dynamic_fees","instructions":[{"name":"storeSolBalance","accounts":[{"name":"state","isMut":true,"isSigner":true},{"name":"user","isMut":true,"isSigner":true},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[]},{"name":"takeFee","accounts":[{"name":"state","isMut":true,"isSigner":false},{"name":"user","isMut":true,"isSigner":true},{"name":"feeReceiver","isMut":true,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"feePercentage","type":"u64"},{"name":"minFee","type":"u64"}]}],"accounts":[{"name":"State","type":{"kind":"struct","fields":[{"name":"preBalance","type":"u64"}]}}],"errors":[{"code":6000,"name":"CalculationError","msg":"Calculation error."}]}

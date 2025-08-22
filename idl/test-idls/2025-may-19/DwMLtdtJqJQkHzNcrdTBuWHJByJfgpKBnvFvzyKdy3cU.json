@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:03b3e35625c4ee04559d1b764f9c3207ce068d850eb92d424bb5c366ca73efaa
-size 724
+{"address":"DwMLtdtJqJQkHzNcrdTBuWHJByJfgpKBnvFvzyKdy3cU","metadata":{"name":"mctp_payload_writer","version":"0.1.0","spec":"0.1.0","description":"Created with Anchor"},"instructions":[{"name":"close","discriminator":[98,165,201,177,108,65,206,96],"accounts":[{"name":"payer","writable":true,"signer":true},{"name":"payload","writable":true}],"args":[{"name":"nonce","type":"u16"}]},{"name":"create_simple","discriminator":[202,39,193,48,193,201,58,114],"accounts":[{"name":"payer","writable":true,"signer":true},{"name":"payload","writable":true},{"name":"system_program"}],"args":[{"name":"nonce","type":"u16"},{"name":"data","type":"bytes"}]}],"errors":[{"code":6000,"name":"InvalidPda","msg":"Invalid PDA for payload"}]}

@@ -2,7 +2,6 @@ package generator
 
 import (
 	"fmt"
-
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/anchor-go/idl"
 	"github.com/gagliardetto/anchor-go/idl/idltype"
@@ -59,6 +58,10 @@ func FormatInstructionDiscriminatorName(exportedInstructionName string) string {
 	return formatDiscriminatorName("Instruction", exportedInstructionName)
 }
 
+func FormatTypeIDDiscriminatorName(exportedInstructionName string) string {
+	return formatDiscriminatorName("TypeID", exportedInstructionName)
+}
+
 func formatBuilderFuncName(insExportedName string) string {
 	return "New" + insExportedName + "InstructionBuilder"
 }
@@ -69,6 +72,18 @@ func formatEnumParserName(enumTypeName string) string {
 
 func formatEnumEncoderName(enumTypeName string) string {
 	return "Encode" + enumTypeName
+}
+
+func formatPadEncoderName(padName string) string {
+	return "Find" + tools.ToCamelUpper(padName) + "Address"
+}
+
+func formatMustPadEncoderName(padName string) string {
+	return "MustFind" + tools.ToCamelUpper(padName) + "Address"
+}
+
+func formatGlobalPadEncoderName(padName string) string {
+	return tools.ToCamelUpper(padName) + "Address"
 }
 
 func gen_UnmarshalWithDecoder_struct(
@@ -238,19 +253,13 @@ func gen_unmarshal_DefinedFieldsNamed(
 		}
 
 		if isComplexEnum(field.Ty) || (IsArray(field.Ty) && isComplexEnum(field.Ty.(*idltype.Array).Type)) || (IsVec(field.Ty) && isComplexEnum(field.Ty.(*idltype.Vec).Vec)) {
-			// TODO: this assumes this cannot be an option;
 			// - check whether this is an option?
 			switch field.Ty.(type) {
 			case *idltype.Defined:
 				enumName := field.Ty.(*idltype.Defined).Name
 				body.BlockFunc(func(argBody *Group) {
-					{
-						argBody.Var().Err().Error()
-						argBody.List(
-							Id("obj").Dot(exportedArgName),
-							Err(),
-						).Op("=").Id(formatEnumParserName(enumName)).Call(Id("decoder"))
-					}
+					argBody.Var().Err().Error()
+					argBody.List(Id("obj").Dot(exportedArgName), Err()).Op("=").Id(formatEnumParserName(enumName)).Call(Id("decoder"))
 					argBody.If(
 						Err().Op("!=").Nil(),
 					).Block(
@@ -270,14 +279,14 @@ func gen_unmarshal_DefinedFieldsNamed(
 							Id("obj").Dot(exportedArgName).Index(Id("i")),
 							Err(),
 						).Op("=").Id(formatEnumParserName(enumTypeName)).Call(Id("decoder"))
+
 						forBody.If(Err().Op("!=").Nil()).Block(
 							Return(
-								Qual(PkgAnchorGoErrors, "NewField").Call(
+								Qual("fmt", "Errorf").Call(
+									Lit("failed to reading field [%s-%d]: %w"),
 									Lit(exportedArgName),
-									Qual(PkgAnchorGoErrors, "NewIndex").Call(
-										Id("i"),
-										Err(),
-									),
+									Id("i"),
+									Err(),
 								),
 							),
 						)
@@ -290,12 +299,9 @@ func gen_unmarshal_DefinedFieldsNamed(
 					argBody.List(Id("vecLen"), Err()).Op(":=").Id("decoder").Dot("ReadLength").Call()
 					argBody.If(Err().Op("!=").Nil()).Block(
 						Return(
-							Qual(PkgAnchorGoErrors, "NewField").Call(
-								Lit(exportedArgName),
-								Qual("fmt", "Errorf").Call(
-									Lit("error while reading vector length: %w"),
-									Err(),
-								),
+							Qual("fmt", "Errorf").Call(
+								Lit("error while unmarshaling"+exportedArgName+":%w"),
+								Err(),
 							),
 						),
 					)
@@ -307,18 +313,18 @@ func gen_unmarshal_DefinedFieldsNamed(
 						Id("i").Op("<").Id("vecLen"),
 						Id("i").Op("++"),
 					).BlockFunc(func(forBody *Group) {
-						forBody.List(
-							Id("obj").Dot(exportedArgName).Index(Id("i")),
-							Err(),
-						).Op("=").Id(formatEnumParserName(enumTypeName)).Call(Id("decoder"))
-						forBody.If(Err().Op("!=").Nil()).Block(
+
+						forBody.If(
+							List(
+								Id("obj").Dot(exportedArgName).Index(Id("i")),
+								Err(),
+							).Op("=").Id(formatEnumParserName(enumTypeName)).Call(Id("decoder")),
+							Err().Op("!=").Nil()).Block(
 							Return(
-								Qual(PkgAnchorGoErrors, "NewField").Call(
-									Lit(exportedArgName),
-									Qual(PkgAnchorGoErrors, "NewIndex").Call(
-										Id("i"),
-										Err(),
-									),
+								Qual("fmt", "Errorf").Call(
+									Lit("error while unmarshaling "+exportedArgName+"-%d:%w"),
+									Id("i"),
+									Err(),
 								),
 							),
 						)
@@ -340,21 +346,20 @@ func gen_unmarshal_DefinedFieldsNamed(
 					optGroup.List(Id("ok"), Err()).Op(":=").Id("decoder").Dot(optionalityReaderName).Call()
 					optGroup.If(Err().Op("!=").Nil()).Block(
 						Return(
-							Qual(PkgAnchorGoErrors, "NewOption").Call(
-								Lit(exportedArgName),
-								Qual("fmt", "Errorf").Call(
-									Lit("error while reading optionality: %w"),
-									Err(),
-								),
+							// fmt.Errorf("failed to serialize argsParam (%T): %w", argsParam, err)
+							Qual("fmt", "Errorf").Call(
+								Lit("error while unmarshaling "+exportedArgName+":%w"),
+								Err(),
 							),
 						),
 					)
 					optGroup.If(Id("ok")).Block(
-						Err().Op("=").Id("decoder").Dot("Decode").Call(Op("&").Id("obj").Dot(exportedArgName)),
-						If(Err().Op("!=").Nil()).Block(
+						If(
+							Err().Op("=").Id("decoder").Dot("Decode").Call(Op("&").Id("obj").Dot(exportedArgName)),
+							Err().Op("!=").Nil()).Block(
 							Return(
-								Qual(PkgAnchorGoErrors, "NewField").Call(
-									Lit(exportedArgName),
+								Qual("fmt", "Errorf").Call(
+									Lit("error while unmarshaling "+exportedArgName+":%w"),
 									Err(),
 								),
 							),
@@ -362,11 +367,12 @@ func gen_unmarshal_DefinedFieldsNamed(
 					)
 				})
 			} else {
-				body.Err().Op("=").Id("decoder").Dot("Decode").Call(Op("&").Id("obj").Dot(exportedArgName))
-				body.If(Err().Op("!=").Nil()).Block(
+				body.If(
+					Err().Op("=").Id("decoder").Dot("Decode").Call(Op("&").Id("obj").Dot(exportedArgName)),
+					Err().Op("!=").Nil()).Block(
 					Return(
-						Qual(PkgAnchorGoErrors, "NewField").Call(
-							Lit(exportedArgName),
+						Qual("fmt", "Errorf").Call(
+							Lit("error while unmarshaling "+exportedArgName+":%w"),
 							Err(),
 						),
 					),

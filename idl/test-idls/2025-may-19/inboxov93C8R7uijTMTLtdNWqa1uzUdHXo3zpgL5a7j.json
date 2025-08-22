@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7de3ca908c374ae2b9ba384d9af5088d4a7446121305d9dc6da33bc13ab7ce70
-size 507
+{"address":"inboxov93C8R7uijTMTLtdNWqa1uzUdHXo3zpgL5a7j","metadata":{"name":"inbox","version":"0.1.0","spec":"0.1.0","description":"The HyperGrid Inbox Program periodically logs Merkle Root updates from the HyperGrid Shared State Network for further fraud proof verification."},"instructions":[{"name":"addblock","discriminator":[84,146,51,231,211,192,208,51],"accounts":[{"name":"user","signer":true}],"args":[{"name":"slot","type":"u64"},{"name":"hash","type":"string"},{"name":"from","type":"string"}]}]}

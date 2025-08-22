@@ -79,8 +79,8 @@ func (ix *IdlInstruction) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *IdlInstruction) ComputeDiscriminator() (out [8]byte) {
-	discrim := bin.SighashInstruction(i.Name)
+func (ix *IdlInstruction) ComputeDiscriminator() (out [8]byte) {
+	discrim := bin.SighashInstruction(ix.Name)
 	copy(out[:], discrim[:8])
 	return out
 }

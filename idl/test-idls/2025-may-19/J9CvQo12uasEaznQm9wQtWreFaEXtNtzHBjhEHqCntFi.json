@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:11d5b6794fa7a3f80944d5a2542338d233833fa7aeb43f6646ddeb10eea57c93
-size 385
+{"version":"0.1.0","name":"hello_anchor","instructions":[{"name":"initialize","accounts":[{"name":"newAccount","isMut":true,"isSigner":true},{"name":"signer","isMut":true,"isSigner":true},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"data","type":"u64"}]}],"accounts":[{"name":"NewAccount","type":{"kind":"struct","fields":[{"name":"data","type":"u64"}]}}]}

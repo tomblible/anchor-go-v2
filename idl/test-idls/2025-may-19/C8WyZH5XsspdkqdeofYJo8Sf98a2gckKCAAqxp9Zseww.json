@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d2edd3c99864927d4b310c21cacbef9a53e0b084c2fa097f16e49c64c25d9ade
-size 783
+{"address":"C8WyZH5XsspdkqdeofYJo8Sf98a2gckKCAAqxp9Zseww","metadata":{"name":"soljet","version":"0.1.0","spec":"0.1.0","description":"Created with Anchor"},"instructions":[{"name":"receive_sol","discriminator":[121,244,250,3,8,229,225,1],"accounts":[{"name":"from","writable":true,"signer":true},{"name":"to","writable":true},{"name":"system_program","address":"11111111111111111111111111111111"}],"args":[{"name":"amount","type":"u64"}]}],"events":[{"name":"SolReceived","discriminator":[221,95,50,186,8,16,0,208]}],"errors":[{"code":6000,"name":"InvalidDestinationAddress","msg":"The destination address is invalid."}],"types":[{"name":"SolReceived","type":{"kind":"struct","fields":[{"name":"from","type":"pubkey"},{"name":"to","type":"pubkey"},{"name":"amount","type":"u64"}]}}]}

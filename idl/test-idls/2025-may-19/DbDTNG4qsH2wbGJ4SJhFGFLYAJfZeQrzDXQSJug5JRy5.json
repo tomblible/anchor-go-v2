@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c5d8bb43d6c6d843225f74d8206eb55c5ec4e109d84173f07457bf41321e08e4
-size 806
+{"version":"0.1.0","name":"house_counters","instructions":[{"name":"create","accounts":[{"name":"counter","isMut":true,"isSigner":true},{"name":"user","isMut":true,"isSigner":true},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"authority","type":"publicKey"}]},{"name":"increment","accounts":[{"name":"counter","isMut":true,"isSigner":false},{"name":"authority","isMut":false,"isSigner":true}],"args":[]},{"name":"decrement","accounts":[{"name":"counter","isMut":true,"isSigner":false},{"name":"authority","isMut":false,"isSigner":true}],"args":[]}],"accounts":[{"name":"Counter","type":{"kind":"struct","fields":[{"name":"authority","type":"publicKey"},{"name":"count","type":"u64"}]}}],"errors":[{"code":6000,"name":"HouseFull","msg":"House is at maximum number of members."}]}

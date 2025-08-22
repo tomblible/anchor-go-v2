@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:baa41d4855d80823faf63403b37facae66ec1ce86766d7d15419769f0d503696
-size 285
+{"version":"0.1.0","name":"my_anchor_contract","instructions":[{"name":"processFeePayment","accounts":[{"name":"payerAccount","isMut":true,"isSigner":true},{"name":"destinationAccount","isMut":true,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[]}]}

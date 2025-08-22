@@ -22,6 +22,7 @@ func Into(
 		tryUnmarshal[*I32],
 		tryUnmarshal[*F32],
 		tryUnmarshal[*U64],
+		tryUnmarshal[*USize],
 		tryUnmarshal[*I64],
 		tryUnmarshal[*F64],
 		tryUnmarshal[*U128],

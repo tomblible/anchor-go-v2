@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2a234a62d1d5132ee110c7c7ed9fff6837966917a253e6db5269a748ed0847ac
-size 746
+{"version":"0.1.0","name":"anchor_coin_flip","instructions":[{"name":"addWalletState","accounts":[{"name":"user","isMut":true,"isSigner":true},{"name":"wallet","isMut":true,"isSigner":false},{"name":"walletState","isMut":true,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"refLink","type":"string"},{"name":"refWallet","type":"string"},{"name":"feeBp","type":"u8"}]}],"accounts":[{"name":"RefState","type":{"kind":"struct","fields":[{"name":"refLink","type":"string"},{"name":"refWallet","type":"string"},{"name":"feeBp","type":"u8"}]}}],"errors":[{"code":6000,"name":"WrongAdminWallet","msg":"You are using the wrong admin wallet."},{"code":6001,"name":"FeeTooHigh","msg":"Fee must be under 100%."}]}

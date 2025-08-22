@@ -10,6 +10,7 @@ import (
 const (
 	PkgBinary         = "github.com/gagliardetto/binary"
 	PkgSolanaGo       = "github.com/gagliardetto/solana-go"
+	PkgProgramParser  = "github.com/yydsqu/solana-sdk/program_parser"
 	PkgSolanaGoText   = "github.com/gagliardetto/solana-go/text"
 	PkgAnchorGoErrors = "github.com/gagliardetto/anchor-go/errors"
 	// TODO: use or remove this:

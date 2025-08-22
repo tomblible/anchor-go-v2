@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:25d8a46eeafd24d26a33ff38f6596054e486ab0ce7a5947b1cc8c52cb30afc05
-size 608
+{"version":"0.1.0","name":"titan","instructions":[{"name":"initialize","accounts":[{"name":"signer","isMut":true,"isSigner":true},{"name":"marketAuthPda","isMut":true,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false},{"name":"tokenProgram","isMut":false,"isSigner":false}],"args":[]},{"name":"parseVersioned","accounts":[{"name":"jupiterProgram","isMut":false,"isSigner":false}],"args":[{"name":"isWritable","type":{"vec":"bool"}},{"name":"isSigner","type":{"vec":"bool"}},{"name":"swapData","type":"bytes"}]}],"accounts":[{"name":"AuthAccount","type":{"kind":"struct","fields":[]}}]}

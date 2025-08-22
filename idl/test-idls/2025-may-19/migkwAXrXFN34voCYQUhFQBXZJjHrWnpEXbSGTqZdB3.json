@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7adb2713e65d30c168d2d3a7ef5a9762f8c59e5c176ac7305ed61839ea871b11
-size 514
+{"version":"0.1.0","name":"autocrat_migrator","instructions":[{"name":"multiTransfer2","accounts":[{"name":"tokenProgram","isMut":false,"isSigner":false},{"name":"authority","isMut":true,"isSigner":true},{"name":"from0","isMut":true,"isSigner":false},{"name":"to0","isMut":true,"isSigner":false},{"name":"from1","isMut":true,"isSigner":false},{"name":"to1","isMut":true,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false},{"name":"lamportReceiver","isMut":true,"isSigner":false}],"args":[]}]}

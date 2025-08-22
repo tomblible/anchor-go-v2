@@ -35,7 +35,6 @@ func Parse(data []byte) (*Idl, error) {
 	return &idl, nil
 }
 
-// pub struct Idl {
 type Idl struct {
 	//     pub address: String,
 	Address *solana.PublicKey `json:"address,omitzero"`

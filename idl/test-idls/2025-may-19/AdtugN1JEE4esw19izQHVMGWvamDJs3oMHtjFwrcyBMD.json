@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:820f7e23bf90ab4ed0257800fe9af2c2c7b043ae76a2c57a53ce9aab935d422a
-size 291
+{"version":"0.1.0","name":"my_anchor_project","instructions":[{"name":"sendSol","accounts":[{"name":"user","isMut":true,"isSigner":true},{"name":"staticAddress","isMut":true,"isSigner":false},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"amount","type":"u64"}]}]}

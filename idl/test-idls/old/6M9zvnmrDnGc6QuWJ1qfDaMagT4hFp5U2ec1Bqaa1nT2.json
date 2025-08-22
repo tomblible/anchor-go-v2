@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ea4cd745935dd1427731bbf930a857314d818bf688a7d7d64808dfa0b4edd733
-size 465
+{"version":"0.1.0","name":"upgrade_nft","instructions":[{"name":"upgrade","accounts":[{"name":"mintAddress","isMut":false,"isSigner":false},{"name":"tokenMetadata","isMut":true,"isSigner":false},{"name":"updateAuthority","isMut":true,"isSigner":true},{"name":"userTokenAccount","isMut":true,"isSigner":false},{"name":"owner","isMut":false,"isSigner":true},{"name":"tokenMetadataProgram","isMut":false,"isSigner":false}],"args":[{"name":"newUri","type":"string"}]}]}

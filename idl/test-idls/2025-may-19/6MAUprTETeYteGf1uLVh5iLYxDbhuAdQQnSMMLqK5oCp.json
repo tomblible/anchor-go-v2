@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:18b79f049afc99b849f244f058e217faa0397c2b3e5db69bde24973ee00f98c4
-size 345
+{"version":"0.1.0","name":"xiaohu_project","instructions":[{"name":"initialize","accounts":[],"args":[]},{"name":"swap","accounts":[{"name":"poolAccount","isMut":true,"isSigner":false},{"name":"poolQuoteAccount","isMut":true,"isSigner":false},{"name":"poolBaseAccount","isMut":true,"isSigner":false}],"args":[{"name":"amountIn","type":"u64"}]}]}

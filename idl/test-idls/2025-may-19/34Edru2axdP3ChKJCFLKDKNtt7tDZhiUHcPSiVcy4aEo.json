@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:92892230e527f1ce72a7a94e1e7c9c6190e0f4d824b8cbf64ec35be2ba123874
-size 273
+{"address":"34Edru2axdP3ChKJCFLKDKNtt7tDZhiUHcPSiVcy4aEo","metadata":{"name":"temp_project","version":"0.1.0","spec":"0.1.0","description":"Created with Anchor"},"instructions":[{"name":"initialize","discriminator":[175,175,109,31,13,152,155,237],"accounts":[],"args":[]}]}

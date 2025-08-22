@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:656bc6cb106bcf1bc5d5da992fe026ab26a73f36ed23dc2f4e516a74c984e358
-size 277
+{"address":"woRrXQHeAi9R5oUcKJb7pkqC3GrQMabKWPBYHAN1ufY","metadata":{"name":"workflow_tutorial","version":"0.1.0","spec":"0.1.0","description":"Created with Anchor"},"instructions":[{"name":"initialize","discriminator":[175,175,109,31,13,152,155,237],"accounts":[],"args":[]}]}

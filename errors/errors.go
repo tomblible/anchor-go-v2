@@ -20,7 +20,6 @@ func (e *FieldError) Error() string {
 	return e.Field + ": " + e.Err.Error()
 }
 
-// and utility:
 func NewField(field string, err error) error {
 	if err == nil {
 		return nil

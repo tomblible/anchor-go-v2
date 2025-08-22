@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e63cb114e81b1b3fdd873925147b397a8682f6c8ee8e571a7ac21c327f623091
-size 409
+{"version":"0.1.0","name":"check_collection_size_v2","instructions":[{"name":"checkCollectionSizeLimit","accounts":[{"name":"collectionMetadata","isMut":false,"isSigner":false}],"args":[{"name":"limit","type":"u64"}]}],"errors":[{"code":6000,"name":"CollectionSizeLimitReached","msg":"Collection has reached limit!"},{"code":6001,"name":"NotSizedCollection","msg":"Collection should be a sized collection!"}]}

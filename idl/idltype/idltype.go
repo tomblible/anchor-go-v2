@@ -243,6 +243,26 @@ func (U64) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type USize struct {
+	_ struct{}
+}
+
+func (USize) _is_IdlType() {}
+func (USize) String() string {
+	return "usize"
+}
+
+func (USize) MarshalJSON() ([]byte, error) {
+	return []byte(`"usize"`), nil
+}
+
+func (USize) UnmarshalJSON(data []byte) error {
+	if string(data) != `"usize"` {
+		return fmt.Errorf(`expected "usize", got %s`, string(data))
+	}
+	return nil
+}
+
 type I64 struct {
 	_ struct{}
 }

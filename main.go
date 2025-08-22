@@ -8,12 +8,21 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 
 	"github.com/gagliardetto/anchor-go/generator"
 	"github.com/gagliardetto/anchor-go/idl"
 	"github.com/gagliardetto/anchor-go/tools"
 	bin "github.com/gagliardetto/binary"
 	"github.com/gagliardetto/solana-go"
+)
+
+const (
+	TypeIDUvarint32 string = "uvarint32"
+	TypeIDUint32    string = "uint32"
+	TypeIDUint8     string = "uint8"
+	TypeIDAnchor    string = "anchor"
+	TypeIDNoType    string = "notype"
 )
 
 const defaultProgramName = "myprogram"
@@ -32,19 +41,19 @@ func main() {
 	var modPath string
 	var pathToIdl string
 	var programIDOverride solana.PublicKey
+	var TypeId string
 	flag.Var(&programIDOverride, "program-id", "Program ID to use in the generated code (optional; must be a valid Solana public key). If not provided, it will be derived from the IDL metadata.address field if available.")
 	flag.StringVar(&outputDir, "output", "", "Directory to write the generated code to")
 	flag.StringVar(&programName, "name", defaultProgramName, "Name of the program for the generated code (optional; example: myprogram). If not provided, it will be derived from the IDL metadata.name field.")
 	flag.StringVar(&modPath, "mod-path", "", "Module path for the generated code (optional; example: github.com/gagliardetto/mysolana-program-go)")
 	flag.StringVar(&pathToIdl, "idl", "", "Path to the IDL file (required)")
+	flag.StringVar(&TypeId, "type-id", "anchor", "Type Id:anchor|uvarint32|uint32|uint8|anchor|notype")
 	var skipGoMod bool
-	flag.BoolVar(&skipGoMod, "no-go-mod", false, "Skip generating the go.mod file (useful for testing)")
+	flag.BoolVar(&skipGoMod, "no-go-mod", true, "Skip generating the go.mod file (useful for testing)")
 	flag.Parse()
+
 	if pathToIdl == "" {
 		panic("Please provide the path to the IDL file using the -idl flag")
-	}
-	if outputDir == "" {
-		panic("Please provide the output directory using the -output flag")
 	}
 
 	if modPath == "" {
@@ -53,9 +62,7 @@ func main() {
 	} else {
 		slog.Info("Using provided module path", "modPath", modPath)
 	}
-	if err := os.MkdirAll(outputDir, 0o777); err != nil {
-		panic(fmt.Errorf("failed to create output directory: %w", err))
-	}
+
 	slog.Info("Starting code generation",
 		"outputDir", outputDir,
 		"modPath", modPath,
@@ -69,16 +76,20 @@ func main() {
 	)
 
 	options := generator.GeneratorOptions{
-		OutputDir:   outputDir,
-		Package:     programName,
-		ProgramName: programName,
-		ModPath:     modPath,
-		SkipGoMod:   skipGoMod,
+		OutputDir:                 outputDir,
+		Package:                   programName,
+		ProgramName:               programName,
+		ModPath:                   modPath,
+		SkipGoMod:                 skipGoMod,
+		InstructionTypeIDEncoding: bin.AnchorTypeIDEncoding,
 	}
+
 	if !programIDOverride.IsZero() {
 		options.ProgramId = &programIDOverride
 		slog.Info("Using provided program ID", "programID", programIDOverride.String())
 	}
+	// 解析编码信息
+
 	parsedIdl, err := idl.ParseFromFilepath(pathToIdl)
 	if err != nil {
 		panic(err)
@@ -89,6 +100,7 @@ func main() {
 	if err := parsedIdl.Validate(); err != nil {
 		panic(fmt.Errorf("invalid IDL: %w", err))
 	}
+
 	{
 		{
 			if parsedIdl.Address != nil && !parsedIdl.Address.IsZero() && options.ProgramId == nil {
@@ -144,24 +156,35 @@ func main() {
 			"errorsCount", len(parsedIdl.Errors),
 		)
 	}
+
+	switch TypeId {
+	case TypeIDUvarint32:
+		options.InstructionTypeIDEncoding = bin.Uvarint32TypeIDEncoding
+	case TypeIDUint32:
+		options.InstructionTypeIDEncoding = bin.Uint32TypeIDEncoding
+	case TypeIDUint8:
+		options.InstructionTypeIDEncoding = bin.Uint8TypeIDEncoding
+	case TypeIDAnchor:
+		options.InstructionTypeIDEncoding = bin.AnchorTypeIDEncoding
+	case TypeIDNoType:
+		options.InstructionTypeIDEncoding = bin.NoTypeIDEncoding
+	}
+	// 处理信息
+
+	if options.OutputDir == "" {
+		options.OutputDir = filepath.Join(filepath.Dir(pathToIdl), options.ProgramName)
+	}
+
+	if err = os.MkdirAll(options.OutputDir, 0o777); err != nil {
+		panic(fmt.Errorf("failed to create output directory: %w", err))
+	}
+
 	gen := generator.NewGenerator(parsedIdl, &options)
 	generatedFiles, err := gen.Generate()
 	if err != nil {
 		panic(err)
 	}
 
-	if !skipGoMod {
-		goModFilepath := path.Join(options.OutputDir, "go.mod")
-		slog.Info("Writing go.mod file",
-			"filepath", goModFilepath,
-			"modPath", options.ModPath,
-		)
-
-		err = os.WriteFile(goModFilepath, []byte(generatedFiles.GoMod), 0o777)
-		if err != nil {
-			panic(err)
-		}
-	}
 	{
 		for _, file := range generatedFiles.Files {
 			{
@@ -187,9 +210,8 @@ func main() {
 				}
 			}
 		}
-		executeCmd(outputDir, "go", "mod", "tidy")
-		executeCmd(outputDir, "go", "fmt")
-		executeCmd(outputDir, "go", "build", "-o", "/dev/null") // Just to ensure everything compiles.
+
+		executeCmd(options.OutputDir, "go", "fmt")
 		slog.Info("Generation completed successfully",
 			"outputDir", options.OutputDir,
 			"modPath", options.ModPath,

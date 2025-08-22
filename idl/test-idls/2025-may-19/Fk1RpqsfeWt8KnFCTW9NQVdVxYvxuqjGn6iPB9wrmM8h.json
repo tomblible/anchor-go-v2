@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4d8926c30afac85c28189a584124fa15905085b2eb335a2633d540d4a29ec514
-size 322
+{"address":"Fk1RpqsfeWt8KnFCTW9NQVdVxYvxuqjGn6iPB9wrmM8h","metadata":{"name":"multicall_handler","version":"0.1.0","spec":"0.1.0","description":"Created with Anchor"},"instructions":[{"name":"handle_v3_across_message","discriminator":[131,141,52,71,16,59,196,92],"accounts":[],"args":[{"name":"message","type":"bytes"}]}]}

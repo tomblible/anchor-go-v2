@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1557ef059955b402322d98e0d9003fc862219414d9ee52baa6f4ad871996b4cc
-size 633
+{"address":"B96dV3Luxzo6SokJx3xt8i5y8Mb7HRR6Eec8hCjJDT69","metadata":{"name":"spl_utils","version":"0.1.0","spec":"0.1.0","description":"An Anchor program that transfers all tokens from a source account and closes it."},"instructions":[{"name":"transfer_all_and_close","discriminator":[32,22,247,80,209,91,203,76],"accounts":[{"name":"owner","signer":true},{"name":"token_account","writable":true},{"name":"transfer_dest","writable":true},{"name":"mint"},{"name":"close_dest","writable":true},{"name":"token_program"}],"args":[]}],"errors":[{"code":6000,"name":"MintAndTokenProgramMismatch","msg":"Mint and Token program mismatch"}]}
