@@ -3,6 +3,8 @@ package generator
 import (
 	"encoding/binary"
 	"fmt"
+	"log/slog"
+
 	"github.com/gagliardetto/anchor-go/sighash"
 	bin "github.com/gagliardetto/binary"
 
@@ -40,6 +42,7 @@ func NewGenerator(idl *idl.Idl, options *GeneratorOptions) *Generator {
 		case bin.Uint32TypeIDEncoding:
 			binary.LittleEndian.AppendUint32(instruction.Discriminator, uint32(i))
 		case bin.Uint8TypeIDEncoding:
+			slog.Info("Using uint8 TypeIDEncoding, make sure the number of instructions does not exceed 255", "instructionIndex", i, "instructionName", instruction.Name)
 			instruction.Discriminator = []byte{uint8(i)}
 		case bin.AnchorTypeIDEncoding:
 			toBeHashed := sighash.ToSnakeForSighash(instruction.Name)

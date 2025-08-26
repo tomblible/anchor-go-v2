@@ -96,12 +96,16 @@ func (g *Generator) genDiscriminators() (*OutputFile, error) {
 		instructionDiscriminatorsCodes.Var().Parens(
 			DoGroup(
 				func(code *Group) {
-					for _, instruction := range g.idl.Instructions {
-						if len(instruction.Discriminator) == 0 {
-							continue
-						}
+					for enumCounter, instruction := range g.idl.Instructions {
 						instructionLen++
 						discriminatorName := FormatInstructionDiscriminatorName(instruction.Name)
+						if len(instruction.Discriminator) == 0 {
+							// len(discriminator) == 0，使用一字节小端枚举值
+							code.Id(discriminatorName).Op("=").Index().Byte().Op("{").Lit(enumCounter).Op("}")
+							enumCounter++
+							code.Line()
+							continue
+						}
 						{
 							code.Id(discriminatorName).Op("=").Index().Byte().Op("{").ListFunc(func(byteGroup *Group) {
 								for _, byteVal := range instruction.Discriminator[:] {

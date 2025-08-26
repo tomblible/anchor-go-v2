@@ -2,10 +2,11 @@ package generator
 
 import (
 	"fmt"
+	"strings"
+
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/anchor-go/idl"
 	"github.com/gagliardetto/anchor-go/tools"
-	"strings"
 )
 
 func (g *Generator) genInstructionFile() ([]*OutputFile, error) {
@@ -106,7 +107,25 @@ func (g *Generator) genInstructionFile() ([]*OutputFile, error) {
 			BlockFunc(func(body *Group) {
 				body.Return(Id("new").Call(Id(instructionName)))
 			}))
-
+		// 生成获取剩余账户的方法
+		file.Line().Line().Add(Empty().Func().
+			Params(Id("obj").Op("*").Id(instructionName)).Id("GetRemainingAccounts").
+			Params(
+				ListFunc(func(params *Group) {
+					// 无参数
+				}),
+			).
+			Params(
+				ListFunc(func(results *Group) {
+					// 返回结果 solanago.PublicKeySlice
+					results.Qual(PkgSolanaGo, "PublicKeySlice")
+				}),
+			).
+			BlockFunc(func(body *Group) {
+				// Body:
+				body.Return(Id("obj").Dot("PublicKeySlice").Index(Lit(len(instruction.Accounts)).Op(":")))
+			}),
+		)
 		// 生成构建交易信息
 		file.Add(g.GetNewInstructionCode(instruction))
 
@@ -298,18 +317,18 @@ func (g *Generator) GetNewInstructionCode(instruction idl.IdlInstruction) *State
 			Id("metas_").Op("=").Make(Qual(PkgSolanaGo, "AccountMetaSlice"), Lit(len(accounts)), Lit(len(accounts)).Op("+").Len(Id("remaining__"))),
 		)
 
-		if len(instruction.Discriminator) > 0 {
-			body.Line().Comment("Encode the instruction discriminator.")
-			body.If(
-				Err().Op("=").Id("enc__").Dot("WriteBytes").Call(Id(FormatInstructionDiscriminatorName(instruction.Name)).Index(Op(":")), False()),
-				Err().Op("!=").Nil()).Block(
-				Return(
-					Nil(),
-					Qual("fmt", "Errorf").Call(Lit("failed to write instruction discriminator: %w"), Err()),
-				),
-			)
-			body.Line()
-		}
+		// if len(instruction.Discriminator) > 0 {
+		body.Line().Comment("Encode the instruction discriminator.")
+		body.If(
+			Err().Op("=").Id("enc__").Dot("WriteBytes").Call(Id(FormatInstructionDiscriminatorName(instruction.Name)).Index(Op(":")), False()),
+			Err().Op("!=").Nil()).Block(
+			Return(
+				Nil(),
+				Qual("fmt", "Errorf").Call(Lit("failed to write instruction discriminator: %w"), Err()),
+			),
+		)
+		body.Line()
+		// }
 
 		if len(instruction.Args) > 0 {
 			body.BlockFunc(func(g *Group) {

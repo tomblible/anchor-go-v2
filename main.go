@@ -51,7 +51,7 @@ func main() {
 	var skipGoMod bool
 	flag.BoolVar(&skipGoMod, "no-go-mod", true, "Skip generating the go.mod file (useful for testing)")
 	flag.Parse()
-
+	slog.Info("params", "outputDir", outputDir, "programName", programName, "modPath", modPath, "pathToIdl", pathToIdl, "TypeId", TypeId, "skipGoMod", skipGoMod)
 	if pathToIdl == "" {
 		panic("Please provide the path to the IDL file using the -idl flag")
 	}

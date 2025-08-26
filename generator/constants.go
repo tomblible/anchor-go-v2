@@ -3,6 +3,7 @@ package generator
 import (
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"strconv"
 
 	. "github.com/dave/jennifer/jen"
@@ -265,6 +266,15 @@ func (g *Generator) gen_constants() (*OutputFile, error) {
 						}
 					}
 				}).Op("}")
+				code.Line()
+			//新增类型
+			case *idltype.U128:
+				_ = ty
+				v, ok := new(big.Int).SetString(co.Value, 10)
+				if !ok {
+					return nil, fmt.Errorf("failed to parse u128 constants[%d] %s", coi, spew.Sdump(co))
+				}
+				code.Var().Id(co.Name).Op("=").Qual("math/big", "NewInt").Call(Lit(0)).Op(".").Id("SetString").Call(Lit(v.String()), Lit(10)).Op(",").Lit(true)
 				code.Line()
 			default:
 				return nil, fmt.Errorf("unsupported constant type for constants[%d] %s: %T", coi, spew.Sdump(co), ty)

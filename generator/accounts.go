@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	. "github.com/dave/jennifer/jen"
 	"github.com/davecgh/go-spew/spew"
@@ -58,13 +59,21 @@ func (g *Generator) genIdlTypeDeftyStruct(
 	withDiscriminator bool,
 ) (Code, error) {
 	st := newStatement()
+	structName := tools.ToCamelUpper(name)
 	exportedAccountName := tools.ToCamelUpper(name)
+	// 有的idl对事件的命名和指令的命名冲突了，但是又是用这个名称在types中寻找的stuct，
+	// 有的idl是自己都有自己的名字和对应的struct。
+	if g.isEvents(name) {
+		if !strings.Contains(structName, "Event") && !strings.Contains(structName, "Evt") {
+			structName = "Evt" + structName
+		}
+	}
 	{
 		// Declare the struct:
 		code := Empty()
 		addComments(code, docs)
 
-		code.Type().Id(exportedAccountName).StructFunc(func(fieldsGroup *Group) {
+		code.Type().Id(structName).StructFunc(func(fieldsGroup *Group) {
 			switch fields := typ.Fields.(type) {
 			case idl.IdlDefinedFieldsNamed:
 				for fieldIndex, field := range fields {
@@ -134,7 +143,7 @@ func (g *Generator) genIdlTypeDeftyStruct(
 				gen_MarshalWithEncoder_struct(
 					g.idl,
 					withDiscriminator,
-					exportedAccountName,
+					structName,
 					discriminatorName,
 					typ.Fields,
 					true,
@@ -145,7 +154,7 @@ func (g *Generator) genIdlTypeDeftyStruct(
 				gen_UnmarshalWithDecoder_struct(
 					g.idl,
 					withDiscriminator,
-					exportedAccountName,
+					structName,
 					discriminatorName,
 					typ.Fields,
 				))
