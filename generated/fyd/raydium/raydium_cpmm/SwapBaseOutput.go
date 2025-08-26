@@ -110,6 +110,10 @@ func (*SwapBaseOutput) NewInstance() programparser.Instruction {
 	return new(SwapBaseOutput)
 }
 
+func (obj *SwapBaseOutput) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[13:]
+}
+
 // Builds a "swap_base_output" instruction.
 // Swap the tokens in the pool base output amount //  // # Arguments //  // * `ctx`- The context of accounts // * `max_amount_in` -  input amount prevents excessive slippage // * `amount_out` -  amount of output token //
 func NewSwapBaseOutputInstruction(

@@ -75,8 +75,8 @@ func (*MigratePosition) NewInstance() programparser.Instruction {
 	return new(MigratePosition)
 }
 
-func (inst *MigratePosition) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[10:]
+func (obj *MigratePosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
 }
 
 // Builds a "migrate_position" instruction.

@@ -63,6 +63,10 @@ func (*DeleteTokenBadge) NewInstance() programparser.Instruction {
 	return new(DeleteTokenBadge)
 }
 
+func (obj *DeleteTokenBadge) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "delete_token_badge" instruction.
 func NewDeleteTokenBadgeInstruction(
 	whirlpoolsConfig solanago.PublicKey,

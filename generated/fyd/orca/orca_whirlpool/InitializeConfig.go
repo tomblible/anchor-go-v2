@@ -98,6 +98,10 @@ func (*InitializeConfig) NewInstance() programparser.Instruction {
 	return new(InitializeConfig)
 }
 
+func (obj *InitializeConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "initialize_config" instruction.
 // Initializes a WhirlpoolsConfig account that hosts info & authorities // required to govern a set of Whirlpools. //  // ### Parameters // - `fee_authority` - Authority authorized to initialize fee-tiers and set customs fees. // - `collect_protocol_fees_authority` - Authority authorized to collect protocol fees. // - `reward_emissions_super_authority` - Authority authorized to set reward authorities in pools.
 func NewInitializeConfigInstruction(

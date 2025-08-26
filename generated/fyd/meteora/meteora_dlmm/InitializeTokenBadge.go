@@ -57,8 +57,8 @@ func (*InitializeTokenBadge) NewInstance() programparser.Instruction {
 	return new(InitializeTokenBadge)
 }
 
-func (inst *InitializeTokenBadge) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[4:]
+func (obj *InitializeTokenBadge) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "initialize_token_badge" instruction.

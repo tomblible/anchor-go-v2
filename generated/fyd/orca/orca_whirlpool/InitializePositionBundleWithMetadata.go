@@ -85,6 +85,10 @@ func (*InitializePositionBundleWithMetadata) NewInstance() programparser.Instruc
 	return new(InitializePositionBundleWithMetadata)
 }
 
+func (obj *InitializePositionBundleWithMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[12:]
+}
+
 // Builds a "initialize_position_bundle_with_metadata" instruction.
 // Initializes a PositionBundle account that bundles several positions. // A unique token will be minted to represent the position bundle in the users wallet. // Additional Metaplex metadata is appended to identify the token.
 func NewInitializePositionBundleWithMetadataInstruction(

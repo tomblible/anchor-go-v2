@@ -93,8 +93,8 @@ func (*AddLiquidityOneSidePrecise2) NewInstance() programparser.Instruction {
 	return new(AddLiquidityOneSidePrecise2)
 }
 
-func (inst *AddLiquidityOneSidePrecise2) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[10:]
+func (obj *AddLiquidityOneSidePrecise2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
 }
 
 // Builds a "add_liquidity_one_side_precise2" instruction.

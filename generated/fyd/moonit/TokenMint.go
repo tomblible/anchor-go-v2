@@ -87,6 +87,10 @@ func (*TokenMint) NewInstance() programparser.Instruction {
 	return new(TokenMint)
 }
 
+func (obj *TokenMint) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[11:]
+}
+
 // Builds a "token_mint" instruction.
 func NewTokenMintInstruction(
 	// Params:

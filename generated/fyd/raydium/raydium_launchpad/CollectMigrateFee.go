@@ -74,6 +74,10 @@ func (*CollectMigrateFee) NewInstance() programparser.Instruction {
 	return new(CollectMigrateFee)
 }
 
+func (obj *CollectMigrateFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "collect_migrate_fee" instruction.
 // Collects  migrate fees from the pool // # Arguments //  // * `ctx` - The context of accounts //
 func NewCollectMigrateFeeInstruction(

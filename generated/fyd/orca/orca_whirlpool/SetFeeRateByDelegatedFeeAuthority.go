@@ -75,6 +75,10 @@ func (*SetFeeRateByDelegatedFeeAuthority) NewInstance() programparser.Instructio
 	return new(SetFeeRateByDelegatedFeeAuthority)
 }
 
+func (obj *SetFeeRateByDelegatedFeeAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "set_fee_rate_by_delegated_fee_authority" instruction.
 // Sets the fee rate for a Whirlpool by the delegated fee authority in AdaptiveFeeTier. // Fee rate is represented as hundredths of a basis point. //  // ### Authority // - "delegated_fee_authority" - Set authority that can modify pool fees in the AdaptiveFeeTier //  // ### Parameters // - `fee_rate` - The rate that the pool will use to calculate fees going onwards. //  // #### Special Errors // - `FeeRateMaxExceeded` - If the provided fee_rate exceeds MAX_FEE_RATE.
 func NewSetFeeRateByDelegatedFeeAuthorityInstruction(

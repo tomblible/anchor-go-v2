@@ -3,6 +3,7 @@ package orca_whirlpool
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 )
@@ -382,8 +383,8 @@ func (obj DynamicTickArray) MarshalWithEncoder(encoder *binary.Encoder) (err err
 	}
 	// Serialize `Ticks`:
 	{
-		for i := 0; i < len(obj.Ticks); i++ {
-			err = EncodeDynamicTick(encoder, obj.Ticks[i])
+		for i := range len(obj.Ticks) {
+			// err = EncodeDynamicTick(encoder, obj.Ticks[i])
 			if err = EncodeDynamicTick(encoder, obj.Ticks[i]); err != nil {
 				return fmt.Errorf("error while marshaling Ticks-%d: %w", i, err)
 			}

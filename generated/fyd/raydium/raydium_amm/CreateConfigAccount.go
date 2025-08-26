@@ -60,6 +60,10 @@ func (*CreateConfigAccount) NewInstance() programparser.Instruction {
 	return new(CreateConfigAccount)
 }
 
+func (obj *CreateConfigAccount) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "create_config_account" instruction.
 func NewCreateConfigAccountInstruction(
 	admin solanago.PublicKey,

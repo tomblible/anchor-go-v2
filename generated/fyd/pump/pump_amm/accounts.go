@@ -3,7 +3,6 @@ package pump_amm
 import (
 	"bytes"
 	"fmt"
-
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 )

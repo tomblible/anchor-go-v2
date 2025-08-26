@@ -71,8 +71,8 @@ func (*GetPoolInfo) NewInstance() programparser.Instruction {
 	return new(GetPoolInfo)
 }
 
-func (inst *GetPoolInfo) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[8:]
+func (obj *GetPoolInfo) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
 }
 
 // Builds a "get_pool_info" instruction.

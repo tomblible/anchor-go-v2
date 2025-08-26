@@ -108,8 +108,8 @@ func (*SwapExactOut) NewInstance() programparser.Instruction {
 	return new(SwapExactOut)
 }
 
-func (inst *SwapExactOut) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[15:]
+func (obj *SwapExactOut) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
 }
 
 // Builds a "swap_exact_out" instruction.

@@ -105,8 +105,8 @@ func (*InitializePermissionLbPair) NewInstance() programparser.Instruction {
 	return new(InitializePermissionLbPair)
 }
 
-func (inst *InitializePermissionLbPair) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[17:]
+func (obj *InitializePermissionLbPair) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[17:]
 }
 
 // Builds a "initialize_permission_lb_pair" instruction.

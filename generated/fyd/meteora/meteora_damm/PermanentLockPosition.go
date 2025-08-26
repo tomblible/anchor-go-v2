@@ -72,6 +72,10 @@ func (*PermanentLockPosition) NewInstance() programparser.Instruction {
 	return new(PermanentLockPosition)
 }
 
+func (obj *PermanentLockPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "permanent_lock_position" instruction.
 func NewPermanentLockPositionInstruction(
 	// Params:

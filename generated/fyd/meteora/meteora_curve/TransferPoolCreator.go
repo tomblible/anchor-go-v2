@@ -63,6 +63,10 @@ func (*TransferPoolCreator) NewInstance() programparser.Instruction {
 	return new(TransferPoolCreator)
 }
 
+func (obj *TransferPoolCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "transfer_pool_creator" instruction.
 func NewTransferPoolCreatorInstruction(
 	virtualPool solanago.PublicKey,

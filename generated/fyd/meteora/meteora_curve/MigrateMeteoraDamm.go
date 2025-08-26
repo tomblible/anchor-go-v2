@@ -138,6 +138,10 @@ func (*MigrateMeteoraDamm) NewInstance() programparser.Instruction {
 	return new(MigrateMeteoraDamm)
 }
 
+func (obj *MigrateMeteoraDamm) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[31:]
+}
+
 // Builds a "migrate_meteora_damm" instruction.
 func NewMigrateMeteoraDammInstruction(
 	virtualPool solanago.PublicKey,

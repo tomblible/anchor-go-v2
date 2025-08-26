@@ -113,6 +113,10 @@ func (*OpenPosition) NewInstance() programparser.Instruction {
 	return new(OpenPosition)
 }
 
+func (obj *OpenPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "open_position" instruction.
 // Open a position in a Whirlpool. A unique token will be minted to represent the position // in the users wallet. The position will start off with 0 liquidity. //  // ### Parameters // - `tick_lower_index` - The tick specifying the lower end of the position range. // - `tick_upper_index` - The tick specifying the upper end of the position range. //  // #### Special Errors // - `InvalidTickIndex` - If a provided tick is out of bounds, out of order or not a multiple of // the tick-spacing in this pool.
 func NewOpenPositionInstruction(

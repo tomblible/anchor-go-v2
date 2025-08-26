@@ -102,6 +102,10 @@ func (*InitializeReward) NewInstance() programparser.Instruction {
 	return new(InitializeReward)
 }
 
+func (obj *InitializeReward) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "initialize_reward" instruction.
 func NewInitializeRewardInstruction(
 	// Params:

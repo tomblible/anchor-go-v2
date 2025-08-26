@@ -60,8 +60,8 @@ func (*SetPairStatusPermissionless) NewInstance() programparser.Instruction {
 	return new(SetPairStatusPermissionless)
 }
 
-func (inst *SetPairStatusPermissionless) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *SetPairStatusPermissionless) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_pair_status_permissionless" instruction.

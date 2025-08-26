@@ -64,6 +64,10 @@ func (*SetDelegatedFeeAuthority) NewInstance() programparser.Instruction {
 	return new(SetDelegatedFeeAuthority)
 }
 
+func (obj *SetDelegatedFeeAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "set_delegated_fee_authority" instruction.
 // Sets the delegated fee authority for an AdaptiveFeeTier. // The delegated fee authority can set the fee rate for individual pools initialized with the adaptive fee-tier. // Only the current fee authority in WhirlpoolsConfig has permission to invoke this instruction. //  // ### Authority // - "fee_authority" - Set authority in the WhirlpoolConfig
 func NewSetDelegatedFeeAuthorityInstruction(

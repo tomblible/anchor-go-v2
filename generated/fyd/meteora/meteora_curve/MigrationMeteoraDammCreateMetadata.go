@@ -68,6 +68,10 @@ func (*MigrationMeteoraDammCreateMetadata) NewInstance() programparser.Instructi
 	return new(MigrationMeteoraDammCreateMetadata)
 }
 
+func (obj *MigrationMeteoraDammCreateMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
+}
+
 // Builds a "migration_meteora_damm_create_metadata" instruction.
 // migrate damm v1
 func NewMigrationMeteoraDammCreateMetadataInstruction(

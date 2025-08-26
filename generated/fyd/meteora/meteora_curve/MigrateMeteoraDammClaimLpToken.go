@@ -72,6 +72,10 @@ func (*MigrateMeteoraDammClaimLpToken) NewInstance() programparser.Instruction {
 	return new(MigrateMeteoraDammClaimLpToken)
 }
 
+func (obj *MigrateMeteoraDammClaimLpToken) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
+}
+
 // Builds a "migrate_meteora_damm_claim_lp_token" instruction.
 func NewMigrateMeteoraDammClaimLpTokenInstruction(
 	virtualPool solanago.PublicKey,

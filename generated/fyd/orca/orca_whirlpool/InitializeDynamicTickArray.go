@@ -87,6 +87,10 @@ func (*InitializeDynamicTickArray) NewInstance() programparser.Instruction {
 	return new(InitializeDynamicTickArray)
 }
 
+func (obj *InitializeDynamicTickArray) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "initialize_dynamic_tick_array" instruction.
 // Initialize a variable-length tick array for a Whirlpool. //  // ### Parameters // - `start_tick_index` - The starting tick index for this tick-array. // Has to be a multiple of TickArray size & the tick spacing of this pool. // - `idempotent` - If true, the instruction will not fail if the tick array already exists. // Note: The idempotent option exits successfully if a FixedTickArray is present as well as a DynamicTickArray. //  // #### Special Errors // - `InvalidStartTick` - if the provided start tick is out of bounds or is not a multiple of // TICK_ARRAY_SIZE * tick spacing.
 func NewInitializeDynamicTickArrayInstruction(

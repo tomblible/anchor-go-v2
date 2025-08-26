@@ -66,8 +66,8 @@ func (*UpdateDynamicFeeParameters) NewInstance() programparser.Instruction {
 	return new(UpdateDynamicFeeParameters)
 }
 
-func (inst *UpdateDynamicFeeParameters) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[4:]
+func (obj *UpdateDynamicFeeParameters) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "update_dynamic_fee_parameters" instruction.

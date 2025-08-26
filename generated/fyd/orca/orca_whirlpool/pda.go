@@ -3,7 +3,7 @@
 
 package orca_whirlpool
 
-import  solanago "github.com/gagliardetto/solana-go"
+import solanago "github.com/gagliardetto/solana-go"
 
 func FindTickArrayAddress(whirlpool solanago.PublicKey, argsStartTickIndex solanago.PublicKey) (pda solanago.PublicKey, bumpSeed uint8, err error) {
 	var seeds [][]byte

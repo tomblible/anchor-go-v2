@@ -93,8 +93,8 @@ func (*WithdrawIneligibleReward) NewInstance() programparser.Instruction {
 	return new(WithdrawIneligibleReward)
 }
 
-func (inst *WithdrawIneligibleReward) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[10:]
+func (obj *WithdrawIneligibleReward) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
 }
 
 // Builds a "withdraw_ineligible_reward" instruction.

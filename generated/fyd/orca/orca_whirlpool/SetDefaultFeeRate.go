@@ -76,6 +76,10 @@ func (*SetDefaultFeeRate) NewInstance() programparser.Instruction {
 	return new(SetDefaultFeeRate)
 }
 
+func (obj *SetDefaultFeeRate) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "set_default_fee_rate" instruction.
 // Set the default_fee_rate for a FeeTier // Only the current fee authority has permission to invoke this instruction. //  // ### Authority // - "fee_authority" - Set authority in the WhirlpoolConfig //  // ### Parameters // - `default_fee_rate` - The default fee rate that a pool will use if the pool uses this // fee tier during initialization. //  // #### Special Errors // - `FeeRateMaxExceeded` - If the provided default_fee_rate exceeds MAX_FEE_RATE.
 func NewSetDefaultFeeRateInstruction(

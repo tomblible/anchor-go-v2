@@ -7,7 +7,7 @@ import (
 	solanago "github.com/gagliardetto/solana-go"
 )
 
-type LiquidityDecreased struct {
+type EvtLiquidityDecreased struct {
 	Whirlpool         solanago.PublicKey
 	Position          solanago.PublicKey
 	TickLowerIndex    int32
@@ -19,7 +19,7 @@ type LiquidityDecreased struct {
 	TokenBTransferFee uint64
 }
 
-func (obj LiquidityDecreased) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj EvtLiquidityDecreased) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Write account discriminator:
 	err = encoder.WriteBytes(Event_LiquidityDecreased[:], false)
 	if err != nil {
@@ -64,17 +64,17 @@ func (obj LiquidityDecreased) MarshalWithEncoder(encoder *binary.Encoder) (err e
 	return nil
 }
 
-func (obj LiquidityDecreased) Marshal() ([]byte, error) {
+func (obj EvtLiquidityDecreased) Marshal() ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 	encoder := binary.NewBorshEncoder(buf)
 	err := obj.MarshalWithEncoder(encoder)
 	if err != nil {
-		return nil, fmt.Errorf("error while encoding LiquidityDecreased: %w", err)
+		return nil, fmt.Errorf("error while encoding EvtLiquidityDecreased: %w", err)
 	}
 	return buf.Bytes(), nil
 }
 
-func (obj *LiquidityDecreased) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *EvtLiquidityDecreased) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	// Read and check account discriminator:
 	{
 		discriminator, err := decoder.ReadDiscriminator()
@@ -127,16 +127,16 @@ func (obj *LiquidityDecreased) UnmarshalWithDecoder(decoder *binary.Decoder) (er
 	return nil
 }
 
-func (obj *LiquidityDecreased) Unmarshal(buf []byte) error {
+func (obj *EvtLiquidityDecreased) Unmarshal(buf []byte) error {
 	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
 	if err != nil {
-		return fmt.Errorf("error while unmarshaling LiquidityDecreased: %w", err)
+		return fmt.Errorf("error while unmarshaling EvtLiquidityDecreased: %w", err)
 	}
 	return nil
 }
 
-func UnmarshalLiquidityDecreased(buf []byte) (*LiquidityDecreased, error) {
-	obj := new(LiquidityDecreased)
+func UnmarshalEvtLiquidityDecreased(buf []byte) (*EvtLiquidityDecreased, error) {
+	obj := new(EvtLiquidityDecreased)
 	err := obj.Unmarshal(buf)
 	if err != nil {
 		return nil, err
@@ -144,7 +144,7 @@ func UnmarshalLiquidityDecreased(buf []byte) (*LiquidityDecreased, error) {
 	return obj, nil
 }
 
-type LiquidityIncreased struct {
+type EvtLiquidityIncreased struct {
 	Whirlpool         solanago.PublicKey
 	Position          solanago.PublicKey
 	TickLowerIndex    int32
@@ -156,7 +156,7 @@ type LiquidityIncreased struct {
 	TokenBTransferFee uint64
 }
 
-func (obj LiquidityIncreased) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj EvtLiquidityIncreased) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Write account discriminator:
 	err = encoder.WriteBytes(Event_LiquidityIncreased[:], false)
 	if err != nil {
@@ -201,17 +201,17 @@ func (obj LiquidityIncreased) MarshalWithEncoder(encoder *binary.Encoder) (err e
 	return nil
 }
 
-func (obj LiquidityIncreased) Marshal() ([]byte, error) {
+func (obj EvtLiquidityIncreased) Marshal() ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 	encoder := binary.NewBorshEncoder(buf)
 	err := obj.MarshalWithEncoder(encoder)
 	if err != nil {
-		return nil, fmt.Errorf("error while encoding LiquidityIncreased: %w", err)
+		return nil, fmt.Errorf("error while encoding EvtLiquidityIncreased: %w", err)
 	}
 	return buf.Bytes(), nil
 }
 
-func (obj *LiquidityIncreased) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *EvtLiquidityIncreased) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	// Read and check account discriminator:
 	{
 		discriminator, err := decoder.ReadDiscriminator()
@@ -264,16 +264,16 @@ func (obj *LiquidityIncreased) UnmarshalWithDecoder(decoder *binary.Decoder) (er
 	return nil
 }
 
-func (obj *LiquidityIncreased) Unmarshal(buf []byte) error {
+func (obj *EvtLiquidityIncreased) Unmarshal(buf []byte) error {
 	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
 	if err != nil {
-		return fmt.Errorf("error while unmarshaling LiquidityIncreased: %w", err)
+		return fmt.Errorf("error while unmarshaling EvtLiquidityIncreased: %w", err)
 	}
 	return nil
 }
 
-func UnmarshalLiquidityIncreased(buf []byte) (*LiquidityIncreased, error) {
-	obj := new(LiquidityIncreased)
+func UnmarshalEvtLiquidityIncreased(buf []byte) (*EvtLiquidityIncreased, error) {
+	obj := new(EvtLiquidityIncreased)
 	err := obj.Unmarshal(buf)
 	if err != nil {
 		return nil, err
@@ -281,7 +281,7 @@ func UnmarshalLiquidityIncreased(buf []byte) (*LiquidityIncreased, error) {
 	return obj, nil
 }
 
-type PoolInitialized struct {
+type EvtPoolInitialized struct {
 	Whirlpool        solanago.PublicKey
 	WhirlpoolsConfig solanago.PublicKey
 	TokenMintA       solanago.PublicKey
@@ -294,7 +294,7 @@ type PoolInitialized struct {
 	InitialSqrtPrice binary.Uint128
 }
 
-func (obj PoolInitialized) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj EvtPoolInitialized) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Write account discriminator:
 	err = encoder.WriteBytes(Event_PoolInitialized[:], false)
 	if err != nil {
@@ -343,17 +343,17 @@ func (obj PoolInitialized) MarshalWithEncoder(encoder *binary.Encoder) (err erro
 	return nil
 }
 
-func (obj PoolInitialized) Marshal() ([]byte, error) {
+func (obj EvtPoolInitialized) Marshal() ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 	encoder := binary.NewBorshEncoder(buf)
 	err := obj.MarshalWithEncoder(encoder)
 	if err != nil {
-		return nil, fmt.Errorf("error while encoding PoolInitialized: %w", err)
+		return nil, fmt.Errorf("error while encoding EvtPoolInitialized: %w", err)
 	}
 	return buf.Bytes(), nil
 }
 
-func (obj *PoolInitialized) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *EvtPoolInitialized) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	// Read and check account discriminator:
 	{
 		discriminator, err := decoder.ReadDiscriminator()
@@ -410,16 +410,16 @@ func (obj *PoolInitialized) UnmarshalWithDecoder(decoder *binary.Decoder) (err e
 	return nil
 }
 
-func (obj *PoolInitialized) Unmarshal(buf []byte) error {
+func (obj *EvtPoolInitialized) Unmarshal(buf []byte) error {
 	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
 	if err != nil {
-		return fmt.Errorf("error while unmarshaling PoolInitialized: %w", err)
+		return fmt.Errorf("error while unmarshaling EvtPoolInitialized: %w", err)
 	}
 	return nil
 }
 
-func UnmarshalPoolInitialized(buf []byte) (*PoolInitialized, error) {
-	obj := new(PoolInitialized)
+func UnmarshalEvtPoolInitialized(buf []byte) (*EvtPoolInitialized, error) {
+	obj := new(EvtPoolInitialized)
 	err := obj.Unmarshal(buf)
 	if err != nil {
 		return nil, err
@@ -427,7 +427,7 @@ func UnmarshalPoolInitialized(buf []byte) (*PoolInitialized, error) {
 	return obj, nil
 }
 
-type Traded struct {
+type EvtTraded struct {
 	Whirlpool         solanago.PublicKey
 	AToB              bool
 	PreSqrtPrice      binary.Uint128
@@ -440,7 +440,7 @@ type Traded struct {
 	ProtocolFee       uint64
 }
 
-func (obj Traded) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj EvtTraded) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Write account discriminator:
 	err = encoder.WriteBytes(Event_Traded[:], false)
 	if err != nil {
@@ -489,17 +489,17 @@ func (obj Traded) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	return nil
 }
 
-func (obj Traded) Marshal() ([]byte, error) {
+func (obj EvtTraded) Marshal() ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 	encoder := binary.NewBorshEncoder(buf)
 	err := obj.MarshalWithEncoder(encoder)
 	if err != nil {
-		return nil, fmt.Errorf("error while encoding Traded: %w", err)
+		return nil, fmt.Errorf("error while encoding EvtTraded: %w", err)
 	}
 	return buf.Bytes(), nil
 }
 
-func (obj *Traded) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *EvtTraded) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	// Read and check account discriminator:
 	{
 		discriminator, err := decoder.ReadDiscriminator()
@@ -556,16 +556,16 @@ func (obj *Traded) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	return nil
 }
 
-func (obj *Traded) Unmarshal(buf []byte) error {
+func (obj *EvtTraded) Unmarshal(buf []byte) error {
 	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
 	if err != nil {
-		return fmt.Errorf("error while unmarshaling Traded: %w", err)
+		return fmt.Errorf("error while unmarshaling EvtTraded: %w", err)
 	}
 	return nil
 }
 
-func UnmarshalTraded(buf []byte) (*Traded, error) {
-	obj := new(Traded)
+func UnmarshalEvtTraded(buf []byte) (*EvtTraded, error) {
+	obj := new(EvtTraded)
 	err := obj.Unmarshal(buf)
 	if err != nil {
 		return nil, err

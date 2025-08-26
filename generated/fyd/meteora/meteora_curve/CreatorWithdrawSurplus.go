@@ -75,6 +75,10 @@ func (*CreatorWithdrawSurplus) NewInstance() programparser.Instruction {
 	return new(CreatorWithdrawSurplus)
 }
 
+func (obj *CreatorWithdrawSurplus) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "creator_withdraw_surplus" instruction.
 func NewCreatorWithdrawSurplusInstruction(
 	config solanago.PublicKey,

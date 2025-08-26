@@ -77,6 +77,10 @@ func (*SetRewardAuthorityBySuperAuthority) NewInstance() programparser.Instructi
 	return new(SetRewardAuthorityBySuperAuthority)
 }
 
+func (obj *SetRewardAuthorityBySuperAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "set_reward_authority_by_super_authority" instruction.
 // Set the whirlpool reward authority at the provided `reward_index`. // Only the current reward super authority has permission to invoke this instruction. //  // ### Authority // - "reward_authority" - Set authority that can control reward emission for this particular reward. //  // #### Special Errors // - `InvalidRewardIndex` - If the provided reward index doesn't match the lowest uninitialized // index in this pool, or exceeds NUM_REWARDS, or // all reward slots for this pool has been initialized.
 func NewSetRewardAuthorityBySuperAuthorityInstruction(

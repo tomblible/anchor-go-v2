@@ -76,6 +76,10 @@ func (*SetProtocolFeeRate) NewInstance() programparser.Instruction {
 	return new(SetProtocolFeeRate)
 }
 
+func (obj *SetProtocolFeeRate) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "set_protocol_fee_rate" instruction.
 // Sets the protocol fee rate for a Whirlpool. // Protocol fee rate is represented as a basis point. // Only the current fee authority has permission to invoke this instruction. //  // ### Authority // - "fee_authority" - Set authority that can modify pool fees in the WhirlpoolConfig //  // ### Parameters // - `protocol_fee_rate` - The rate that the pool will use to calculate protocol fees going onwards. //  // #### Special Errors // - `ProtocolFeeRateMaxExceeded` - If the provided default_protocol_fee_rate exceeds MAX_PROTOCOL_FEE_RATE.
 func NewSetProtocolFeeRateInstruction(

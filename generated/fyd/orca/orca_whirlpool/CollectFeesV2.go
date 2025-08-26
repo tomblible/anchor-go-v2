@@ -117,6 +117,10 @@ func (*CollectFeesV2) NewInstance() programparser.Instruction {
 	return new(CollectFeesV2)
 }
 
+func (obj *CollectFeesV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[13:]
+}
+
 // Builds a "collect_fees_v2" instruction.
 // Collect fees accrued for this position. //  // ### Authority // - `position_authority` - authority that owns the token corresponding to this desired position.
 func NewCollectFeesV2Instruction(

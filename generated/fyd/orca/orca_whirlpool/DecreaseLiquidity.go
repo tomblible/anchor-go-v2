@@ -120,6 +120,10 @@ func (*DecreaseLiquidity) NewInstance() programparser.Instruction {
 	return new(DecreaseLiquidity)
 }
 
+func (obj *DecreaseLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[11:]
+}
+
 // Builds a "decrease_liquidity" instruction.
 // Withdraw liquidity from a position in the Whirlpool. This call also updates the position's accrued fees and rewards. //  // ### Authority // - `position_authority` - authority that owns the token corresponding to this desired position. //  // ### Parameters // - `liquidity_amount` - The total amount of Liquidity the user desires to withdraw. // - `token_min_a` - The minimum amount of tokenA the user is willing to withdraw. // - `token_min_b` - The minimum amount of tokenB the user is willing to withdraw. //  // #### Special Errors // - `LiquidityZero` - Provided liquidity amount is zero. // - `LiquidityTooHigh` - Provided liquidity exceeds u128::max. // - `TokenMinSubceeded` - The required token to perform this operation subceeds the user defined amount.
 func NewDecreaseLiquidityInstruction(

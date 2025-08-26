@@ -102,6 +102,10 @@ func (*UpdateFeeConfig) NewInstance() programparser.Instruction {
 	return new(UpdateFeeConfig)
 }
 
+func (obj *UpdateFeeConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "update_fee_config" instruction.
 func NewUpdateFeeConfigInstruction(
 	// Params:

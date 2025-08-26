@@ -117,6 +117,10 @@ func (*Deposit) NewInstance() programparser.Instruction {
 	return new(Deposit)
 }
 
+func (obj *Deposit) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "deposit" instruction.
 func NewDepositInstruction(
 	// Params:

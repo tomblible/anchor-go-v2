@@ -60,6 +60,10 @@ func (*CreateOperationAccount) NewInstance() programparser.Instruction {
 	return new(CreateOperationAccount)
 }
 
+func (obj *CreateOperationAccount) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "create_operation_account" instruction.
 // Creates an operation account for the program //  // # Arguments //  // * `ctx`- The context of accounts //
 func NewCreateOperationAccountInstruction(

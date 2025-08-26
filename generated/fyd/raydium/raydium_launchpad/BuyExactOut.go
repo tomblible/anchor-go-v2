@@ -125,6 +125,10 @@ func (*BuyExactOut) NewInstance() programparser.Instruction {
 	return new(BuyExactOut)
 }
 
+func (obj *BuyExactOut) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "buy_exact_out" instruction.
 // Use quote tokens to purchase the given amount of base tokens. // # Arguments //  // * `ctx` - The context of accounts // * `amount_out` - Amount of base token to receive // * `maximum_amount_in` - Maximum amount of quote token to purchase (slippage protection) // * `share_fee_rate` - Fee rate for the share
 func NewBuyExactOutInstruction(

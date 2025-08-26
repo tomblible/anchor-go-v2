@@ -60,8 +60,8 @@ func (*SetPreActivationSwapAddress) NewInstance() programparser.Instruction {
 	return new(SetPreActivationSwapAddress)
 }
 
-func (inst *SetPreActivationSwapAddress) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *SetPreActivationSwapAddress) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_pre_activation_swap_address" instruction.

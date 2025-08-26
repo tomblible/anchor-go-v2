@@ -102,8 +102,8 @@ func (*InitializeReward) NewInstance() programparser.Instruction {
 	return new(InitializeReward)
 }
 
-func (inst *InitializeReward) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[10:]
+func (obj *InitializeReward) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
 }
 
 // Builds a "initialize_reward" instruction.

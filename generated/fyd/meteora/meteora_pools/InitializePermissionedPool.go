@@ -134,8 +134,8 @@ func (*InitializePermissionedPool) NewInstance() programparser.Instruction {
 	return new(InitializePermissionedPool)
 }
 
-func (inst *InitializePermissionedPool) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[24:]
+func (obj *InitializePermissionedPool) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[24:]
 }
 
 // Builds a "initialize_permissioned_pool" instruction.

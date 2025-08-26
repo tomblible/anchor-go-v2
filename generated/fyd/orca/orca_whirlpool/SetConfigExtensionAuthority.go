@@ -57,6 +57,10 @@ func (*SetConfigExtensionAuthority) NewInstance() programparser.Instruction {
 	return new(SetConfigExtensionAuthority)
 }
 
+func (obj *SetConfigExtensionAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "set_config_extension_authority" instruction.
 func NewSetConfigExtensionAuthorityInstruction(
 	whirlpoolsConfig solanago.PublicKey,

@@ -83,6 +83,10 @@ func (*UpdateOperationAccount) NewInstance() programparser.Instruction {
 	return new(UpdateOperationAccount)
 }
 
+func (obj *UpdateOperationAccount) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "update_operation_account" instruction.
 // Update the operation account //  // # Arguments //  // * `ctx`- The context of accounts // * `param`- The value can be 0 | 1 | 2 | 3, otherwise will report a error // * `keys`- update operation owner when the `param` is 0 // remove operation owner when the `param` is 1 // update whitelist mint when the `param` is 2 // remove whitelist mint when the `param` is 3 //
 func NewUpdateOperationAccountInstruction(

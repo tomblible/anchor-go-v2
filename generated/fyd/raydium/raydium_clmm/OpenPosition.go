@@ -179,6 +179,10 @@ func (*OpenPosition) NewInstance() programparser.Instruction {
 	return new(OpenPosition)
 }
 
+func (obj *OpenPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[19:]
+}
+
 // Builds a "open_position" instruction.
 // #[deprecated(note = "Use `open_position_with_token22_nft` instead.")] // Creates a new position wrapped in a NFT //  // # Arguments //  // * `ctx` - The context of accounts // * `tick_lower_index` - The low boundary of market // * `tick_upper_index` - The upper boundary of market // * `tick_array_lower_start_index` - The start index of tick array which include tick low // * `tick_array_upper_start_index` - The start index of tick array which include tick upper // * `liquidity` - The liquidity to be added // * `amount_0_max` - The max amount of token_0 to spend, which serves as a slippage check // * `amount_1_max` - The max amount of token_1 to spend, which serves as a slippage check //
 func NewOpenPositionInstruction(

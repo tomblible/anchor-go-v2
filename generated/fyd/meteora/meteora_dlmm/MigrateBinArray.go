@@ -48,8 +48,8 @@ func (*MigrateBinArray) NewInstance() programparser.Instruction {
 	return new(MigrateBinArray)
 }
 
-func (inst *MigrateBinArray) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[1:]
+func (obj *MigrateBinArray) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[1:]
 }
 
 // Builds a "migrate_bin_array" instruction.

@@ -194,6 +194,10 @@ func (*InitializeAdaptiveFeeTier) NewInstance() programparser.Instruction {
 	return new(InitializeAdaptiveFeeTier)
 }
 
+func (obj *InitializeAdaptiveFeeTier) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "initialize_adaptive_fee_tier" instruction.
 // Initializes an adaptive_fee_tier account usable by Whirlpools in a WhirlpoolConfig space. //  // ### Authority // - "fee_authority" - Set authority in the WhirlpoolConfig //  // ### Parameters // - `fee_tier_index` - The index of the fee-tier that this adaptive fee tier will be initialized. // - `tick_spacing` - The tick-spacing that this fee-tier suggests the default_fee_rate for. // - `initialize_pool_authority` - The authority that can initialize pools with this adaptive fee-tier. // - `delegated_fee_authority` - The authority that can set the base fee rate for pools using this adaptive fee-tier. // - `default_fee_rate` - The default fee rate that a pool will use if the pool uses this // fee tier during initialization. // - `filter_period` - Period determine high frequency trading time window. (seconds) // - `decay_period` - Period determine when the adaptive fee start decrease. (seconds) // - `reduction_factor` - Adaptive fee rate decrement rate. // - `adaptive_fee_control_factor` - Adaptive fee control factor. // - `max_volatility_accumulator` - Max volatility accumulator. // - `tick_group_size` - Tick group size to define tick group index. // - `major_swap_threshold_ticks` - Major swap threshold ticks to define major swap. //  // #### Special Errors // - `InvalidTickSpacing` - If the provided tick_spacing is 0. // - `InvalidFeeTierIndex` - If the provided fee_tier_index is same to tick_spacing. // - `FeeRateMaxExceeded` - If the provided default_fee_rate exceeds MAX_FEE_RATE. // - `InvalidAdaptiveFeeConstants` - If the provided adaptive fee constants are invalid.
 func NewInitializeAdaptiveFeeTierInstruction(

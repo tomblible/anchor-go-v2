@@ -51,6 +51,10 @@ func (*IdlInclude) NewInstance() programparser.Instruction {
 	return new(IdlInclude)
 }
 
+func (obj *IdlInclude) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "idl_include" instruction.
 func NewIdlIncludeInstruction(
 	tickArray solanago.PublicKey,

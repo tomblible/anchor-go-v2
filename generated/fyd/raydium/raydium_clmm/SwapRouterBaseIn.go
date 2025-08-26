@@ -89,6 +89,10 @@ func (*SwapRouterBaseIn) NewInstance() programparser.Instruction {
 	return new(SwapRouterBaseIn)
 }
 
+func (obj *SwapRouterBaseIn) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "swap_router_base_in" instruction.
 // Swap token for as much as possible of another token across the path provided, base input //  // # Arguments //  // * `ctx` - The context of accounts // * `amount_in` - Token amount to be swapped in // * `amount_out_minimum` - Minimum output amount for slip control
 func NewSwapRouterBaseInInstruction(

@@ -60,6 +60,10 @@ func (*UpdateGlobalAuthority) NewInstance() programparser.Instruction {
 	return new(UpdateGlobalAuthority)
 }
 
+func (obj *UpdateGlobalAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "update_global_authority" instruction.
 func NewUpdateGlobalAuthorityInstruction(
 	global solanago.PublicKey,

@@ -120,6 +120,10 @@ func (*MigrationDammV2) NewInstance() programparser.Instruction {
 	return new(MigrationDammV2)
 }
 
+func (obj *MigrationDammV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[25:]
+}
+
 // Builds a "migration_damm_v2" instruction.
 func NewMigrationDammV2Instruction(
 	virtualPool solanago.PublicKey,

@@ -166,6 +166,10 @@ func (*InitializeWithToken2022) NewInstance() programparser.Instruction {
 	return new(InitializeWithToken2022)
 }
 
+func (obj *InitializeWithToken2022) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "initialize_with_token_2022" instruction.
 // Initializes a new trading pool with base token belongs to spl-token-2022, // pool created by this instruction must be migrated to cpswap after fundraising ends, i.e., curve_param.migrate_type = 1 // # Arguments //  // * `ctx` - The context of accounts containing pool and token information //
 func NewInitializeWithToken2022Instruction(

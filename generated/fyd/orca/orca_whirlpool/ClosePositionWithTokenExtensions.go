@@ -72,6 +72,10 @@ func (*ClosePositionWithTokenExtensions) NewInstance() programparser.Instruction
 	return new(ClosePositionWithTokenExtensions)
 }
 
+func (obj *ClosePositionWithTokenExtensions) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "close_position_with_token_extensions" instruction.
 // Close a position in a Whirlpool. Burns the position token in the owner's wallet. // Mint and TokenAccount are based on Token-2022. And Mint accout will be also closed. //  // ### Authority // - "position_authority" - The authority that owns the position token. //  // #### Special Errors // - `ClosePositionNotEmpty` - The provided position account is not empty.
 func NewClosePositionWithTokenExtensionsInstruction(

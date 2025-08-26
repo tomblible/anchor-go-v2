@@ -72,6 +72,10 @@ func (*WithdrawSrm) NewInstance() programparser.Instruction {
 	return new(WithdrawSrm)
 }
 
+func (obj *WithdrawSrm) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "withdraw_srm" instruction.
 func NewWithdrawSrmInstruction(
 	// Params:

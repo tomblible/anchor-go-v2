@@ -155,6 +155,10 @@ func (*IncreaseLiquidityV2) NewInstance() programparser.Instruction {
 	return new(IncreaseLiquidityV2)
 }
 
+func (obj *IncreaseLiquidityV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "increase_liquidity_v2" instruction.
 // Increases liquidity for an existing position, with amount paid by `payer`, support Token2022 //  // # Arguments //  // * `ctx` - The context of accounts // * `liquidity` - The desired liquidity to be added, if zero, calculate liquidity base amount_0 or amount_1 according base_flag // * `amount_0_max` - The max amount of token_0 to spend, which serves as a slippage check // * `amount_1_max` - The max amount of token_1 to spend, which serves as a slippage check // * `base_flag` - must be specified if liquidity is zero, true: calculate liquidity base amount_0_max otherwise base amount_1_max //
 func NewIncreaseLiquidityV2Instruction(

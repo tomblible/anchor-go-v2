@@ -81,6 +81,10 @@ func (*MigrateFunds) NewInstance() programparser.Instruction {
 	return new(MigrateFunds)
 }
 
+func (obj *MigrateFunds) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[12:]
+}
+
 // Builds a "migrate_funds" instruction.
 func NewMigrateFundsInstruction(
 	backendAuthority solanago.PublicKey,

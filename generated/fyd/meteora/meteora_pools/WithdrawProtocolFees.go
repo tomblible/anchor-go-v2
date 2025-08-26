@@ -68,8 +68,8 @@ func (*WithdrawProtocolFees) NewInstance() programparser.Instruction {
 	return new(WithdrawProtocolFees)
 }
 
-func (inst *WithdrawProtocolFees) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[7:]
+func (obj *WithdrawProtocolFees) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
 }
 
 // Builds a "withdraw_protocol_fees" instruction.

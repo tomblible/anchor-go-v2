@@ -125,6 +125,10 @@ func (*SellExactOut) NewInstance() programparser.Instruction {
 	return new(SellExactOut)
 }
 
+func (obj *SellExactOut) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "sell_exact_out" instruction.
 // Sell base tokens for the given amount of quote tokens. // # Arguments //  // * `ctx` - The context of accounts // * `amount_out` - Amount of quote token to receive // * `maximum_amount_in` - Maximum amount of base token to purchase (slippage protection) // * `share_fee_rate` - Fee rate for the share //
 func NewSellExactOutInstruction(

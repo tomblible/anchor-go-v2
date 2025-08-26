@@ -63,6 +63,10 @@ func (*UpdateFeesAndRewards) NewInstance() programparser.Instruction {
 	return new(UpdateFeesAndRewards)
 }
 
+func (obj *UpdateFeesAndRewards) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "update_fees_and_rewards" instruction.
 // Update the accrued fees and rewards for a position. //  // #### Special Errors // - `TickNotFound` - Provided tick array account does not contain the tick for this position. // - `LiquidityZero` - Position has zero liquidity and therefore already has the most updated fees and reward values.
 func NewUpdateFeesAndRewardsInstruction(

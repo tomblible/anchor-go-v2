@@ -119,6 +119,10 @@ func (*Migrate) NewInstance() programparser.Instruction {
 	return new(Migrate)
 }
 
+func (obj *Migrate) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[24:]
+}
+
 // Builds a "migrate" instruction.
 // Migrates liquidity to pump_amm if the bonding curve is complete
 func NewMigrateInstruction(

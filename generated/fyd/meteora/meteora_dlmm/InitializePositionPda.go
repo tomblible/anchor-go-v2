@@ -90,8 +90,8 @@ func (*InitializePositionPda) NewInstance() programparser.Instruction {
 	return new(InitializePositionPda)
 }
 
-func (inst *InitializePositionPda) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[9:]
+func (obj *InitializePositionPda) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
 }
 
 // Builds a "initialize_position_pda" instruction.

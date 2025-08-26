@@ -116,6 +116,10 @@ func (*OpenPositionWithTokenExtensions) NewInstance() programparser.Instruction 
 	return new(OpenPositionWithTokenExtensions)
 }
 
+func (obj *OpenPositionWithTokenExtensions) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "open_position_with_token_extensions" instruction.
 // Open a position in a Whirlpool. A unique token will be minted to represent the position // in the users wallet. Additional TokenMetadata extension is initialized to identify the token. // Mint and TokenAccount are based on Token-2022. // The position will start off with 0 liquidity. //  // ### Parameters // - `tick_lower_index` - The tick specifying the lower end of the position range. // - `tick_upper_index` - The tick specifying the upper end of the position range. // - `with_token_metadata_extension` - If true, the token metadata extension will be initialized. //  // #### Special Errors // - `InvalidTickIndex` - If a provided tick is out of bounds, out of order or not a multiple of // the tick-spacing in this pool.
 func NewOpenPositionWithTokenExtensionsInstruction(

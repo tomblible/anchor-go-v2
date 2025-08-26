@@ -132,6 +132,10 @@ func (*SetPresetAdaptiveFeeConstants) NewInstance() programparser.Instruction {
 	return new(SetPresetAdaptiveFeeConstants)
 }
 
+func (obj *SetPresetAdaptiveFeeConstants) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "set_preset_adaptive_fee_constants" instruction.
 // Sets the adaptive fee constants for an AdaptiveFeeTier. // Only the current fee authority in WhirlpoolsConfig has permission to invoke this instruction. //  // ### Authority // - "fee_authority" - Set authority in the WhirlpoolConfig //  // ### Parameters // - `filter_period` - Period determine high frequency trading time window. (seconds) // - `decay_period` - Period determine when the adaptive fee start decrease. (seconds) // - `reduction_factor` - Adaptive fee rate decrement rate. // - `adaptive_fee_control_factor` - Adaptive fee control factor. // - `max_volatility_accumulator` - Max volatility accumulator. // - `tick_group_size` - Tick group size to define tick group index. // - `major_swap_threshold_ticks` - Major swap threshold ticks to define major swap.
 func NewSetPresetAdaptiveFeeConstantsInstruction(

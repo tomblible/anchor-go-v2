@@ -123,6 +123,10 @@ func (*OpenPositionWithMetadata) NewInstance() programparser.Instruction {
 	return new(OpenPositionWithMetadata)
 }
 
+func (obj *OpenPositionWithMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[13:]
+}
+
 // Builds a "open_position_with_metadata" instruction.
 // Open a position in a Whirlpool. A unique token will be minted to represent the position // in the users wallet. Additional Metaplex metadata is appended to identify the token. // The position will start off with 0 liquidity. //  // ### Parameters // - `tick_lower_index` - The tick specifying the lower end of the position range. // - `tick_upper_index` - The tick specifying the upper end of the position range. //  // #### Special Errors // - `InvalidTickIndex` - If a provided tick is out of bounds, out of order or not a multiple of // the tick-spacing in this pool.
 func NewOpenPositionWithMetadataInstruction(

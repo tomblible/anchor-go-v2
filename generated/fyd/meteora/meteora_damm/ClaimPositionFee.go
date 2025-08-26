@@ -90,6 +90,10 @@ func (*ClaimPositionFee) NewInstance() programparser.Instruction {
 	return new(ClaimPositionFee)
 }
 
+func (obj *ClaimPositionFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "claim_position_fee" instruction.
 func NewClaimPositionFeeInstruction(
 	pool solanago.PublicKey,

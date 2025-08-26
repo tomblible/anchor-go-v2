@@ -64,6 +64,10 @@ func (*SetInitializePoolAuthority) NewInstance() programparser.Instruction {
 	return new(SetInitializePoolAuthority)
 }
 
+func (obj *SetInitializePoolAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "set_initialize_pool_authority" instruction.
 // Sets the initialize pool authority for an AdaptiveFeeTier. // Only the initialize pool authority can initialize pools with the adaptive fee-tier. // Only the current fee authority in WhirlpoolsConfig has permission to invoke this instruction. //  // ### Authority // - "fee_authority" - Set authority in the WhirlpoolConfig
 func NewSetInitializePoolAuthorityInstruction(

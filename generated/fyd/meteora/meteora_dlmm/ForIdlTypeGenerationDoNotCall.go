@@ -57,8 +57,8 @@ func (*ForIdlTypeGenerationDoNotCall) NewInstance() programparser.Instruction {
 	return new(ForIdlTypeGenerationDoNotCall)
 }
 
-func (inst *ForIdlTypeGenerationDoNotCall) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[1:]
+func (obj *ForIdlTypeGenerationDoNotCall) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[1:]
 }
 
 // Builds a "for_idl_type_generation_do_not_call" instruction.

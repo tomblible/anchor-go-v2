@@ -60,6 +60,10 @@ func (*ConfigUpdate) NewInstance() programparser.Instruction {
 	return new(ConfigUpdate)
 }
 
+func (obj *ConfigUpdate) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "config_update" instruction.
 func NewConfigUpdateInstruction(
 	// Params:

@@ -75,6 +75,10 @@ func (*UpdateRewardDuration) NewInstance() programparser.Instruction {
 	return new(UpdateRewardDuration)
 }
 
+func (obj *UpdateRewardDuration) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "update_reward_duration" instruction.
 func NewUpdateRewardDurationInstruction(
 	// Params:

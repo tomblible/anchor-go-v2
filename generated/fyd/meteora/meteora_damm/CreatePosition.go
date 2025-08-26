@@ -78,6 +78,10 @@ func (*CreatePosition) NewInstance() programparser.Instruction {
 	return new(CreatePosition)
 }
 
+func (obj *CreatePosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[11:]
+}
+
 // Builds a "create_position" instruction.
 func NewCreatePositionInstruction(
 	owner solanago.PublicKey,

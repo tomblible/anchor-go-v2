@@ -71,6 +71,10 @@ func (*DeletePositionBundle) NewInstance() programparser.Instruction {
 	return new(DeletePositionBundle)
 }
 
+func (obj *DeletePositionBundle) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "delete_position_bundle" instruction.
 // Delete a PositionBundle account. Burns the position bundle token in the owner's wallet. //  // ### Authority // - `position_bundle_owner` - The owner that owns the position bundle token. //  // ### Special Errors // - `PositionBundleNotDeletable` - The provided position bundle has open positions.
 func NewDeletePositionBundleInstruction(

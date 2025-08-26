@@ -242,6 +242,10 @@ func (*SetParams) NewInstance() programparser.Instruction {
 	return new(SetParams)
 }
 
+func (obj *SetParams) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
+}
+
 // Builds a "set_params" instruction.
 func NewSetParamsInstruction(
 	// Params:

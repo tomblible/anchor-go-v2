@@ -60,8 +60,8 @@ func (*ClosePosition2) NewInstance() programparser.Instruction {
 	return new(ClosePosition2)
 }
 
-func (inst *ClosePosition2) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[5:]
+func (obj *ClosePosition2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
 }
 
 // Builds a "close_position2" instruction.

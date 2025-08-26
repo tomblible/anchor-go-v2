@@ -114,6 +114,10 @@ func (*CollectProtocolFeesV2) NewInstance() programparser.Instruction {
 	return new(CollectProtocolFeesV2)
 }
 
+func (obj *CollectProtocolFeesV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[12:]
+}
+
 // Builds a "collect_protocol_fees_v2" instruction.
 // Collect the protocol fees accrued in this Whirlpool //  // ### Authority // - `collect_protocol_fees_authority` - assigned authority in the WhirlpoolConfig that can collect protocol fees
 func NewCollectProtocolFeesV2Instruction(

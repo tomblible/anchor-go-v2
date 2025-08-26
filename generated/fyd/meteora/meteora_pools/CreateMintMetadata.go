@@ -68,8 +68,8 @@ func (*CreateMintMetadata) NewInstance() programparser.Instruction {
 	return new(CreateMintMetadata)
 }
 
-func (inst *CreateMintMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[7:]
+func (obj *CreateMintMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
 }
 
 // Builds a "create_mint_metadata" instruction.

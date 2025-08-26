@@ -141,6 +141,10 @@ func (*Initialize) NewInstance() programparser.Instruction {
 	return new(Initialize)
 }
 
+func (obj *Initialize) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[20:]
+}
+
 // Builds a "initialize" instruction.
 // Creates a pool for the given token pair and the initial price //  // # Arguments //  // * `ctx`- The context of accounts // * `init_amount_0` - the initial amount_0 to deposit // * `init_amount_1` - the initial amount_1 to deposit // * `open_time` - the timestamp allowed for swap //
 func NewInitializeInstruction(

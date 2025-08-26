@@ -75,6 +75,10 @@ func (*CreateVestingAccount) NewInstance() programparser.Instruction {
 	return new(CreateVestingAccount)
 }
 
+func (obj *CreateVestingAccount) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "create_vesting_account" instruction.
 // Create vesting account // # Arguments //  // * `ctx` - The context of accounts // * `share` - The share amount of base token to be vested //
 func NewCreateVestingAccountInstruction(

@@ -117,6 +117,10 @@ func (*InitializePoolWithDynamicConfig) NewInstance() programparser.Instruction 
 	return new(InitializePoolWithDynamicConfig)
 }
 
+func (obj *InitializePoolWithDynamicConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[21:]
+}
+
 // Builds a "initialize_pool_with_dynamic_config" instruction.
 func NewInitializePoolWithDynamicConfigInstruction(
 	// Params:

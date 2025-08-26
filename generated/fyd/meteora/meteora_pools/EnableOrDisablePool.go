@@ -62,8 +62,8 @@ func (*EnableOrDisablePool) NewInstance() programparser.Instruction {
 	return new(EnableOrDisablePool)
 }
 
-func (inst *EnableOrDisablePool) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *EnableOrDisablePool) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "enable_or_disable_pool" instruction.

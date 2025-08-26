@@ -66,8 +66,8 @@ func (*UpdatePositionOperator) NewInstance() programparser.Instruction {
 	return new(UpdatePositionOperator)
 }
 
-func (inst *UpdatePositionOperator) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[4:]
+func (obj *UpdatePositionOperator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "update_position_operator" instruction.

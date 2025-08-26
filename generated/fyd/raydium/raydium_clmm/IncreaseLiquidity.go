@@ -118,6 +118,10 @@ func (*IncreaseLiquidity) NewInstance() programparser.Instruction {
 	return new(IncreaseLiquidity)
 }
 
+func (obj *IncreaseLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[12:]
+}
+
 // Builds a "increase_liquidity" instruction.
 // #[deprecated(note = "Use `increase_liquidity_v2` instead.")] // Increases liquidity for an existing position, with amount paid by `payer` //  // # Arguments //  // * `ctx` - The context of accounts // * `liquidity` - The desired liquidity to be added, can't be zero // * `amount_0_max` - The max amount of token_0 to spend, which serves as a slippage check // * `amount_1_max` - The max amount of token_1 to spend, which serves as a slippage check //
 func NewIncreaseLiquidityInstruction(

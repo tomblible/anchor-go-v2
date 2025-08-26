@@ -74,6 +74,10 @@ func (*ClaimCreatorFee) NewInstance() programparser.Instruction {
 	return new(ClaimCreatorFee)
 }
 
+func (obj *ClaimCreatorFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "claim_creator_fee" instruction.
 // Claim the fee from the exclusive creator fee vault. // # Arguments //  // * `ctx` - The context of accounts //
 func NewClaimCreatorFeeInstruction(

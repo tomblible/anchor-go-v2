@@ -96,6 +96,10 @@ func (*PreInitialize) NewInstance() programparser.Instruction {
 	return new(PreInitialize)
 }
 
+func (obj *PreInitialize) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "pre_initialize" instruction.
 func NewPreInitializeInstruction(
 	// Params:

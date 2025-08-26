@@ -167,8 +167,8 @@ func (*InitializePermissionlessPoolWithFeeTier) NewInstance() programparser.Inst
 	return new(InitializePermissionlessPoolWithFeeTier)
 }
 
-func (inst *InitializePermissionlessPoolWithFeeTier) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[26:]
+func (obj *InitializePermissionlessPoolWithFeeTier) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[26:]
 }
 
 // Builds a "initialize_permissionless_pool_with_fee_tier" instruction.

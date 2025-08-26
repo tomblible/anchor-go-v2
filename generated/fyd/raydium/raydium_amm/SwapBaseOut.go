@@ -117,6 +117,10 @@ func (*SwapBaseOut) NewInstance() programparser.Instruction {
 	return new(SwapBaseOut)
 }
 
+func (obj *SwapBaseOut) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[18:]
+}
+
 // Builds a "swap_base_out" instruction.
 func NewSwapBaseOutInstruction(
 	// Params:

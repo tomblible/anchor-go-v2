@@ -120,8 +120,8 @@ func (*RemoveLiquidityByRange) NewInstance() programparser.Instruction {
 	return new(RemoveLiquidityByRange)
 }
 
-func (inst *RemoveLiquidityByRange) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[16:]
+func (obj *RemoveLiquidityByRange) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
 }
 
 // Builds a "remove_liquidity_by_range" instruction.

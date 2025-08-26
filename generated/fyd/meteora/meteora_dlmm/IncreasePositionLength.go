@@ -84,8 +84,8 @@ func (*IncreasePositionLength) NewInstance() programparser.Instruction {
 	return new(IncreasePositionLength)
 }
 
-func (inst *IncreasePositionLength) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[7:]
+func (obj *IncreasePositionLength) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
 }
 
 // Builds a "increase_position_length" instruction.

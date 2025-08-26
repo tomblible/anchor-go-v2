@@ -96,6 +96,10 @@ func (*Swap) NewInstance() programparser.Instruction {
 	return new(Swap)
 }
 
+func (obj *Swap) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "swap" instruction.
 func NewSwapInstruction(
 	// Params:

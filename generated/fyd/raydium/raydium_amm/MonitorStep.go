@@ -129,6 +129,10 @@ func (*MonitorStep) NewInstance() programparser.Instruction {
 	return new(MonitorStep)
 }
 
+func (obj *MonitorStep) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[19:]
+}
+
 // Builds a "monitor_step" instruction.
 func NewMonitorStepInstruction(
 	// Params:

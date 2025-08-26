@@ -113,6 +113,10 @@ func (*OpenBundledPosition) NewInstance() programparser.Instruction {
 	return new(OpenBundledPosition)
 }
 
+func (obj *OpenBundledPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "open_bundled_position" instruction.
 // Open a bundled position in a Whirlpool. No new tokens are issued // because the owner of the position bundle becomes the owner of the position. // The position will start off with 0 liquidity. //  // ### Authority // - `position_bundle_authority` - authority that owns the token corresponding to this desired position bundle. //  // ### Parameters // - `bundle_index` - The bundle index that we'd like to open. // - `tick_lower_index` - The tick specifying the lower end of the position range. // - `tick_upper_index` - The tick specifying the upper end of the position range. //  // #### Special Errors // - `InvalidBundleIndex` - If the provided bundle index is out of bounds. // - `InvalidTickIndex` - If a provided tick is out of bounds, out of order or not a multiple of // the tick-spacing in this pool.
 func NewOpenBundledPositionInstruction(

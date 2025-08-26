@@ -105,8 +105,8 @@ func (*InitializeCustomizablePermissionlessLbPair2) NewInstance() programparser.
 	return new(InitializeCustomizablePermissionlessLbPair2)
 }
 
-func (inst *InitializeCustomizablePermissionlessLbPair2) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[17:]
+func (obj *InitializeCustomizablePermissionlessLbPair2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[17:]
 }
 
 // Builds a "initialize_customizable_permissionless_lb_pair2" instruction.

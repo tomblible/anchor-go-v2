@@ -102,8 +102,8 @@ func (*AddLiquidityByWeight) NewInstance() programparser.Instruction {
 	return new(AddLiquidityByWeight)
 }
 
-func (inst *AddLiquidityByWeight) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[16:]
+func (obj *AddLiquidityByWeight) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
 }
 
 // Builds a "add_liquidity_by_weight" instruction.

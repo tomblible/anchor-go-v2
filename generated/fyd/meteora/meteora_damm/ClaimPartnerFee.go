@@ -102,6 +102,10 @@ func (*ClaimPartnerFee) NewInstance() programparser.Instruction {
 	return new(ClaimPartnerFee)
 }
 
+func (obj *ClaimPartnerFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[13:]
+}
+
 // Builds a "claim_partner_fee" instruction.
 func NewClaimPartnerFeeInstruction(
 	// Params:

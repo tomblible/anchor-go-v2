@@ -172,6 +172,10 @@ func (*MigrateToAmm) NewInstance() programparser.Instruction {
 	return new(MigrateToAmm)
 }
 
+func (obj *MigrateToAmm) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[32:]
+}
+
 // Builds a "migrate_to_amm" instruction.
 // # Arguments //  // * `ctx` - The context of accounts //
 func NewMigrateToAmmInstruction(

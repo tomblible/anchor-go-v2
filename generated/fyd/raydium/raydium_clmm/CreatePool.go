@@ -110,6 +110,10 @@ func (*CreatePool) NewInstance() programparser.Instruction {
 	return new(CreatePool)
 }
 
+func (obj *CreatePool) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[13:]
+}
+
 // Builds a "create_pool" instruction.
 // Creates a pool for the given token pair and the initial price //  // # Arguments //  // * `ctx`- The context of accounts // * `sqrt_price_x64` - the initial sqrt price (amount_token_1 / amount_token_0) of the pool as a Q64.64 // Note: The open_time must be smaller than the current block_timestamp on chain.
 func NewCreatePoolInstruction(

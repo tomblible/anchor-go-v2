@@ -57,8 +57,8 @@ func (*CreateClaimProtocolFeeOperator) NewInstance() programparser.Instruction {
 	return new(CreateClaimProtocolFeeOperator)
 }
 
-func (inst *CreateClaimProtocolFeeOperator) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[4:]
+func (obj *CreateClaimProtocolFeeOperator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "create_claim_protocol_fee_operator" instruction.

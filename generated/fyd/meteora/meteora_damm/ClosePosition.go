@@ -75,6 +75,10 @@ func (*ClosePosition) NewInstance() programparser.Instruction {
 	return new(ClosePosition)
 }
 
+func (obj *ClosePosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "close_position" instruction.
 func NewClosePositionInstruction(
 	positionNftMint solanago.PublicKey,

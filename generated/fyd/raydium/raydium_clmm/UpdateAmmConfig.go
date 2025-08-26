@@ -82,6 +82,10 @@ func (*UpdateAmmConfig) NewInstance() programparser.Instruction {
 	return new(UpdateAmmConfig)
 }
 
+func (obj *UpdateAmmConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "update_amm_config" instruction.
 // Updates the owner of the amm config // Must be called by the current owner or admin //  // # Arguments //  // * `ctx`- The context of accounts // * `trade_fee_rate`- The new trade fee rate of amm config, be set when `param` is 0 // * `protocol_fee_rate`- The new protocol fee rate of amm config, be set when `param` is 1 // * `fund_fee_rate`- The new fund fee rate of amm config, be set when `param` is 2 // * `new_owner`- The config's new owner, be set when `param` is 3 // * `new_fund_owner`- The config's new fund owner, be set when `param` is 4 // * `param`- The value can be 0 | 1 | 2 | 3 | 4, otherwise will report a error //
 func NewUpdateAmmConfigInstruction(

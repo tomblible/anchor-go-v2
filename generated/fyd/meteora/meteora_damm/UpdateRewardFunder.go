@@ -75,6 +75,10 @@ func (*UpdateRewardFunder) NewInstance() programparser.Instruction {
 	return new(UpdateRewardFunder)
 }
 
+func (obj *UpdateRewardFunder) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "update_reward_funder" instruction.
 func NewUpdateRewardFunderInstruction(
 	// Params:

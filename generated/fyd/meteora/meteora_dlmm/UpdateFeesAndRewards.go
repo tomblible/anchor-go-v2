@@ -60,8 +60,8 @@ func (*UpdateFeesAndRewards) NewInstance() programparser.Instruction {
 	return new(UpdateFeesAndRewards)
 }
 
-func (inst *UpdateFeesAndRewards) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[5:]
+func (obj *UpdateFeesAndRewards) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
 }
 
 // Builds a "update_fees_and_rewards" instruction.

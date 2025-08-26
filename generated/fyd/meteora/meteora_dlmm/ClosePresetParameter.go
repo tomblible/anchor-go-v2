@@ -54,8 +54,8 @@ func (*ClosePresetParameter) NewInstance() programparser.Instruction {
 	return new(ClosePresetParameter)
 }
 
-func (inst *ClosePresetParameter) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[3:]
+func (obj *ClosePresetParameter) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "close_preset_parameter" instruction.

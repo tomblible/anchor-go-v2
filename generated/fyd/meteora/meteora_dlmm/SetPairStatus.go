@@ -60,8 +60,8 @@ func (*SetPairStatus) NewInstance() programparser.Instruction {
 	return new(SetPairStatus)
 }
 
-func (inst *SetPairStatus) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *SetPairStatus) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_pair_status" instruction.

@@ -107,6 +107,10 @@ func (*Buy) NewInstance() programparser.Instruction {
 	return new(Buy)
 }
 
+func (obj *Buy) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "buy" instruction.
 // Buys tokens from a bonding curve.
 func NewBuyInstruction(

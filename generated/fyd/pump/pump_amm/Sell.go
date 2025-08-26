@@ -120,6 +120,10 @@ func (*Sell) NewInstance() programparser.Instruction {
 	return new(Sell)
 }
 
+func (obj *Sell) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[19:]
+}
+
 // Builds a "sell" instruction.
 func NewSellInstruction(
 	// Params:

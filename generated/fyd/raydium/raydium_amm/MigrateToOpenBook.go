@@ -108,6 +108,10 @@ func (*MigrateToOpenBook) NewInstance() programparser.Instruction {
 	return new(MigrateToOpenBook)
 }
 
+func (obj *MigrateToOpenBook) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[21:]
+}
+
 // Builds a "migrate_to_open_book" instruction.
 func NewMigrateToOpenBookInstruction(
 	tokenProgram solanago.PublicKey,

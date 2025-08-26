@@ -74,6 +74,10 @@ func (*CreatePartnerMetadata) NewInstance() programparser.Instruction {
 	return new(CreatePartnerMetadata)
 }
 
+func (obj *CreatePartnerMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "create_partner_metadata" instruction.
 // PARTNER FUNCTIONS ////
 func NewCreatePartnerMetadataInstruction(

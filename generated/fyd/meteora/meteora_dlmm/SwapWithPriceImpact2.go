@@ -148,8 +148,8 @@ func (*SwapWithPriceImpact2) NewInstance() programparser.Instruction {
 	return new(SwapWithPriceImpact2)
 }
 
-func (inst *SwapWithPriceImpact2) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[16:]
+func (obj *SwapWithPriceImpact2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
 }
 
 // Builds a "swap_with_price_impact2" instruction.

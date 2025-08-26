@@ -81,6 +81,10 @@ func (*SplitPosition) NewInstance() programparser.Instruction {
 	return new(SplitPosition)
 }
 
+func (obj *SplitPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
+}
+
 // Builds a "split_position" instruction.
 func NewSplitPositionInstruction(
 	// Params:

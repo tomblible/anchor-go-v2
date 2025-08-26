@@ -62,6 +62,10 @@ func (*SetCoinCreator) NewInstance() programparser.Instruction {
 	return new(SetCoinCreator)
 }
 
+func (obj *SetCoinCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "set_coin_creator" instruction.
 // Sets Pool::coin_creator from Metaplex metadata creator or BondingCurve::creator
 func NewSetCoinCreatorInstruction(

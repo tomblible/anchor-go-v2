@@ -85,6 +85,10 @@ func (*CreatePlatformConfig) NewInstance() programparser.Instruction {
 	return new(CreatePlatformConfig)
 }
 
+func (obj *CreatePlatformConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
+}
+
 // Builds a "create_platform_config" instruction.
 // Create platform config account // # Arguments //  // * `ctx` - The context of accounts // # Fields // * `fee_rate` - Fee rate of the platform // * `name` - Name of the platform // * `web` - Website of the platform // * `img` - Image link of the platform //
 func NewCreatePlatformConfigInstruction(

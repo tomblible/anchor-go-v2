@@ -120,6 +120,10 @@ func (*Withdraw) NewInstance() programparser.Instruction {
 	return new(Withdraw)
 }
 
+func (obj *Withdraw) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[22:]
+}
+
 // Builds a "withdraw" instruction.
 func NewWithdrawInstruction(
 	// Params:

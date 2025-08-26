@@ -85,6 +85,10 @@ func (*CollectRemainingRewards) NewInstance() programparser.Instruction {
 	return new(CollectRemainingRewards)
 }
 
+func (obj *CollectRemainingRewards) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "collect_remaining_rewards" instruction.
 // Collect remaining reward token for reward founder //  // # Arguments //  // * `ctx`- The context of accounts // * `reward_index` - the index to reward info, it must be smaller than 3 //
 func NewCollectRemainingRewardsInstruction(

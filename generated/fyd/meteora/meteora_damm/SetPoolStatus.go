@@ -66,6 +66,10 @@ func (*SetPoolStatus) NewInstance() programparser.Instruction {
 	return new(SetPoolStatus)
 }
 
+func (obj *SetPoolStatus) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "set_pool_status" instruction.
 func NewSetPoolStatusInstruction(
 	// Params:

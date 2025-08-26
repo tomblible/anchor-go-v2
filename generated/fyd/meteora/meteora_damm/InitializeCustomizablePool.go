@@ -111,6 +111,10 @@ func (*InitializeCustomizablePool) NewInstance() programparser.Instruction {
 	return new(InitializeCustomizablePool)
 }
 
+func (obj *InitializeCustomizablePool) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[19:]
+}
+
 // Builds a "initialize_customizable_pool" instruction.
 func NewInitializeCustomizablePoolInstruction(
 	// Params:

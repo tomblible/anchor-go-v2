@@ -60,6 +60,10 @@ func (*InitializeConfigExtension) NewInstance() programparser.Instruction {
 	return new(InitializeConfigExtension)
 }
 
+func (obj *InitializeConfigExtension) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "initialize_config_extension" instruction.
 func NewInitializeConfigExtensionInstruction(
 	config solanago.PublicKey,

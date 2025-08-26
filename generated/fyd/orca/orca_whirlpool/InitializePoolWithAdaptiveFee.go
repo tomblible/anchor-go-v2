@@ -142,6 +142,10 @@ func (*InitializePoolWithAdaptiveFee) NewInstance() programparser.Instruction {
 	return new(InitializePoolWithAdaptiveFee)
 }
 
+func (obj *InitializePoolWithAdaptiveFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
+}
+
 // Builds a "initialize_pool_with_adaptive_fee" instruction.
 // Initializes a Whirlpool account and Oracle account with adaptive fee. //  // ### Parameters // - `initial_sqrt_price` - The desired initial sqrt-price for this pool // - `trade_enable_timestamp` - The timestamp when trading is enabled for this pool (within 72 hours) //  // #### Special Errors // `InvalidTokenMintOrder` - The order of mints have to be ordered by // `SqrtPriceOutOfBounds` - provided initial_sqrt_price is not between 2^-64 to 2^64 // `InvalidTradeEnableTimestamp` - provided trade_enable_timestamp is not within 72 hours or the adaptive fee-tier is permission-less // `UnsupportedTokenMint` - The provided token mint is not supported by the program (e.g. it has risky token extensions) //
 func NewInitializePoolWithAdaptiveFeeInstruction(

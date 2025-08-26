@@ -78,6 +78,10 @@ func (*UpdateConfig) NewInstance() programparser.Instruction {
 	return new(UpdateConfig)
 }
 
+func (obj *UpdateConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "update_config" instruction.
 // Updates configuration parameters // # Arguments //  // * `ctx` - The context of accounts // * `param` - Parameter to update: // - 0: Update trade_fee_rate // - 1: Update fee owner // * `value` - New value for the selected parameter //
 func NewUpdateConfigInstruction(

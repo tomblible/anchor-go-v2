@@ -96,6 +96,10 @@ func (*InitializeVirtualPoolWithToken2022) NewInstance() programparser.Instructi
 	return new(InitializeVirtualPoolWithToken2022)
 }
 
+func (obj *InitializeVirtualPoolWithToken2022) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "initialize_virtual_pool_with_token2022" instruction.
 func NewInitializeVirtualPoolWithToken2022Instruction(
 	// Params:

@@ -69,6 +69,10 @@ func (*CollectCoinCreatorFee) NewInstance() programparser.Instruction {
 	return new(CollectCoinCreatorFee)
 }
 
+func (obj *CollectCoinCreatorFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "collect_coin_creator_fee" instruction.
 func NewCollectCoinCreatorFeeInstruction(
 	quoteMint solanago.PublicKey,

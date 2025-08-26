@@ -74,6 +74,10 @@ func (*CollectFee) NewInstance() programparser.Instruction {
 	return new(CollectFee)
 }
 
+func (obj *CollectFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "collect_fee" instruction.
 // Collects accumulated fees from the pool // # Arguments //  // * `ctx` - The context of accounts //
 func NewCollectFeeInstruction(

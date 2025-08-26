@@ -75,6 +75,10 @@ func (*CreateVirtualPoolMetadata) NewInstance() programparser.Instruction {
 	return new(CreateVirtualPoolMetadata)
 }
 
+func (obj *CreateVirtualPoolMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
+}
+
 // Builds a "create_virtual_pool_metadata" instruction.
 func NewCreateVirtualPoolMetadataInstruction(
 	// Params:

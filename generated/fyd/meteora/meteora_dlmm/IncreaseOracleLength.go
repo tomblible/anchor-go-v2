@@ -69,8 +69,8 @@ func (*IncreaseOracleLength) NewInstance() programparser.Instruction {
 	return new(IncreaseOracleLength)
 }
 
-func (inst *IncreaseOracleLength) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[5:]
+func (obj *IncreaseOracleLength) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
 }
 
 // Builds a "increase_oracle_length" instruction.

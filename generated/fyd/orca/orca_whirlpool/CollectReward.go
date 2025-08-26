@@ -80,6 +80,10 @@ func (*CollectReward) NewInstance() programparser.Instruction {
 	return new(CollectReward)
 }
 
+func (obj *CollectReward) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
+}
+
 // Builds a "collect_reward" instruction.
 // Collect rewards accrued for this position. //  // ### Authority // - `position_authority` - authority that owns the token corresponding to this desired position.
 func NewCollectRewardInstruction(

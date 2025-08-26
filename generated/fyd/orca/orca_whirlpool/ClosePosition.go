@@ -71,6 +71,10 @@ func (*ClosePosition) NewInstance() programparser.Instruction {
 	return new(ClosePosition)
 }
 
+func (obj *ClosePosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "close_position" instruction.
 // Close a position in a Whirlpool. Burns the position token in the owner's wallet. //  // ### Authority // - "position_authority" - The authority that owns the position token. //  // #### Special Errors // - `ClosePositionNotEmpty` - The provided position account is not empty.
 func NewClosePositionInstruction(

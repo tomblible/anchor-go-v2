@@ -56,6 +56,10 @@ func (*Initialize) NewInstance() programparser.Instruction {
 	return new(Initialize)
 }
 
+func (obj *Initialize) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "initialize" instruction.
 // Creates the global state.
 func NewInitializeInstruction(

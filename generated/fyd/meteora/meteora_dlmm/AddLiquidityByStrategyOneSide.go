@@ -90,8 +90,8 @@ func (*AddLiquidityByStrategyOneSide) NewInstance() programparser.Instruction {
 	return new(AddLiquidityByStrategyOneSide)
 }
 
-func (inst *AddLiquidityByStrategyOneSide) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[12:]
+func (obj *AddLiquidityByStrategyOneSide) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[12:]
 }
 
 // Builds a "add_liquidity_by_strategy_one_side" instruction.

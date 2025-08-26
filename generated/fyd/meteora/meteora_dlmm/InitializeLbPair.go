@@ -105,8 +105,8 @@ func (*InitializeLbPair) NewInstance() programparser.Instruction {
 	return new(InitializeLbPair)
 }
 
-func (inst *InitializeLbPair) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[14:]
+func (obj *InitializeLbPair) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
 }
 
 // Builds a "initialize_lb_pair" instruction.

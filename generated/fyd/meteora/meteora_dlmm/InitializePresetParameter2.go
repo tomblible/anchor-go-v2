@@ -63,8 +63,8 @@ func (*InitializePresetParameter2) NewInstance() programparser.Instruction {
 	return new(InitializePresetParameter2)
 }
 
-func (inst *InitializePresetParameter2) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[3:]
+func (obj *InitializePresetParameter2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "initialize_preset_parameter2" instruction.

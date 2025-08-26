@@ -66,6 +66,10 @@ func (*RemovePlatformCurveParam) NewInstance() programparser.Instruction {
 	return new(RemovePlatformCurveParam)
 }
 
+func (obj *RemovePlatformCurveParam) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "remove_platform_curve_param" instruction.
 // Remove platform launch param // # Arguments //  // * `ctx` - The context of accounts // * `param` - Parameter to update //
 func NewRemovePlatformCurveParamInstruction(

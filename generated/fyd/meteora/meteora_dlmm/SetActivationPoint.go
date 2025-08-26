@@ -60,8 +60,8 @@ func (*SetActivationPoint) NewInstance() programparser.Instruction {
 	return new(SetActivationPoint)
 }
 
-func (inst *SetActivationPoint) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *SetActivationPoint) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_activation_point" instruction.

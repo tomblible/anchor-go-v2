@@ -90,6 +90,10 @@ func (*ClaimProtocolFee) NewInstance() programparser.Instruction {
 	return new(ClaimProtocolFee)
 }
 
+func (obj *ClaimProtocolFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "claim_protocol_fee" instruction.
 func NewClaimProtocolFeeInstruction(
 	config solanago.PublicKey,

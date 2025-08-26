@@ -86,6 +86,10 @@ func (*WithdrawMigrationFee) NewInstance() programparser.Instruction {
 	return new(WithdrawMigrationFee)
 }
 
+func (obj *WithdrawMigrationFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "withdraw_migration_fee" instruction.
 // BOTH partner and creator FUNCTIONS ///
 func NewWithdrawMigrationFeeInstruction(

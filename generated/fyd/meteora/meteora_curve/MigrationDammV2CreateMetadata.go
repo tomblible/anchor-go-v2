@@ -66,6 +66,10 @@ func (*MigrationDammV2CreateMetadata) NewInstance() programparser.Instruction {
 	return new(MigrationDammV2CreateMetadata)
 }
 
+func (obj *MigrationDammV2CreateMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
+}
+
 // Builds a "migration_damm_v2_create_metadata" instruction.
 func NewMigrationDammV2CreateMetadataInstruction(
 	virtualPool solanago.PublicKey,

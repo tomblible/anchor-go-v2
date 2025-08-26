@@ -104,6 +104,10 @@ func (*CollectFundFee) NewInstance() programparser.Instruction {
 	return new(CollectFundFee)
 }
 
+func (obj *CollectFundFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[11:]
+}
+
 // Builds a "collect_fund_fee" instruction.
 // Collect the fund fee accrued to the pool //  // # Arguments //  // * `ctx` - The context of accounts // * `amount_0_requested` - The maximum amount of token_0 to send // * `amount_1_requested` - The maximum amount of token_1 to send //
 func NewCollectFundFeeInstruction(

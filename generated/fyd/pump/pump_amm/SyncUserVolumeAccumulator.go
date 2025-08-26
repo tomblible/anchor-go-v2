@@ -60,6 +60,10 @@ func (*SyncUserVolumeAccumulator) NewInstance() programparser.Instruction {
 	return new(SyncUserVolumeAccumulator)
 }
 
+func (obj *SyncUserVolumeAccumulator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "sync_user_volume_accumulator" instruction.
 func NewSyncUserVolumeAccumulatorInstruction(
 	user solanago.PublicKey,

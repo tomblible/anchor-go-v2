@@ -60,8 +60,8 @@ func (*InitializeBinArrayBitmapExtension) NewInstance() programparser.Instructio
 	return new(InitializeBinArrayBitmapExtension)
 }
 
-func (inst *InitializeBinArrayBitmapExtension) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[5:]
+func (obj *InitializeBinArrayBitmapExtension) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
 }
 
 // Builds a "initialize_bin_array_bitmap_extension" instruction.

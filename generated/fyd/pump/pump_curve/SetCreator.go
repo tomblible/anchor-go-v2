@@ -77,6 +77,10 @@ func (*SetCreator) NewInstance() programparser.Instruction {
 	return new(SetCreator)
 }
 
+func (obj *SetCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[7:]
+}
+
 // Builds a "set_creator" instruction.
 // Allows Global::set_creator_authority to set the bonding curve creator from Metaplex metadata or input argument
 func NewSetCreatorInstruction(

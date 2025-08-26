@@ -75,6 +75,10 @@ func (*InitializePositionBundle) NewInstance() programparser.Instruction {
 	return new(InitializePositionBundle)
 }
 
+func (obj *InitializePositionBundle) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
+}
+
 // Builds a "initialize_position_bundle" instruction.
 // Initializes a PositionBundle account that bundles several positions. // A unique token will be minted to represent the position bundle in the users wallet.
 func NewInitializePositionBundleInstruction(

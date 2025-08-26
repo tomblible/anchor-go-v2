@@ -66,8 +66,8 @@ func (*InitializeBinArray) NewInstance() programparser.Instruction {
 	return new(InitializeBinArray)
 }
 
-func (inst *InitializeBinArray) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[4:]
+func (obj *InitializeBinArray) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "initialize_bin_array" instruction.

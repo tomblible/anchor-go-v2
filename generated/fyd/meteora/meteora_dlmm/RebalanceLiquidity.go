@@ -114,8 +114,8 @@ func (*RebalanceLiquidity) NewInstance() programparser.Instruction {
 	return new(RebalanceLiquidity)
 }
 
-func (inst *RebalanceLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[17:]
+func (obj *RebalanceLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[17:]
 }
 
 // Builds a "rebalance_liquidity" instruction.

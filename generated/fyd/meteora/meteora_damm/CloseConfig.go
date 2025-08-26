@@ -60,6 +60,10 @@ func (*CloseConfig) NewInstance() programparser.Instruction {
 	return new(CloseConfig)
 }
 
+func (obj *CloseConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "close_config" instruction.
 func NewCloseConfigInstruction(
 	config solanago.PublicKey,

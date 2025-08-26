@@ -54,6 +54,10 @@ func (*UpdateRewardInfos) NewInstance() programparser.Instruction {
 	return new(UpdateRewardInfos)
 }
 
+func (obj *UpdateRewardInfos) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[1:]
+}
+
 // Builds a "update_reward_infos" instruction.
 // Update rewards info of the given pool, can be called for everyone //  // # Arguments //  // * `ctx`- The context of accounts //
 func NewUpdateRewardInfosInstruction(

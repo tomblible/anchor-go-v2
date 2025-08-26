@@ -59,6 +59,10 @@ func (*CreateSupportMintAssociated) NewInstance() programparser.Instruction {
 	return new(CreateSupportMintAssociated)
 }
 
+func (obj *CreateSupportMintAssociated) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "create_support_mint_associated" instruction.
 // Create support token22 mint account which can create pool and send rewards with ignoring the not support extensions.
 func NewCreateSupportMintAssociatedInstruction(

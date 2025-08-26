@@ -105,6 +105,10 @@ func (*AdminCancelOrders) NewInstance() programparser.Instruction {
 	return new(AdminCancelOrders)
 }
 
+func (obj *AdminCancelOrders) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[17:]
+}
+
 // Builds a "admin_cancel_orders" instruction.
 func NewAdminCancelOrdersInstruction(
 	// Params:

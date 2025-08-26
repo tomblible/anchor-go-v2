@@ -67,6 +67,10 @@ func (*TransferRewardOwner) NewInstance() programparser.Instruction {
 	return new(TransferRewardOwner)
 }
 
+func (obj *TransferRewardOwner) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "transfer_reward_owner" instruction.
 // Transfer reward owner //  // # Arguments //  // * `ctx`- The context of accounts // * `new_owner`- new owner pubkey //
 func NewTransferRewardOwnerInstruction(

@@ -61,6 +61,10 @@ func (*SetRewardEmissionsSuperAuthority) NewInstance() programparser.Instruction
 	return new(SetRewardEmissionsSuperAuthority)
 }
 
+func (obj *SetRewardEmissionsSuperAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "set_reward_emissions_super_authority" instruction.
 // Set the whirlpool reward super authority for a WhirlpoolConfig // Only the current reward super authority has permission to invoke this instruction. // This instruction will not change the authority on any `WhirlpoolRewardInfo` whirlpool rewards. //  // ### Authority // - "reward_emissions_super_authority" - Set authority that can control reward authorities for all pools in this config space.
 func NewSetRewardEmissionsSuperAuthorityInstruction(

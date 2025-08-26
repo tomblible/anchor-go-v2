@@ -77,6 +77,10 @@ func (*ClaimPlatformFeeFromVault) NewInstance() programparser.Instruction {
 	return new(ClaimPlatformFeeFromVault)
 }
 
+func (obj *ClaimPlatformFeeFromVault) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
+}
+
 // Builds a "claim_platform_fee_from_vault" instruction.
 // Claim the fee from the exclusive platform fee vault. // # Arguments //  // * `ctx` - The context of accounts //
 func NewClaimPlatformFeeFromVaultInstruction(

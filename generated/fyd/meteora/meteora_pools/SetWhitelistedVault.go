@@ -62,8 +62,8 @@ func (*SetWhitelistedVault) NewInstance() programparser.Instruction {
 	return new(SetWhitelistedVault)
 }
 
-func (inst *SetWhitelistedVault) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *SetWhitelistedVault) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_whitelisted_vault" instruction.

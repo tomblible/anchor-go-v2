@@ -105,6 +105,10 @@ func (*CreateConfig) NewInstance() programparser.Instruction {
 	return new(CreateConfig)
 }
 
+func (obj *CreateConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "create_config" instruction.
 func NewCreateConfigInstruction(
 	// Params:

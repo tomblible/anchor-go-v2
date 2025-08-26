@@ -60,6 +60,10 @@ func (*UpdateAdmin) NewInstance() programparser.Instruction {
 	return new(UpdateAdmin)
 }
 
+func (obj *UpdateAdmin) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "update_admin" instruction.
 func NewUpdateAdminInstruction(
 	admin solanago.PublicKey,

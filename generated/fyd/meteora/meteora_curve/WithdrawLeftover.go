@@ -75,6 +75,10 @@ func (*WithdrawLeftover) NewInstance() programparser.Instruction {
 	return new(WithdrawLeftover)
 }
 
+func (obj *WithdrawLeftover) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "withdraw_leftover" instruction.
 func NewWithdrawLeftoverInstruction(
 	config solanago.PublicKey,

@@ -90,6 +90,10 @@ func (*SetRewardEmissions) NewInstance() programparser.Instruction {
 	return new(SetRewardEmissions)
 }
 
+func (obj *SetRewardEmissions) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "set_reward_emissions" instruction.
 // Set the reward emissions for a reward in a Whirlpool. //  // ### Authority // - "reward_authority" - assigned authority by the reward_super_authority for the specified // reward-index in this Whirlpool //  // ### Parameters // - `reward_index` - The reward index (0 <= index <= NUM_REWARDS) that we'd like to modify. // - `emissions_per_second_x64` - The amount of rewards emitted in this pool. //  // #### Special Errors // - `RewardVaultAmountInsufficient` - The amount of rewards in the reward vault cannot emit // more than a day of desired emissions. // - `InvalidTimestamp` - Provided timestamp is not in order with the previous timestamp. // - `InvalidRewardIndex` - If the provided reward index doesn't match the lowest uninitialized // index in this pool, or exceeds NUM_REWARDS, or // all reward slots for this pool has been initialized.
 func NewSetRewardEmissionsInstruction(

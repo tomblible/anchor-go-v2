@@ -90,6 +90,10 @@ func (*CreateLocker) NewInstance() programparser.Instruction {
 	return new(CreateLocker)
 }
 
+func (obj *CreateLocker) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "create_locker" instruction.
 // PERMISSIONLESS FUNCTIONS /// // create locker
 func NewCreateLockerInstruction(

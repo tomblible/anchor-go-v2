@@ -113,6 +113,10 @@ func (*CreateConfig) NewInstance() programparser.Instruction {
 	return new(CreateConfig)
 }
 
+func (obj *CreateConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "create_config" instruction.
 // Creates a new configuration // # Arguments //  // * `ctx` - The accounts needed by instruction // * `curve_type` - The type of bonding curve (0: ConstantProduct) // * `index` - The index of config, there may be multiple config with the same curve type. // * `trade_fee_rate` - Trade fee rate, must be less than RATE_DENOMINATOR_VALUE //
 func NewCreateConfigInstruction(

@@ -62,6 +62,10 @@ func (*SetMetaplexCreator) NewInstance() programparser.Instruction {
 	return new(SetMetaplexCreator)
 }
 
+func (obj *SetMetaplexCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "set_metaplex_creator" instruction.
 // Syncs the bonding curve creator with the Metaplex metadata creator if it exists
 func NewSetMetaplexCreatorInstruction(

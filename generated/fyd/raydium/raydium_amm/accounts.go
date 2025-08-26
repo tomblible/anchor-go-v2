@@ -36,6 +36,11 @@ type TargetOrders struct {
 }
 
 func (obj TargetOrders) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_TargetOrders[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Owner`:
 	if err = encoder.Encode(obj.Owner); err != nil {
 		return fmt.Errorf("error while marshaling Owner:%w", err)
@@ -150,6 +155,19 @@ func (obj TargetOrders) Marshal() ([]byte, error) {
 }
 
 func (obj *TargetOrders) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_TargetOrders[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_TargetOrders[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Owner`:
 	if err = decoder.Decode(&obj.Owner); err != nil {
 		return fmt.Errorf("error while unmarshaling Owner:%w", err)
@@ -282,6 +300,11 @@ type Fees struct {
 }
 
 func (obj Fees) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_Fees[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `MinSeparateNumerator`:
 	if err = encoder.Encode(obj.MinSeparateNumerator); err != nil {
 		return fmt.Errorf("error while marshaling MinSeparateNumerator:%w", err)
@@ -328,6 +351,19 @@ func (obj Fees) Marshal() ([]byte, error) {
 }
 
 func (obj *Fees) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_Fees[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_Fees[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `MinSeparateNumerator`:
 	if err = decoder.Decode(&obj.MinSeparateNumerator); err != nil {
 		return fmt.Errorf("error while unmarshaling MinSeparateNumerator:%w", err)
@@ -417,6 +453,11 @@ type AmmInfo struct {
 }
 
 func (obj AmmInfo) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_AmmInfo[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Status`:
 	if err = encoder.Encode(obj.Status); err != nil {
 		return fmt.Errorf("error while marshaling Status:%w", err)
@@ -563,6 +604,19 @@ func (obj AmmInfo) Marshal() ([]byte, error) {
 }
 
 func (obj *AmmInfo) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_AmmInfo[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_AmmInfo[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Status`:
 	if err = decoder.Decode(&obj.Status); err != nil {
 		return fmt.Errorf("error while unmarshaling Status:%w", err)

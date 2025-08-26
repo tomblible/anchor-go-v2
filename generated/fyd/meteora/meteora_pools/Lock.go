@@ -95,8 +95,8 @@ func (*Lock) NewInstance() programparser.Instruction {
 	return new(Lock)
 }
 
-func (inst *Lock) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[13:]
+func (obj *Lock) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[13:]
 }
 
 // Builds a "lock" instruction.

@@ -80,6 +80,10 @@ func (*ClaimPlatformFee) NewInstance() programparser.Instruction {
 	return new(ClaimPlatformFee)
 }
 
+func (obj *ClaimPlatformFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "claim_platform_fee" instruction.
 // Claim platform fee // # Arguments //  // * `ctx` - The context of accounts //
 func NewClaimPlatformFeeInstruction(

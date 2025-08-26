@@ -67,6 +67,10 @@ func (*UpdatePoolStatus) NewInstance() programparser.Instruction {
 	return new(UpdatePoolStatus)
 }
 
+func (obj *UpdatePoolStatus) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "update_pool_status" instruction.
 // Update pool status for given value //  // # Arguments //  // * `ctx`- The context of accounts // * `status` - The value of status //
 func NewUpdatePoolStatusInstruction(

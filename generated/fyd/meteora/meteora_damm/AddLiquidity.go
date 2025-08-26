@@ -96,6 +96,10 @@ func (*AddLiquidity) NewInstance() programparser.Instruction {
 	return new(AddLiquidity)
 }
 
+func (obj *AddLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "add_liquidity" instruction.
 func NewAddLiquidityInstruction(
 	// Params:

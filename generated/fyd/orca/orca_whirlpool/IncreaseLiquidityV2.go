@@ -160,6 +160,10 @@ func (*IncreaseLiquidityV2) NewInstance() programparser.Instruction {
 	return new(IncreaseLiquidityV2)
 }
 
+func (obj *IncreaseLiquidityV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[15:]
+}
+
 // Builds a "increase_liquidity_v2" instruction.
 // Add liquidity to a position in the Whirlpool. This call also updates the position's accrued fees and rewards. //  // ### Authority // - `position_authority` - authority that owns the token corresponding to this desired position. //  // ### Parameters // - `liquidity_amount` - The total amount of Liquidity the user is willing to deposit. // - `token_max_a` - The maximum amount of tokenA the user is willing to deposit. // - `token_max_b` - The maximum amount of tokenB the user is willing to deposit. //  // #### Special Errors // - `LiquidityZero` - Provided liquidity amount is zero. // - `LiquidityTooHigh` - Provided liquidity exceeds u128::max. // - `TokenMaxExceeded` - The required token to perform this operation exceeds the user defined amount.
 func NewIncreaseLiquidityV2Instruction(

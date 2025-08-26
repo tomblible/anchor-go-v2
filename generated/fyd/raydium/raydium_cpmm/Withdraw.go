@@ -123,6 +123,10 @@ func (*Withdraw) NewInstance() programparser.Instruction {
 	return new(Withdraw)
 }
 
+func (obj *Withdraw) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "withdraw" instruction.
 // Withdraw lp for token0 and token1 //  // # Arguments //  // * `ctx`- The context of accounts // * `lp_token_amount` - Amount of pool tokens to burn. User receives an output of token a and b based on the percentage of the pool tokens that are returned. // * `minimum_token_0_amount` -  Minimum amount of token 0 to receive, prevents excessive slippage // * `minimum_token_1_amount` -  Minimum amount of token 1 to receive, prevents excessive slippage //
 func NewWithdrawInstruction(

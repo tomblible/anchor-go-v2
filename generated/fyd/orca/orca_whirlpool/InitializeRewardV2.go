@@ -95,6 +95,10 @@ func (*InitializeRewardV2) NewInstance() programparser.Instruction {
 	return new(InitializeRewardV2)
 }
 
+func (obj *InitializeRewardV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
+}
+
 // Builds a "initialize_reward_v2" instruction.
 // Initialize reward for a Whirlpool. A pool can only support up to a set number of rewards. //  // ### Authority // - "reward_authority" - assigned authority by the reward_super_authority for the specified // reward-index in this Whirlpool //  // ### Parameters // - `reward_index` - The reward index that we'd like to initialize. (0 <= index <= NUM_REWARDS) //  // #### Special Errors // - `InvalidRewardIndex` - If the provided reward index doesn't match the lowest uninitialized // index in this pool, or exceeds NUM_REWARDS, or // all reward slots for this pool has been initialized.
 func NewInitializeRewardV2Instruction(

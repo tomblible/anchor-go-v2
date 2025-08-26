@@ -94,6 +94,10 @@ func (*InitializeReward) NewInstance() programparser.Instruction {
 	return new(InitializeReward)
 }
 
+func (obj *InitializeReward) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "initialize_reward" instruction.
 // Initialize a reward info for a given pool and reward index //  // # Arguments //  // * `ctx`- The context of accounts // * `reward_index` - the index to reward info // * `open_time` - reward open timestamp // * `end_time` - reward end timestamp // * `emissions_per_second_x64` - Token reward per second are earned per unit of liquidity. //
 func NewInitializeRewardInstruction(

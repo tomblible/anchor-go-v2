@@ -71,8 +71,8 @@ func (*SetPoolFees) NewInstance() programparser.Instruction {
 	return new(SetPoolFees)
 }
 
-func (inst *SetPoolFees) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *SetPoolFees) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_pool_fees" instruction.

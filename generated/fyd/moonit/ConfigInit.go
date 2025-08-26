@@ -63,6 +63,10 @@ func (*ConfigInit) NewInstance() programparser.Instruction {
 	return new(ConfigInit)
 }
 
+func (obj *ConfigInit) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "config_init" instruction.
 func NewConfigInitInstruction(
 	// Params:

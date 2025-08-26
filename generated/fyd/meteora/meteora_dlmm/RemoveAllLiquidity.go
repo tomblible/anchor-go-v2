@@ -93,8 +93,8 @@ func (*RemoveAllLiquidity) NewInstance() programparser.Instruction {
 	return new(RemoveAllLiquidity)
 }
 
-func (inst *RemoveAllLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[16:]
+func (obj *RemoveAllLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
 }
 
 // Builds a "remove_all_liquidity" instruction.

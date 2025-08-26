@@ -110,6 +110,10 @@ func (*SetRewardParams) NewInstance() programparser.Instruction {
 	return new(SetRewardParams)
 }
 
+func (obj *SetRewardParams) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "set_reward_params" instruction.
 // Reset reward param, start a new reward cycle or extend the current cycle. //  // # Arguments //  // * `ctx` - The context of accounts // * `reward_index` - The index of reward token in the pool, it must be smaller than 3 // * `emissions_per_second_x64` - The per second emission reward, when extend the current cycle, // new value can't be less than old value // * `open_time` - reward open timestamp, must be set when starting a new cycle // * `end_time` - reward end timestamp //
 func NewSetRewardParamsInstruction(

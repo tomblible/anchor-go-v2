@@ -63,6 +63,10 @@ func (*CreateClaimFeeOperator) NewInstance() programparser.Instruction {
 	return new(CreateClaimFeeOperator)
 }
 
+func (obj *CreateClaimFeeOperator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "create_claim_fee_operator" instruction.
 func NewCreateClaimFeeOperatorInstruction(
 	claimFeeOperator solanago.PublicKey,

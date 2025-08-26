@@ -125,6 +125,10 @@ func (*Create) NewInstance() programparser.Instruction {
 	return new(Create)
 }
 
+func (obj *Create) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "create" instruction.
 // Creates a new coin and bonding curve.
 func NewCreateInstruction(

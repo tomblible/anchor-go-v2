@@ -69,6 +69,10 @@ func (*ClosePosition) NewInstance() programparser.Instruction {
 	return new(ClosePosition)
 }
 
+func (obj *ClosePosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "close_position" instruction.
 // Close the user's position and NFT account. If the NFT mint belongs to token2022, it will also be closed and the funds returned to the NFT owner. //  // # Arguments //  // * `ctx` - The context of accounts //
 func NewClosePositionInstruction(

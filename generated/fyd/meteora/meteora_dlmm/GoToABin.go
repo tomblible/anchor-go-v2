@@ -72,8 +72,8 @@ func (*GoToABin) NewInstance() programparser.Instruction {
 	return new(GoToABin)
 }
 
-func (inst *GoToABin) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[6:]
+func (obj *GoToABin) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
 }
 
 // Builds a "go_to_a_bin" instruction.

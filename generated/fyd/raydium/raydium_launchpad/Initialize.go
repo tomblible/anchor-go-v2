@@ -137,6 +137,10 @@ func (*Initialize) NewInstance() programparser.Instruction {
 	return new(Initialize)
 }
 
+func (obj *Initialize) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[18:]
+}
+
 // Builds a "initialize" instruction.
 // Initializes a new trading pool // # Arguments //  // * `ctx` - The context of accounts containing pool and token information //
 func NewInitializeInstruction(

@@ -74,6 +74,10 @@ func (*TransferLockedPosition) NewInstance() programparser.Instruction {
 	return new(TransferLockedPosition)
 }
 
+func (obj *TransferLockedPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "transfer_locked_position" instruction.
 // Transfer a locked position to to a different token account. //  // ### Authority // - `position_authority` - The authority that owns the position token.
 func NewTransferLockedPositionInstruction(

@@ -134,6 +134,10 @@ func (*SimulateInfo) NewInstance() programparser.Instruction {
 	return new(SimulateInfo)
 }
 
+func (obj *SimulateInfo) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
+}
+
 // Builds a "simulate_info" instruction.
 func NewSimulateInfoInstruction(
 	// Params:

@@ -81,6 +81,10 @@ func (*UpdatePlatformCurveParam) NewInstance() programparser.Instruction {
 	return new(UpdatePlatformCurveParam)
 }
 
+func (obj *UpdatePlatformCurveParam) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "update_platform_curve_param" instruction.
 // Update platform launch param // # Arguments //  // * `ctx` - The context of accounts // * `param` - Parameter to update //
 func NewUpdatePlatformCurveParamInstruction(

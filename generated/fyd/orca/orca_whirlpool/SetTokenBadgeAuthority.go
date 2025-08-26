@@ -57,6 +57,10 @@ func (*SetTokenBadgeAuthority) NewInstance() programparser.Instruction {
 	return new(SetTokenBadgeAuthority)
 }
 
+func (obj *SetTokenBadgeAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "set_token_badge_authority" instruction.
 func NewSetTokenBadgeAuthorityInstruction(
 	whirlpoolsConfig solanago.PublicKey,

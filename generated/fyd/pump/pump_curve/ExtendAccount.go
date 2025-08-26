@@ -62,6 +62,10 @@ func (*ExtendAccount) NewInstance() programparser.Instruction {
 	return new(ExtendAccount)
 }
 
+func (obj *ExtendAccount) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "extend_account" instruction.
 // Extends the size of program-owned accounts
 func NewExtendAccountInstruction(

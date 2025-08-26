@@ -74,6 +74,10 @@ func (*AdminSetCreator) NewInstance() programparser.Instruction {
 	return new(AdminSetCreator)
 }
 
+func (obj *AdminSetCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
+}
+
 // Builds a "admin_set_creator" instruction.
 // Allows Global::admin_set_creator_authority to override the bonding curve creator
 func NewAdminSetCreatorInstruction(

@@ -60,8 +60,8 @@ func (*SetPreActivationDuration) NewInstance() programparser.Instruction {
 	return new(SetPreActivationDuration)
 }
 
-func (inst *SetPreActivationDuration) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *SetPreActivationDuration) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_pre_activation_duration" instruction.

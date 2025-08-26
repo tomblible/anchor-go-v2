@@ -81,6 +81,10 @@ func (*CloseBundledPosition) NewInstance() programparser.Instruction {
 	return new(CloseBundledPosition)
 }
 
+func (obj *CloseBundledPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "close_bundled_position" instruction.
 // Close a bundled position in a Whirlpool. //  // ### Authority // - `position_bundle_authority` - authority that owns the token corresponding to this desired position bundle. //  // ### Parameters // - `bundle_index` - The bundle index that we'd like to close. //  // #### Special Errors // - `InvalidBundleIndex` - If the provided bundle index is out of bounds. // - `ClosePositionNotEmpty` - The provided position account is not empty.
 func NewCloseBundledPositionInstruction(

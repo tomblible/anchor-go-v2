@@ -60,8 +60,8 @@ func (*ClosePositionIfEmpty) NewInstance() programparser.Instruction {
 	return new(ClosePositionIfEmpty)
 }
 
-func (inst *ClosePositionIfEmpty) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[5:]
+func (obj *ClosePositionIfEmpty) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
 }
 
 // Builds a "close_position_if_empty" instruction.

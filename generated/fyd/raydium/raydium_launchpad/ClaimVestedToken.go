@@ -78,6 +78,10 @@ func (*ClaimVestedToken) NewInstance() programparser.Instruction {
 	return new(ClaimVestedToken)
 }
 
+func (obj *ClaimVestedToken) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "claim_vested_token" instruction.
 // Claim vested token // # Arguments
 func NewClaimVestedTokenInstruction(

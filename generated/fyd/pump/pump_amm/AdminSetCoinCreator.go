@@ -71,6 +71,10 @@ func (*AdminSetCoinCreator) NewInstance() programparser.Instruction {
 	return new(AdminSetCoinCreator)
 }
 
+func (obj *AdminSetCoinCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "admin_set_coin_creator" instruction.
 // Overrides the coin creator for a canonical pump pool
 func NewAdminSetCoinCreatorInstruction(

@@ -60,6 +60,10 @@ func (*CloseTokenBadge) NewInstance() programparser.Instruction {
 	return new(CloseTokenBadge)
 }
 
+func (obj *CloseTokenBadge) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "close_token_badge" instruction.
 func NewCloseTokenBadgeInstruction(
 	tokenBadge solanago.PublicKey,

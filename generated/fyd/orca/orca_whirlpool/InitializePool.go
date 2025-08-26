@@ -117,6 +117,10 @@ func (*InitializePool) NewInstance() programparser.Instruction {
 	return new(InitializePool)
 }
 
+func (obj *InitializePool) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[11:]
+}
+
 // Builds a "initialize_pool" instruction.
 // Initializes a Whirlpool account. // Fee rate is set to the default values on the config and supplied fee_tier. //  // ### Parameters // - `bumps` - The bump value when deriving the PDA of the Whirlpool address. // - `tick_spacing` - The desired tick spacing for this pool. // - `initial_sqrt_price` - The desired initial sqrt-price for this pool //  // #### Special Errors // `InvalidTokenMintOrder` - The order of mints have to be ordered by // `SqrtPriceOutOfBounds` - provided initial_sqrt_price is not between 2^-64 to 2^64 //
 func NewInitializePoolInstruction(

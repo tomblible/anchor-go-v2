@@ -102,6 +102,10 @@ func (*Disable) NewInstance() programparser.Instruction {
 	return new(Disable)
 }
 
+func (obj *Disable) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "disable" instruction.
 func NewDisableInstruction(
 	// Params:

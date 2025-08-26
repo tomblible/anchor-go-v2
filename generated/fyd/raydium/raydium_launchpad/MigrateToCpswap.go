@@ -136,6 +136,10 @@ func (*MigrateToCpswap) NewInstance() programparser.Instruction {
 	return new(MigrateToCpswap)
 }
 
+func (obj *MigrateToCpswap) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[29:]
+}
+
 // Builds a "migrate_to_cpswap" instruction.
 // # Arguments //  // * `ctx` - The context of accounts //
 func NewMigrateToCpswapInstruction(

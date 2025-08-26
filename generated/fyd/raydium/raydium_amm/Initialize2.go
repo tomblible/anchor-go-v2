@@ -144,6 +144,10 @@ func (*Initialize2) NewInstance() programparser.Instruction {
 	return new(Initialize2)
 }
 
+func (obj *Initialize2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[21:]
+}
+
 // Builds a "initialize2" instruction.
 func NewInitialize2Instruction(
 	// Params:

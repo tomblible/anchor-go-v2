@@ -81,6 +81,10 @@ func (*ClaimTokenIncentives) NewInstance() programparser.Instruction {
 	return new(ClaimTokenIncentives)
 }
 
+func (obj *ClaimTokenIncentives) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[12:]
+}
+
 // Builds a "claim_token_incentives" instruction.
 func NewClaimTokenIncentivesInstruction(
 	user solanago.PublicKey,

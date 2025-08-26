@@ -171,8 +171,8 @@ func (*InitializePermissionlessConstantProductPoolWithConfig2) NewInstance() pro
 	return new(InitializePermissionlessConstantProductPoolWithConfig2)
 }
 
-func (inst *InitializePermissionlessConstantProductPoolWithConfig2) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[26:]
+func (obj *InitializePermissionlessConstantProductPoolWithConfig2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[26:]
 }
 
 // Builds a "initialize_permissionless_constant_product_pool_with_config2" instruction.

@@ -129,6 +129,10 @@ func (*DecreaseLiquidityV2) NewInstance() programparser.Instruction {
 	return new(DecreaseLiquidityV2)
 }
 
+func (obj *DecreaseLiquidityV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
+}
+
 // Builds a "decrease_liquidity_v2" instruction.
 // Decreases liquidity for an existing position, support Token2022 //  // # Arguments //  // * `ctx` -  The context of accounts // * `liquidity` - The amount by which liquidity will be decreased // * `amount_0_min` - The minimum amount of token_0 that should be accounted for the burned liquidity // * `amount_1_min` - The minimum amount of token_1 that should be accounted for the burned liquidity //
 func NewDecreaseLiquidityV2Instruction(

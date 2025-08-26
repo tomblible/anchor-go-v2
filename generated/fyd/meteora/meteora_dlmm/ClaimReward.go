@@ -87,8 +87,8 @@ func (*ClaimReward) NewInstance() programparser.Instruction {
 	return new(ClaimReward)
 }
 
-func (inst *ClaimReward) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[11:]
+func (obj *ClaimReward) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[11:]
 }
 
 // Builds a "claim_reward" instruction.

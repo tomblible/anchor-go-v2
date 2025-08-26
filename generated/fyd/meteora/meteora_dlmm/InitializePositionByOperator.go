@@ -114,8 +114,8 @@ func (*InitializePositionByOperator) NewInstance() programparser.Instruction {
 	return new(InitializePositionByOperator)
 }
 
-func (inst *InitializePositionByOperator) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[11:]
+func (obj *InitializePositionByOperator) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[11:]
 }
 
 // Builds a "initialize_position_by_operator" instruction.

@@ -87,8 +87,8 @@ func (*InitializePosition) NewInstance() programparser.Instruction {
 	return new(InitializePosition)
 }
 
-func (inst *InitializePosition) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[8:]
+func (obj *InitializePosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[8:]
 }
 
 // Builds a "initialize_position" instruction.

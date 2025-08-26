@@ -57,6 +57,10 @@ func (*RefreshVesting) NewInstance() programparser.Instruction {
 	return new(RefreshVesting)
 }
 
+func (obj *RefreshVesting) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[4:]
+}
+
 // Builds a "refresh_vesting" instruction.
 func NewRefreshVestingInstruction(
 	pool solanago.PublicKey,

@@ -120,6 +120,10 @@ func (*AdminUpdateTokenIncentives) NewInstance() programparser.Instruction {
 	return new(AdminUpdateTokenIncentives)
 }
 
+func (obj *AdminUpdateTokenIncentives) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "admin_update_token_incentives" instruction.
 func NewAdminUpdateTokenIncentivesInstruction(
 	// Params:

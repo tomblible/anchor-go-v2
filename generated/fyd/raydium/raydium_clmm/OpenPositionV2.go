@@ -227,6 +227,10 @@ func (*OpenPositionV2) NewInstance() programparser.Instruction {
 	return new(OpenPositionV2)
 }
 
+func (obj *OpenPositionV2) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[22:]
+}
+
 // Builds a "open_position_v2" instruction.
 // #[deprecated(note = "Use `open_position_with_token22_nft` instead.")] // Creates a new position wrapped in a NFT, support Token2022 //  // # Arguments //  // * `ctx` - The context of accounts // * `tick_lower_index` - The low boundary of market // * `tick_upper_index` - The upper boundary of market // * `tick_array_lower_start_index` - The start index of tick array which include tick low // * `tick_array_upper_start_index` - The start index of tick array which include tick upper // * `liquidity` - The liquidity to be added, if zero, and the base_flag is specified, calculate liquidity base amount_0_max or amount_1_max according base_flag, otherwise open position with zero liquidity // * `amount_0_max` - The max amount of token_0 to spend, which serves as a slippage check // * `amount_1_max` - The max amount of token_1 to spend, which serves as a slippage check // * `with_metadata` - The flag indicating whether to create NFT mint metadata // * `base_flag` - if the liquidity specified as zero, true: calculate liquidity base amount_0_max otherwise base amount_1_max //
 func NewOpenPositionV2Instruction(

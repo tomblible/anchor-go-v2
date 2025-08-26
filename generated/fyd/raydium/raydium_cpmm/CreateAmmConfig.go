@@ -107,6 +107,10 @@ func (*CreateAmmConfig) NewInstance() programparser.Instruction {
 	return new(CreateAmmConfig)
 }
 
+func (obj *CreateAmmConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[3:]
+}
+
 // Builds a "create_amm_config" instruction.
 // # Arguments //  // * `ctx`- The accounts needed by instruction. // * `index` - The index of amm config, there may be multiple config. // * `trade_fee_rate` - Trade fee rate, can be changed. // * `protocol_fee_rate` - The rate of protocol fee within trade fee. // * `fund_fee_rate` - The rate of fund fee within trade fee. //
 func NewCreateAmmConfigInstruction(

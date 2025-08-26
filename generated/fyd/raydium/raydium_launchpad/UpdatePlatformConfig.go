@@ -72,6 +72,10 @@ func (*UpdatePlatformConfig) NewInstance() programparser.Instruction {
 	return new(UpdatePlatformConfig)
 }
 
+func (obj *UpdatePlatformConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
+}
+
 // Builds a "update_platform_config" instruction.
 // Update platform config // # Arguments //  // * `ctx` - The context of accounts // * `param` - Parameter to update //
 func NewUpdatePlatformConfigInstruction(

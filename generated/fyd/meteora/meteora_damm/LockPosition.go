@@ -81,6 +81,10 @@ func (*LockPosition) NewInstance() programparser.Instruction {
 	return new(LockPosition)
 }
 
+func (obj *LockPosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
+}
+
 // Builds a "lock_position" instruction.
 func NewLockPositionInstruction(
 	// Params:

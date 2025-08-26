@@ -105,6 +105,10 @@ func (*ClaimTradingFee) NewInstance() programparser.Instruction {
 	return new(ClaimTradingFee)
 }
 
+func (obj *ClaimTradingFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[14:]
+}
+
 // Builds a "claim_trading_fee" instruction.
 func NewClaimTradingFeeInstruction(
 	// Params:

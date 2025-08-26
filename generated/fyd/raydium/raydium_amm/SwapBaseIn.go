@@ -117,6 +117,10 @@ func (*SwapBaseIn) NewInstance() programparser.Instruction {
 	return new(SwapBaseIn)
 }
 
+func (obj *SwapBaseIn) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[18:]
+}
+
 // Builds a "swap_base_in" instruction.
 func NewSwapBaseInInstruction(
 	// Params:

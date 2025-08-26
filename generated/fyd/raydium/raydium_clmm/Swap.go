@@ -122,6 +122,10 @@ func (*Swap) NewInstance() programparser.Instruction {
 	return new(Swap)
 }
 
+func (obj *Swap) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[10:]
+}
+
 // Builds a "swap" instruction.
 // #[deprecated(note = "Use `swap_v2` instead.")] // Swaps one token for as much as possible of another token across a single pool //  // # Arguments //  // * `ctx` - The context of accounts // * `amount` - Arranged in pairs with other_amount_threshold. (amount_in, amount_out_minimum) or (amount_out, amount_in_maximum) // * `other_amount_threshold` - For slippage check // * `sqrt_price_limit_x64` - The Q64.64 format √P limit price, and if it is 0, the maximum and minimum prices that can be reached are set by default according to the swap direction. // * `is_base_input` - swap base input or swap base output //
 func NewSwapInstruction(

@@ -72,6 +72,10 @@ func (*ProtocolWithdrawSurplus) NewInstance() programparser.Instruction {
 	return new(ProtocolWithdrawSurplus)
 }
 
+func (obj *ProtocolWithdrawSurplus) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
+}
+
 // Builds a "protocol_withdraw_surplus" instruction.
 func NewProtocolWithdrawSurplusInstruction(
 	config solanago.PublicKey,

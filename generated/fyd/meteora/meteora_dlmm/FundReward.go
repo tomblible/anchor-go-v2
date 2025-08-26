@@ -108,8 +108,8 @@ func (*FundReward) NewInstance() programparser.Instruction {
 	return new(FundReward)
 }
 
-func (inst *FundReward) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[9:]
+func (obj *FundReward) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[9:]
 }
 
 // Builds a "fund_reward" instruction.

@@ -78,6 +78,10 @@ func (*CreateDynamicConfig) NewInstance() programparser.Instruction {
 	return new(CreateDynamicConfig)
 }
 
+func (obj *CreateDynamicConfig) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[5:]
+}
+
 // Builds a "create_dynamic_config" instruction.
 func NewCreateDynamicConfigInstruction(
 	// Params:

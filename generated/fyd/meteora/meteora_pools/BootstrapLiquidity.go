@@ -113,8 +113,8 @@ func (*BootstrapLiquidity) NewInstance() programparser.Instruction {
 	return new(BootstrapLiquidity)
 }
 
-func (inst *BootstrapLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[16:]
+func (obj *BootstrapLiquidity) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[16:]
 }
 
 // Builds a "bootstrap_liquidity" instruction.

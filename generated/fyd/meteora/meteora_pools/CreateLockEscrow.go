@@ -65,8 +65,8 @@ func (*CreateLockEscrow) NewInstance() programparser.Instruction {
 	return new(CreateLockEscrow)
 }
 
-func (inst *CreateLockEscrow) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[6:]
+func (obj *CreateLockEscrow) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[6:]
 }
 
 // Builds a "create_lock_escrow" instruction.

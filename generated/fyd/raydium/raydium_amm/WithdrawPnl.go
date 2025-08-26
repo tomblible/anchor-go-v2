@@ -96,6 +96,10 @@ func (*WithdrawPnl) NewInstance() programparser.Instruction {
 	return new(WithdrawPnl)
 }
 
+func (obj *WithdrawPnl) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[17:]
+}
+
 // Builds a "withdraw_pnl" instruction.
 func NewWithdrawPnlInstruction(
 	tokenProgram solanago.PublicKey,

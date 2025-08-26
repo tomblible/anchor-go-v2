@@ -69,8 +69,8 @@ func (*OverrideCurveParam) NewInstance() programparser.Instruction {
 	return new(OverrideCurveParam)
 }
 
-func (inst *OverrideCurveParam) GetRemainingAccounts() solanago.PublicKeySlice {
-	return inst.PublicKeySlice[2:]
+func (obj *OverrideCurveParam) GetRemainingAccounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "override_curve_param" instruction.
