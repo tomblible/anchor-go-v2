@@ -6,6 +6,7 @@ package moonit
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 )
@@ -676,16 +677,25 @@ func (value Currency) String() string {
 type CurveType binary.BorshEnum
 
 const (
-	CurveType_LinearV1 CurveType = iota
-	CurveType_ConstantProductV1
+	CurveTypeLinearV1 CurveType = iota
+	CurveTypeConstantProductV1
+	CurveTypeConstantProductV2
+	CurveTypeFlatCurveV1
+	CurveTypeFlatCurveV1AntiSnipe
 )
 
 func (value CurveType) String() string {
 	switch value {
-	case CurveType_LinearV1:
+	case CurveTypeLinearV1:
 		return "LinearV1"
-	case CurveType_ConstantProductV1:
+	case CurveTypeConstantProductV1:
 		return "ConstantProductV1"
+	case CurveTypeConstantProductV2:
+		return "ConstantProductV2"
+	case CurveTypeFlatCurveV1:
+		return "FlatCurveV1"
+	case CurveTypeFlatCurveV1AntiSnipe:
+		return "FlatCurveV1AntiSnipe"
 	default:
 		return ""
 	}
