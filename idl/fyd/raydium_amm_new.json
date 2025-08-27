@@ -8,16 +8,6 @@
   "instructions": [
     {
       "name": "initialize",
-      "discriminator": [
-        175,
-        175,
-        109,
-        31,
-        13,
-        152,
-        155,
-        237
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -95,16 +85,6 @@
     },
     {
       "name": "initialize2",
-      "discriminator": [
-        9,
-        203,
-        254,
-        64,
-        89,
-        32,
-        179,
-        159
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -204,16 +184,6 @@
     },
     {
       "name": "monitor_step",
-      "discriminator": [
-        252,
-        219,
-        18,
-        48,
-        87,
-        183,
-        26,
-        154
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -303,16 +273,6 @@
     },
     {
       "name": "deposit",
-      "discriminator": [
-        242,
-        35,
-        198,
-        137,
-        82,
-        225,
-        242,
-        182
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -383,16 +343,6 @@
     },
     {
       "name": "withdraw",
-      "discriminator": [
-        183,
-        18,
-        70,
-        156,
-        148,
-        109,
-        161,
-        34
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -488,16 +438,6 @@
     },
     {
       "name": "migrate_to_open_book",
-      "discriminator": [
-        207,
-        98,
-        243,
-        89,
-        114,
-        174,
-        205,
-        20
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -581,16 +521,6 @@
     },
     {
       "name": "set_params",
-      "discriminator": [
-        27,
-        234,
-        178,
-        52,
-        147,
-        2,
-        187,
-        141
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -704,16 +634,6 @@
     },
     {
       "name": "withdraw_pnl",
-      "discriminator": [
-        86,
-        36,
-        158,
-        158,
-        92,
-        241,
-        251,
-        94
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -782,16 +702,6 @@
     },
     {
       "name": "withdraw_srm",
-      "discriminator": [
-        193,
-        101,
-        58,
-        65,
-        120,
-        78,
-        99,
-        31
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -824,16 +734,6 @@
     },
     {
       "name": "swap_base_in",
-      "discriminator": [
-        42,
-        236,
-        72,
-        162,
-        242,
-        24,
-        39,
-        84
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -917,16 +817,6 @@
     },
     {
       "name": "pre_initialize",
-      "discriminator": [
-        255,
-        92,
-        87,
-        45,
-        198,
-        172,
-        236,
-        2
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -988,16 +878,6 @@
     },
     {
       "name": "swap_base_out",
-      "discriminator": [
-        163,
-        210,
-        155,
-        208,
-        175,
-        146,
-        213,
-        150
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -1081,16 +961,6 @@
     },
     {
       "name": "simulate_info",
-      "discriminator": [
-        195,
-        75,
-        104,
-        72,
-        253,
-        176,
-        183,
-        160
-      ],
       "accounts": [
         {
           "name": "amm"
@@ -1146,16 +1016,6 @@
     },
     {
       "name": "admin_cancel_orders",
-      "discriminator": [
-        151,
-        90,
-        110,
-        217,
-        196,
-        223,
-        251,
-        95
-      ],
       "accounts": [
         {
           "name": "token_program"
@@ -1230,16 +1090,6 @@
     },
     {
       "name": "create_config_account",
-      "discriminator": [
-        190,
-        227,
-        122,
-        84,
-        73,
-        166,
-        40,
-        100
-      ],
       "accounts": [
         {
           "name": "admin",
@@ -1264,16 +1114,6 @@
     },
     {
       "name": "update_config_account",
-      "discriminator": [
-        240,
-        32,
-        10,
-        152,
-        8,
-        45,
-        87,
-        58
-      ],
       "accounts": [
         {
           "name": "admin",
@@ -1298,43 +1138,13 @@
   ],
   "accounts": [
     {
-      "name": "TargetOrders",
-      "discriminator": [
-        113,
-        225,
-        140,
-        255,
-        65,
-        144,
-        239,
-        231
-      ]
+      "name": "TargetOrders"
     },
     {
-      "name": "Fees",
-      "discriminator": [
-        151,
-        157,
-        50,
-        115,
-        130,
-        72,
-        179,
-        36
-      ]
+      "name": "Fees"
     },
     {
-      "name": "AmmInfo",
-      "discriminator": [
-        33,
-        217,
-        2,
-        203,
-        184,
-        83,
-        235,
-        91
-      ]
+      "name": "AmmInfo"
     }
   ],
   "errors": [
