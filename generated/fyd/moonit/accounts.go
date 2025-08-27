@@ -27,6 +27,11 @@ type ConfigAccount struct {
 }
 
 func (obj ConfigAccount) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_ConfigAccount[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `MigrationAuthority`:
 	if err = encoder.Encode(obj.MigrationAuthority); err != nil {
 		return fmt.Errorf("error while marshaling MigrationAuthority:%w", err)
@@ -105,6 +110,19 @@ func (obj ConfigAccount) Marshal() ([]byte, error) {
 }
 
 func (obj *ConfigAccount) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_ConfigAccount[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_ConfigAccount[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `MigrationAuthority`:
 	if err = decoder.Decode(&obj.MigrationAuthority); err != nil {
 		return fmt.Errorf("error while unmarshaling MigrationAuthority:%w", err)
@@ -205,6 +223,11 @@ type CurveAccount struct {
 }
 
 func (obj CurveAccount) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_CurveAccount[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `TotalSupply`:
 	if err = encoder.Encode(obj.TotalSupply); err != nil {
 		return fmt.Errorf("error while marshaling TotalSupply:%w", err)
@@ -267,6 +290,19 @@ func (obj CurveAccount) Marshal() ([]byte, error) {
 }
 
 func (obj *CurveAccount) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_CurveAccount[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_CurveAccount[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `TotalSupply`:
 	if err = decoder.Decode(&obj.TotalSupply); err != nil {
 		return fmt.Errorf("error while unmarshaling TotalSupply:%w", err)

@@ -7,29 +7,29 @@ import binary "github.com/gagliardetto/binary"
 
 // Account discriminators
 var (
-	Account_TargetOrders = []byte{113, 225, 140, 255, 65, 144, 239, 231}
-	Account_Fees         = []byte{151, 157, 50, 115, 130, 72, 179, 36}
-	Account_AmmInfo      = []byte{33, 217, 2, 203, 184, 83, 235, 91}
+	Account_TargetOrders = []byte{}
+	Account_Fees         = []byte{}
+	Account_AmmInfo      = []byte{}
 )
 
 const InstructionTypeIDEncoding = binary.Uint8TypeIDEncoding
 
 // Instruction discriminators
 var (
-	Instruction_Initialize          = []byte{175, 175, 109, 31, 13, 152, 155, 237}
-	Instruction_Initialize2         = []byte{9, 203, 254, 64, 89, 32, 179, 159}
-	Instruction_MonitorStep         = []byte{252, 219, 18, 48, 87, 183, 26, 154}
-	Instruction_Deposit             = []byte{242, 35, 198, 137, 82, 225, 242, 182}
-	Instruction_Withdraw            = []byte{183, 18, 70, 156, 148, 109, 161, 34}
-	Instruction_MigrateToOpenBook   = []byte{207, 98, 243, 89, 114, 174, 205, 20}
-	Instruction_SetParams           = []byte{27, 234, 178, 52, 147, 2, 187, 141}
-	Instruction_WithdrawPnl         = []byte{86, 36, 158, 158, 92, 241, 251, 94}
-	Instruction_WithdrawSrm         = []byte{193, 101, 58, 65, 120, 78, 99, 31}
-	Instruction_SwapBaseIn          = []byte{42, 236, 72, 162, 242, 24, 39, 84}
-	Instruction_PreInitialize       = []byte{255, 92, 87, 45, 198, 172, 236, 2}
-	Instruction_SwapBaseOut         = []byte{163, 210, 155, 208, 175, 146, 213, 150}
-	Instruction_SimulateInfo        = []byte{195, 75, 104, 72, 253, 176, 183, 160}
-	Instruction_AdminCancelOrders   = []byte{151, 90, 110, 217, 196, 223, 251, 95}
-	Instruction_CreateConfigAccount = []byte{190, 227, 122, 84, 73, 166, 40, 100}
-	Instruction_UpdateConfigAccount = []byte{240, 32, 10, 152, 8, 45, 87, 58}
+	Instruction_Initialize          = []byte{0}
+	Instruction_Initialize2         = []byte{1}
+	Instruction_MonitorStep         = []byte{2}
+	Instruction_Deposit             = []byte{3}
+	Instruction_Withdraw            = []byte{4}
+	Instruction_MigrateToOpenBook   = []byte{5}
+	Instruction_SetParams           = []byte{6}
+	Instruction_WithdrawPnl         = []byte{7}
+	Instruction_WithdrawSrm         = []byte{8}
+	Instruction_SwapBaseIn          = []byte{9}
+	Instruction_PreInitialize       = []byte{10}
+	Instruction_SwapBaseOut         = []byte{11}
+	Instruction_SimulateInfo        = []byte{12}
+	Instruction_AdminCancelOrders   = []byte{13}
+	Instruction_CreateConfigAccount = []byte{14}
+	Instruction_UpdateConfigAccount = []byte{15}
 )

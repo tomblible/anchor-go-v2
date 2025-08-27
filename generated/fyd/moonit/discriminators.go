@@ -7,24 +7,24 @@ import binary "github.com/gagliardetto/binary"
 
 // Account discriminators
 var (
-	Account_ConfigAccount = []byte{}
-	Account_CurveAccount  = []byte{}
+	Account_ConfigAccount = []byte{189, 255, 97, 70, 186, 189, 24, 102}
+	Account_CurveAccount  = []byte{8, 91, 83, 28, 132, 216, 248, 22}
 )
 
 // Event discriminators
 var (
-	Event_TradeEvent     = []byte{}
-	Event_MigrationEvent = []byte{}
+	Event_TradeEvent     = []byte{189, 219, 127, 211, 78, 230, 97, 238}
+	Event_MigrationEvent = []byte{255, 202, 76, 147, 91, 231, 73, 22}
 )
 
 const InstructionTypeIDEncoding = binary.AnchorTypeIDEncoding
 
 // Instruction discriminators
 var (
-	Instruction_TokenMint    = []byte{0}
-	Instruction_Buy          = []byte{1}
-	Instruction_Sell         = []byte{2}
-	Instruction_MigrateFunds = []byte{3}
-	Instruction_ConfigInit   = []byte{4}
-	Instruction_ConfigUpdate = []byte{5}
+	Instruction_TokenMint    = []byte{3, 44, 164, 184, 123, 13, 245, 179}
+	Instruction_Buy          = []byte{102, 6, 61, 18, 1, 218, 235, 234}
+	Instruction_Sell         = []byte{51, 230, 133, 164, 1, 127, 131, 173}
+	Instruction_MigrateFunds = []byte{42, 229, 10, 231, 189, 62, 193, 174}
+	Instruction_ConfigInit   = []byte{13, 236, 164, 173, 106, 253, 164, 185}
+	Instruction_ConfigUpdate = []byte{80, 37, 109, 136, 82, 135, 89, 241}
 )

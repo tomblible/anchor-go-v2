@@ -21,6 +21,11 @@ type TradeEvent struct {
 }
 
 func (obj TradeEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Event_TradeEvent[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Amount`:
 	if err = encoder.Encode(obj.Amount); err != nil {
 		return fmt.Errorf("error while marshaling Amount:%w", err)
@@ -75,6 +80,19 @@ func (obj TradeEvent) Marshal() ([]byte, error) {
 }
 
 func (obj *TradeEvent) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Event_TradeEvent[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Event_TradeEvent[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Amount`:
 	if err = decoder.Decode(&obj.Amount); err != nil {
 		return fmt.Errorf("error while unmarshaling Amount:%w", err)
@@ -144,6 +162,11 @@ type MigrationEvent struct {
 }
 
 func (obj MigrationEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Event_MigrationEvent[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `TokensMigrated`:
 	if err = encoder.Encode(obj.TokensMigrated); err != nil {
 		return fmt.Errorf("error while marshaling TokensMigrated:%w", err)
@@ -178,6 +201,19 @@ func (obj MigrationEvent) Marshal() ([]byte, error) {
 }
 
 func (obj *MigrationEvent) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Event_MigrationEvent[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Event_MigrationEvent[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `TokensMigrated`:
 	if err = decoder.Decode(&obj.TokensMigrated); err != nil {
 		return fmt.Errorf("error while unmarshaling TokensMigrated:%w", err)
