@@ -17,11 +17,6 @@ type Mint struct {
 }
 
 func (obj Mint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
-	// Write account discriminator:
-	err = encoder.WriteBytes(Account_Mint[:], false)
-	if err != nil {
-		return err
-	}
 	// Serialize `MintAuthority` (optional):
 	{
 		if obj.MintAuthority == nil {
@@ -78,19 +73,6 @@ func (obj Mint) Marshal() ([]byte, error) {
 }
 
 func (obj *Mint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
-	// Read and check account discriminator:
-	{
-		discriminator, err := decoder.ReadDiscriminator()
-		if err != nil {
-			return err
-		}
-		if !discriminator.Equal(Account_Mint[:]) {
-			return fmt.Errorf(
-				"wrong discriminator: wanted %s, got %s",
-				Account_Mint[:],
-				fmt.Sprint(discriminator[:]))
-		}
-	}
 	// Deserialize `MintAuthority` (optional):
 	{
 		ok, err := decoder.ReadOption()
@@ -159,11 +141,6 @@ type Token struct {
 }
 
 func (obj Token) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
-	// Write account discriminator:
-	err = encoder.WriteBytes(Account_Token[:], false)
-	if err != nil {
-		return err
-	}
 	// Serialize `Mint`:
 	if err = encoder.Encode(obj.Mint); err != nil {
 		return fmt.Errorf("error while marshaling Mint:%w", err)
@@ -243,19 +220,6 @@ func (obj Token) Marshal() ([]byte, error) {
 }
 
 func (obj *Token) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
-	// Read and check account discriminator:
-	{
-		discriminator, err := decoder.ReadDiscriminator()
-		if err != nil {
-			return err
-		}
-		if !discriminator.Equal(Account_Token[:]) {
-			return fmt.Errorf(
-				"wrong discriminator: wanted %s, got %s",
-				Account_Token[:],
-				fmt.Sprint(discriminator[:]))
-		}
-	}
 	// Deserialize `Mint`:
 	if err = decoder.Decode(&obj.Mint); err != nil {
 		return fmt.Errorf("error while unmarshaling Mint:%w", err)
@@ -340,11 +304,6 @@ type Multisig struct {
 }
 
 func (obj Multisig) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
-	// Write account discriminator:
-	err = encoder.WriteBytes(Account_Multisig[:], false)
-	if err != nil {
-		return err
-	}
 	// Serialize `M`:
 	if err = encoder.Encode(obj.M); err != nil {
 		return fmt.Errorf("error while marshaling M:%w", err)
@@ -375,19 +334,6 @@ func (obj Multisig) Marshal() ([]byte, error) {
 }
 
 func (obj *Multisig) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
-	// Read and check account discriminator:
-	{
-		discriminator, err := decoder.ReadDiscriminator()
-		if err != nil {
-			return err
-		}
-		if !discriminator.Equal(Account_Multisig[:]) {
-			return fmt.Errorf(
-				"wrong discriminator: wanted %s, got %s",
-				Account_Multisig[:],
-				fmt.Sprint(discriminator[:]))
-		}
-	}
 	// Deserialize `M`:
 	if err = decoder.Decode(&obj.M); err != nil {
 		return fmt.Errorf("error while unmarshaling M:%w", err)

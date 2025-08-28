@@ -21,16 +21,6 @@
         "5. `[]` SPL Token program",
         "6. `[]` Rent sysvar"
       ],
-      "discriminator": [
-        24,
-        30,
-        200,
-        40,
-        5,
-        28,
-        7,
-        119
-      ],
       "accounts": [
         {
           "name": "payer",
@@ -75,16 +65,6 @@
         "4. `[]` System program",
         "5. `[]` SPL Token program"
       ],
-      "discriminator": [
-        143,
-        88,
-        34,
-        91,
-        112,
-        20,
-        245,
-        59
-      ],
       "accounts": [
         {
           "name": "payer",
@@ -126,16 +106,6 @@
         "4. `[writeable]` Associated token account for the wallet and mint, may need to be created",
         "5. `[]` System program",
         "6. `[]` SPL Token program"
-      ],
-      "discriminator": [
-        8,
-        190,
-        201,
-        58,
-        200,
-        121,
-        210,
-        143
       ],
       "accounts": [
         {

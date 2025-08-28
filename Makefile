@@ -47,16 +47,16 @@ meteora_vault:build
 	./anchor-go -name meteora_vault  --idl ./idl/fyd/meteora_vault.json --output ./generated/fyd/meteora/meteora_vault --program-id 24Uqj9JCLxUeoC3hGfh5W3s9FM9uCHDS2SG3LYwBpyTi --no-go-mod
 
 token2022:build
-	./anchor-go -name token2022_program  --idl ./idl/fyd/token2022_program.json --output ./generated/fyd/spl/token2022_program --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb --no-go-mod
+	./anchor-go -name token2022_program --type-id uint8  --idl ./idl/fyd/token2022_program.json --output ./generated/fyd/system/token2022_program --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb --no-go-mod
 
 token_metadata:build
-	./anchor-go -name token_metadata  --idl ./idl/fyd/token_metadata.json --output ./generated/fyd/spl/token_metadata --program-id metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s --no-go-mod
+	./anchor-go -name token_metadata --type-id uint8 --idl ./idl/fyd/token_metadata.json --output ./generated/fyd/system/token_metadata --program-id metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s --no-go-mod
 
 token_program:build
-	./anchor-go -name token_program  --idl ./idl/fyd/token_program_new.json --output ./generated/fyd/spl/token_program --program-id TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA --no-go-mod
+	./anchor-go -name token_program  --type-id uint8 --idl ./idl/fyd/token_program_new.json --output ./generated/fyd/system/token_program --program-id TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA --no-go-mod
 
 associated_token:build
-	./anchor-go -name associated_token  --idl ./idl/fyd/associated_token_new.json --output ./generated/fyd/spl/associated_token --program-id ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL --no-go-mod
+	./anchor-go -name associated_token --type-id uint8  --idl ./idl/fyd/associated_token_new.json --output ./generated/fyd/system/associated_token --program-id ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL --no-go-mod
 
 all:build clean pump_curve pump_amm raydium_amm raydium_clmm raydium_cpmm raydium_launchpad moonit whirlpool meteora_damm meteora_curve meteora_dlmm meteora_pools meteora_vault
 

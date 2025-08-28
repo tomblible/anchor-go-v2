@@ -7,38 +7,38 @@ import binary "github.com/gagliardetto/binary"
 
 // Account discriminators
 var (
-	Account_Mint     = []byte{80, 188, 245, 20, 95, 138, 57, 156}
-	Account_Token    = []byte{131, 254, 39, 144, 4, 179, 134, 127}
-	Account_Multisig = []byte{224, 116, 121, 186, 68, 161, 79, 236}
+	Account_Mint     = []byte{}
+	Account_Token    = []byte{}
+	Account_Multisig = []byte{}
 )
 
-const InstructionTypeIDEncoding = binary.AnchorTypeIDEncoding
+const InstructionTypeIDEncoding = binary.Uint8TypeIDEncoding
 
 // Instruction discriminators
 var (
-	Instruction_InitializeMint              = []byte{209, 42, 195, 4, 129, 85, 209, 44}
-	Instruction_InitializeToken             = []byte{38, 209, 150, 50, 190, 117, 16, 54}
-	Instruction_InitializeMultisig          = []byte{220, 130, 117, 21, 27, 227, 78, 213}
-	Instruction_TransferTokens              = []byte{54, 180, 238, 175, 74, 85, 126, 188}
-	Instruction_ApproveTokenDelegate        = []byte{173, 22, 159, 237, 236, 114, 225, 76}
-	Instruction_RevokeTokenDelegate         = []byte{95, 230, 213, 175, 87, 13, 192, 106}
-	Instruction_SetAuthority                = []byte{133, 250, 37, 21, 110, 163, 26, 121}
-	Instruction_MintTokensTo                = []byte{233, 128, 19, 98, 115, 12, 76, 180}
-	Instruction_BurnToken                   = []byte{185, 165, 216, 246, 144, 31, 70, 74}
-	Instruction_CloseToken                  = []byte{26, 74, 236, 151, 104, 64, 183, 249}
-	Instruction_FreezeToken                 = []byte{127, 5, 218, 58, 139, 36, 241, 201}
-	Instruction_ThawToken                   = []byte{201, 66, 161, 136, 216, 229, 9, 158}
-	Instruction_TransferTokensChecked       = []byte{5, 145, 13, 167, 254, 39, 93, 121}
-	Instruction_ApproveTokenDelegateChecked = []byte{236, 211, 179, 150, 105, 65, 15, 244}
-	Instruction_MintTokensToChecked         = []byte{107, 56, 230, 192, 101, 178, 78, 147}
-	Instruction_BurnTokenChecked            = []byte{43, 103, 16, 206, 222, 47, 45, 242}
-	Instruction_InitializeToken2            = []byte{104, 200, 195, 9, 148, 44, 231, 61}
-	Instruction_SyncNative                  = []byte{155, 219, 36, 36, 239, 128, 21, 65}
-	Instruction_InitializeToken3            = []byte{240, 97, 8, 142, 84, 130, 14, 0}
-	Instruction_InitializeMultisig2         = []byte{81, 239, 73, 39, 27, 148, 2, 146}
-	Instruction_InitializeMint2             = []byte{95, 108, 198, 210, 72, 243, 143, 235}
-	Instruction_GetTokenDataSize            = []byte{82, 179, 205, 29, 223, 85, 0, 197}
-	Instruction_InitializeImmutableOwner    = []byte{141, 50, 15, 44, 195, 247, 34, 60}
-	Instruction_AmountToUiAmount            = []byte{160, 145, 200, 98, 242, 156, 30, 90}
-	Instruction_UiAmountToAmount            = []byte{173, 243, 64, 4, 103, 31, 56, 52}
+	Instruction_InitializeMint              = []byte{0}
+	Instruction_InitializeToken             = []byte{1}
+	Instruction_InitializeMultisig          = []byte{2}
+	Instruction_TransferTokens              = []byte{3}
+	Instruction_ApproveTokenDelegate        = []byte{4}
+	Instruction_RevokeTokenDelegate         = []byte{5}
+	Instruction_SetAuthority                = []byte{6}
+	Instruction_MintTokensTo                = []byte{7}
+	Instruction_BurnToken                   = []byte{8}
+	Instruction_CloseToken                  = []byte{9}
+	Instruction_FreezeToken                 = []byte{10}
+	Instruction_ThawToken                   = []byte{11}
+	Instruction_TransferTokensChecked       = []byte{12}
+	Instruction_ApproveTokenDelegateChecked = []byte{13}
+	Instruction_MintTokensToChecked         = []byte{14}
+	Instruction_BurnTokenChecked            = []byte{15}
+	Instruction_InitializeToken2            = []byte{16}
+	Instruction_SyncNative                  = []byte{17}
+	Instruction_InitializeToken3            = []byte{18}
+	Instruction_InitializeMultisig2         = []byte{19}
+	Instruction_InitializeMint2             = []byte{20}
+	Instruction_GetTokenDataSize            = []byte{21}
+	Instruction_InitializeImmutableOwner    = []byte{22}
+	Instruction_AmountToUiAmount            = []byte{23}
+	Instruction_UiAmountToAmount            = []byte{24}
 )

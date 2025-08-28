@@ -8,16 +8,6 @@
   "instructions": [
     {
       "name": "initialize_mint",
-      "discriminator": [
-        209,
-        42,
-        195,
-        4,
-        129,
-        85,
-        209,
-        44
-      ],
       "accounts": [
         {
           "name": "mint",
@@ -46,16 +36,6 @@
     },
     {
       "name": "initialize_token",
-      "discriminator": [
-        38,
-        209,
-        150,
-        50,
-        190,
-        117,
-        16,
-        54
-      ],
       "accounts": [
         {
           "name": "account",
@@ -75,16 +55,6 @@
     },
     {
       "name": "initialize_multisig",
-      "discriminator": [
-        220,
-        130,
-        117,
-        21,
-        27,
-        227,
-        78,
-        213
-      ],
       "accounts": [
         {
           "name": "multisig",
@@ -103,16 +73,6 @@
     },
     {
       "name": "transfer_tokens",
-      "discriminator": [
-        54,
-        180,
-        238,
-        175,
-        74,
-        85,
-        126,
-        188
-      ],
       "accounts": [
         {
           "name": "source",
@@ -136,16 +96,6 @@
     },
     {
       "name": "approve_token_delegate",
-      "discriminator": [
-        173,
-        22,
-        159,
-        237,
-        236,
-        114,
-        225,
-        76
-      ],
       "accounts": [
         {
           "name": "source",
@@ -168,16 +118,6 @@
     },
     {
       "name": "revoke_token_delegate",
-      "discriminator": [
-        95,
-        230,
-        213,
-        175,
-        87,
-        13,
-        192,
-        106
-      ],
       "accounts": [
         {
           "name": "source",
@@ -192,16 +132,6 @@
     },
     {
       "name": "set_authority",
-      "discriminator": [
-        133,
-        250,
-        37,
-        21,
-        110,
-        163,
-        26,
-        121
-      ],
       "accounts": [
         {
           "name": "owned",
@@ -231,16 +161,6 @@
     },
     {
       "name": "mint_tokens_to",
-      "discriminator": [
-        233,
-        128,
-        19,
-        98,
-        115,
-        12,
-        76,
-        180
-      ],
       "accounts": [
         {
           "name": "mint",
@@ -264,16 +184,6 @@
     },
     {
       "name": "burn_token",
-      "discriminator": [
-        185,
-        165,
-        216,
-        246,
-        144,
-        31,
-        70,
-        74
-      ],
       "accounts": [
         {
           "name": "account",
@@ -297,16 +207,6 @@
     },
     {
       "name": "close_token",
-      "discriminator": [
-        26,
-        74,
-        236,
-        151,
-        104,
-        64,
-        183,
-        249
-      ],
       "accounts": [
         {
           "name": "account",
@@ -325,16 +225,6 @@
     },
     {
       "name": "freeze_token",
-      "discriminator": [
-        127,
-        5,
-        218,
-        58,
-        139,
-        36,
-        241,
-        201
-      ],
       "accounts": [
         {
           "name": "account",
@@ -352,16 +242,6 @@
     },
     {
       "name": "thaw_token",
-      "discriminator": [
-        201,
-        66,
-        161,
-        136,
-        216,
-        229,
-        9,
-        158
-      ],
       "accounts": [
         {
           "name": "account",
@@ -379,16 +259,6 @@
     },
     {
       "name": "transfer_tokens_checked",
-      "discriminator": [
-        5,
-        145,
-        13,
-        167,
-        254,
-        39,
-        93,
-        121
-      ],
       "accounts": [
         {
           "name": "source",
@@ -419,16 +289,6 @@
     },
     {
       "name": "approve_token_delegate_checked",
-      "discriminator": [
-        236,
-        211,
-        179,
-        150,
-        105,
-        65,
-        15,
-        244
-      ],
       "accounts": [
         {
           "name": "source",
@@ -458,16 +318,6 @@
     },
     {
       "name": "mint_tokens_to_checked",
-      "discriminator": [
-        107,
-        56,
-        230,
-        192,
-        101,
-        178,
-        78,
-        147
-      ],
       "accounts": [
         {
           "name": "mint",
@@ -495,16 +345,6 @@
     },
     {
       "name": "burn_token_checked",
-      "discriminator": [
-        43,
-        103,
-        16,
-        206,
-        222,
-        47,
-        45,
-        242
-      ],
       "accounts": [
         {
           "name": "account",
@@ -532,16 +372,6 @@
     },
     {
       "name": "initialize_token2",
-      "discriminator": [
-        104,
-        200,
-        195,
-        9,
-        148,
-        44,
-        231,
-        61
-      ],
       "accounts": [
         {
           "name": "account",
@@ -563,16 +393,6 @@
     },
     {
       "name": "sync_native",
-      "discriminator": [
-        155,
-        219,
-        36,
-        36,
-        239,
-        128,
-        21,
-        65
-      ],
       "accounts": [
         {
           "name": "account",
@@ -583,16 +403,6 @@
     },
     {
       "name": "initialize_token3",
-      "discriminator": [
-        240,
-        97,
-        8,
-        142,
-        84,
-        130,
-        14,
-        0
-      ],
       "accounts": [
         {
           "name": "account",
@@ -611,16 +421,6 @@
     },
     {
       "name": "initialize_multisig2",
-      "discriminator": [
-        81,
-        239,
-        73,
-        39,
-        27,
-        148,
-        2,
-        146
-      ],
       "accounts": [
         {
           "name": "multisig",
@@ -639,16 +439,6 @@
     },
     {
       "name": "initialize_mint2",
-      "discriminator": [
-        95,
-        108,
-        198,
-        210,
-        72,
-        243,
-        143,
-        235
-      ],
       "accounts": [
         {
           "name": "mint",
@@ -674,16 +464,6 @@
     },
     {
       "name": "get_token_data_size",
-      "discriminator": [
-        82,
-        179,
-        205,
-        29,
-        223,
-        85,
-        0,
-        197
-      ],
       "accounts": [
         {
           "name": "mint"
@@ -693,16 +473,6 @@
     },
     {
       "name": "initialize_immutable_owner",
-      "discriminator": [
-        141,
-        50,
-        15,
-        44,
-        195,
-        247,
-        34,
-        60
-      ],
       "accounts": [
         {
           "name": "account",
@@ -713,16 +483,6 @@
     },
     {
       "name": "amount_to_ui_amount",
-      "discriminator": [
-        160,
-        145,
-        200,
-        98,
-        242,
-        156,
-        30,
-        90
-      ],
       "accounts": [
         {
           "name": "mint"
@@ -737,16 +497,6 @@
     },
     {
       "name": "ui_amount_to_amount",
-      "discriminator": [
-        173,
-        243,
-        64,
-        4,
-        103,
-        31,
-        56,
-        52
-      ],
       "accounts": [
         {
           "name": "mint"
@@ -762,43 +512,13 @@
   ],
   "accounts": [
     {
-      "name": "Mint",
-      "discriminator": [
-        80,
-        188,
-        245,
-        20,
-        95,
-        138,
-        57,
-        156
-      ]
+      "name": "Mint"
     },
     {
-      "name": "Token",
-      "discriminator": [
-        131,
-        254,
-        39,
-        144,
-        4,
-        179,
-        134,
-        127
-      ]
+      "name": "Token"
     },
     {
-      "name": "Multisig",
-      "discriminator": [
-        224,
-        116,
-        121,
-        186,
-        68,
-        161,
-        79,
-        236
-      ]
+      "name": "Multisig"
     }
   ],
   "errors": [

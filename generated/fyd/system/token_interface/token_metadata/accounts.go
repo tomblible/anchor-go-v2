@@ -3,7 +3,6 @@ package token_metadata
 import (
 	"bytes"
 	"fmt"
-
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 )
@@ -15,6 +14,11 @@ type CollectionAuthorityRecord struct {
 }
 
 func (obj CollectionAuthorityRecord) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_CollectionAuthorityRecord[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -52,6 +56,19 @@ func (obj CollectionAuthorityRecord) Marshal() ([]byte, error) {
 }
 
 func (obj *CollectionAuthorityRecord) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_CollectionAuthorityRecord[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_CollectionAuthorityRecord[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -101,6 +118,11 @@ type MetadataDelegateRecord struct {
 }
 
 func (obj MetadataDelegateRecord) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_MetadataDelegateRecord[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -135,6 +157,19 @@ func (obj MetadataDelegateRecord) Marshal() ([]byte, error) {
 }
 
 func (obj *MetadataDelegateRecord) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_MetadataDelegateRecord[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_MetadataDelegateRecord[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -184,6 +219,11 @@ type HolderDelegateRecord struct {
 }
 
 func (obj HolderDelegateRecord) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_HolderDelegateRecord[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -218,6 +258,19 @@ func (obj HolderDelegateRecord) Marshal() ([]byte, error) {
 }
 
 func (obj *HolderDelegateRecord) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_HolderDelegateRecord[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_HolderDelegateRecord[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -265,6 +318,11 @@ type Edition struct {
 }
 
 func (obj Edition) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_Edition[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -291,6 +349,19 @@ func (obj Edition) Marshal() ([]byte, error) {
 }
 
 func (obj *Edition) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_Edition[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_Edition[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -329,6 +400,11 @@ type EditionMarker struct {
 }
 
 func (obj EditionMarker) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_EditionMarker[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -351,6 +427,19 @@ func (obj EditionMarker) Marshal() ([]byte, error) {
 }
 
 func (obj *EditionMarker) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_EditionMarker[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_EditionMarker[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -385,6 +474,11 @@ type EditionMarkerV2 struct {
 }
 
 func (obj EditionMarkerV2) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_EditionMarkerV2[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -407,6 +501,19 @@ func (obj EditionMarkerV2) Marshal() ([]byte, error) {
 }
 
 func (obj *EditionMarkerV2) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_EditionMarkerV2[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_EditionMarkerV2[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -443,6 +550,11 @@ type TokenOwnedEscrow struct {
 }
 
 func (obj TokenOwnedEscrow) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_TokenOwnedEscrow[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -475,6 +587,19 @@ func (obj TokenOwnedEscrow) Marshal() ([]byte, error) {
 }
 
 func (obj *TokenOwnedEscrow) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_TokenOwnedEscrow[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_TokenOwnedEscrow[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -522,6 +647,11 @@ type MasterEditionV2 struct {
 }
 
 func (obj MasterEditionV2) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_MasterEditionV2[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -559,6 +689,19 @@ func (obj MasterEditionV2) Marshal() ([]byte, error) {
 }
 
 func (obj *MasterEditionV2) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_MasterEditionV2[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_MasterEditionV2[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -608,6 +751,11 @@ type MasterEditionV1 struct {
 }
 
 func (obj MasterEditionV1) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_MasterEditionV1[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -653,6 +801,19 @@ func (obj MasterEditionV1) Marshal() ([]byte, error) {
 }
 
 func (obj *MasterEditionV1) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_MasterEditionV1[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_MasterEditionV1[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -717,6 +878,11 @@ type Metadata struct {
 }
 
 func (obj Metadata) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_Metadata[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -845,6 +1011,19 @@ func (obj Metadata) Marshal() ([]byte, error) {
 }
 
 func (obj *Metadata) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_Metadata[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_Metadata[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -972,6 +1151,11 @@ type TokenRecord struct {
 }
 
 func (obj TokenRecord) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_TokenRecord[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -1058,6 +1242,19 @@ func (obj TokenRecord) Marshal() ([]byte, error) {
 }
 
 func (obj *TokenRecord) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_TokenRecord[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_TokenRecord[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -1148,6 +1345,11 @@ type ReservationListV2 struct {
 }
 
 func (obj ReservationListV2) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_ReservationListV2[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -1197,6 +1399,19 @@ func (obj ReservationListV2) Marshal() ([]byte, error) {
 }
 
 func (obj *ReservationListV2) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_ReservationListV2[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_ReservationListV2[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -1257,6 +1472,11 @@ type ReservationListV1 struct {
 }
 
 func (obj ReservationListV1) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_ReservationListV1[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -1298,6 +1518,19 @@ func (obj ReservationListV1) Marshal() ([]byte, error) {
 }
 
 func (obj *ReservationListV1) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_ReservationListV1[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_ReservationListV1[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)
@@ -1349,6 +1582,11 @@ type UseAuthorityRecord struct {
 }
 
 func (obj UseAuthorityRecord) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_UseAuthorityRecord[:], false)
+	if err != nil {
+		return err
+	}
 	// Serialize `Key`:
 	if err = encoder.Encode(obj.Key); err != nil {
 		return fmt.Errorf("error while marshaling Key:%w", err)
@@ -1375,6 +1613,19 @@ func (obj UseAuthorityRecord) Marshal() ([]byte, error) {
 }
 
 func (obj *UseAuthorityRecord) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_UseAuthorityRecord[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_UseAuthorityRecord[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
 	// Deserialize `Key`:
 	if err = decoder.Decode(&obj.Key); err != nil {
 		return fmt.Errorf("error while unmarshaling Key:%w", err)

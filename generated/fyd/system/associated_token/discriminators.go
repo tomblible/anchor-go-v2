@@ -5,11 +5,11 @@ package associated_token
 
 import binary "github.com/gagliardetto/binary"
 
-const InstructionTypeIDEncoding = binary.AnchorTypeIDEncoding
+const InstructionTypeIDEncoding = binary.Uint8TypeIDEncoding
 
 // Instruction discriminators
 var (
-	Instruction_Create           = []byte{24, 30, 200, 40, 5, 28, 7, 119}
-	Instruction_CreateIdempotent = []byte{143, 88, 34, 91, 112, 20, 245, 59}
-	Instruction_RecoverNested    = []byte{8, 190, 201, 58, 200, 121, 210, 143}
+	Instruction_Create           = []byte{0}
+	Instruction_CreateIdempotent = []byte{1}
+	Instruction_RecoverNested    = []byte{2}
 )

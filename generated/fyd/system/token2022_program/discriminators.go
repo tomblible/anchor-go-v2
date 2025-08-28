@@ -12,7 +12,7 @@ var (
 	Account_Multisig = []byte{}
 )
 
-const InstructionTypeIDEncoding = binary.AnchorTypeIDEncoding
+const InstructionTypeIDEncoding = binary.Uint8TypeIDEncoding
 
 // Instruction discriminators
 var (
