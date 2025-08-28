@@ -123,6 +123,13 @@ func (g *Generator) genInstructionFile() ([]*OutputFile, error) {
 			).
 			BlockFunc(func(body *Group) {
 				// Body:
+				// 生成：if len(obj.PublicKeySlice) <= 6 {
+				// 	return nil
+				// }
+				body.If(Len(Id("obj").Dot("PublicKeySlice")).Op("<=").Lit(len(instruction.Accounts))).
+					Block(
+						Return(Nil()),
+					)
 				body.Return(Id("obj").Dot("PublicKeySlice").Index(Lit(len(instruction.Accounts)).Op(":")))
 			}),
 		)
