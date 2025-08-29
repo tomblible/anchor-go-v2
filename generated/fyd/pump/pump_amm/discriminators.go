@@ -8,6 +8,7 @@ import binary "github.com/gagliardetto/binary"
 // Account discriminators
 var (
 	Account_BondingCurve            = []byte{23, 183, 248, 55, 96, 216, 172, 96}
+	Account_FeeConfig               = []byte{143, 52, 146, 187, 219, 123, 76, 155}
 	Account_GlobalConfig            = []byte{149, 8, 156, 202, 160, 252, 176, 217}
 	Account_GlobalVolumeAccumulator = []byte{202, 42, 246, 43, 142, 190, 30, 255}
 	Account_Pool                    = []byte{241, 154, 109, 4, 17, 177, 109, 188}
@@ -20,12 +21,14 @@ var (
 	Event_AdminUpdateTokenIncentivesEvent = []byte{147, 250, 108, 120, 247, 29, 67, 222}
 	Event_BuyEvent                        = []byte{103, 244, 82, 31, 44, 245, 119, 119}
 	Event_ClaimTokenIncentivesEvent       = []byte{79, 172, 246, 49, 205, 91, 206, 232}
+	Event_CloseUserVolumeAccumulatorEvent = []byte{146, 159, 189, 172, 146, 88, 56, 244}
 	Event_CollectCoinCreatorFeeEvent      = []byte{232, 245, 194, 238, 234, 218, 58, 89}
 	Event_CreateConfigEvent               = []byte{107, 52, 89, 129, 55, 226, 81, 22}
 	Event_CreatePoolEvent                 = []byte{177, 49, 12, 210, 160, 118, 167, 116}
 	Event_DepositEvent                    = []byte{120, 248, 61, 83, 31, 142, 107, 144}
 	Event_DisableEvent                    = []byte{107, 253, 193, 76, 228, 202, 27, 104}
 	Event_ExtendAccountEvent              = []byte{97, 97, 215, 144, 93, 146, 22, 124}
+	Event_InitUserVolumeAccumulatorEvent  = []byte{134, 36, 13, 72, 232, 101, 130, 216}
 	Event_SellEvent                       = []byte{62, 47, 55, 10, 165, 3, 220, 42}
 	Event_SetBondingCurveCoinCreatorEvent = []byte{242, 231, 235, 102, 65, 99, 189, 211}
 	Event_SetMetaplexCoinCreatorEvent     = []byte{150, 107, 199, 123, 124, 207, 102, 228}
@@ -43,12 +46,14 @@ var (
 	Instruction_AdminUpdateTokenIncentives = []byte{209, 11, 115, 87, 213, 23, 124, 204}
 	Instruction_Buy                        = []byte{102, 6, 61, 18, 1, 218, 235, 234}
 	Instruction_ClaimTokenIncentives       = []byte{16, 4, 71, 28, 204, 1, 40, 27}
+	Instruction_CloseUserVolumeAccumulator = []byte{249, 69, 164, 218, 150, 103, 84, 138}
 	Instruction_CollectCoinCreatorFee      = []byte{160, 57, 89, 42, 181, 139, 43, 66}
 	Instruction_CreateConfig               = []byte{201, 207, 243, 114, 75, 111, 47, 189}
 	Instruction_CreatePool                 = []byte{233, 146, 209, 142, 207, 104, 64, 188}
 	Instruction_Deposit                    = []byte{242, 35, 198, 137, 82, 225, 242, 182}
 	Instruction_Disable                    = []byte{185, 173, 187, 90, 216, 15, 238, 233}
 	Instruction_ExtendAccount              = []byte{234, 102, 194, 203, 150, 72, 62, 229}
+	Instruction_InitUserVolumeAccumulator  = []byte{94, 6, 202, 115, 255, 96, 232, 183}
 	Instruction_Sell                       = []byte{51, 230, 133, 164, 1, 127, 131, 173}
 	Instruction_SetCoinCreator             = []byte{210, 149, 128, 45, 188, 58, 78, 175}
 	Instruction_SyncUserVolumeAccumulator  = []byte{86, 31, 192, 87, 163, 87, 79, 238}

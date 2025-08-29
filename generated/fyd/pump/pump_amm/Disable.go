@@ -103,6 +103,9 @@ func (*Disable) NewInstance() programparser.Instruction {
 }
 
 func (obj *Disable) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 4 {
+		return nil
+	}
 	return obj.PublicKeySlice[4:]
 }
 

@@ -61,6 +61,9 @@ func (*UpdateAdmin) NewInstance() programparser.Instruction {
 }
 
 func (obj *UpdateAdmin) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 5 {
+		return nil
+	}
 	return obj.PublicKeySlice[5:]
 }
 

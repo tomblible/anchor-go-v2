@@ -70,6 +70,9 @@ func (*CollectCoinCreatorFee) NewInstance() programparser.Instruction {
 }
 
 func (obj *CollectCoinCreatorFee) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 8 {
+		return nil
+	}
 	return obj.PublicKeySlice[8:]
 }
 

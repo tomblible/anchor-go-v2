@@ -136,6 +136,9 @@ func (*CreatePool) NewInstance() programparser.Instruction {
 }
 
 func (obj *CreatePool) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 18 {
+		return nil
+	}
 	return obj.PublicKeySlice[18:]
 }
 

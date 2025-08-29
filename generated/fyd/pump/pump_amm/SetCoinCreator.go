@@ -63,6 +63,9 @@ func (*SetCoinCreator) NewInstance() programparser.Instruction {
 }
 
 func (obj *SetCoinCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 5 {
+		return nil
+	}
 	return obj.PublicKeySlice[5:]
 }
 

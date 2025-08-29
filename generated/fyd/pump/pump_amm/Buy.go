@@ -15,6 +15,7 @@ type Buy struct {
 	// Params:
 	BaseAmountOut    uint64
 	MaxQuoteAmountIn uint64
+	TrackVolume      OptionBool
 	// Accounts:
 	// [0] = [] pool
 	Pool solanago.PublicKey `bin:"-"`
@@ -48,7 +49,7 @@ type Buy struct {
 	AssociatedTokenProgram solanago.PublicKey `bin:"-"`
 	// [15] = [] event_authority
 	EventAuthority solanago.PublicKey `bin:"-"`
-	// [16] = [] program
+	// [16] = [] program[pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA]
 	Program solanago.PublicKey `bin:"-"`
 	// [17] = [writable] coin_creator_vault_ata
 	CoinCreatorVaultAta solanago.PublicKey `bin:"-"`
@@ -58,6 +59,10 @@ type Buy struct {
 	GlobalVolumeAccumulator solanago.PublicKey `bin:"-"`
 	// [20] = [writable] user_volume_accumulator
 	UserVolumeAccumulator solanago.PublicKey `bin:"-"`
+	// [21] = [,optional] fee_config
+	FeeConfig solanago.PublicKey `bin:"-"`
+	// [22] = [,optional] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+	FeeProgram solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
 }
@@ -71,6 +76,10 @@ func (obj Buy) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	if err = encoder.Encode(obj.MaxQuoteAmountIn); err != nil {
 		return fmt.Errorf("error while marshaling maxQuoteAmountInParam:%w", err)
 	}
+	// Serialize `trackVolumeParam`:
+	if err = encoder.Encode(obj.TrackVolume); err != nil {
+		return fmt.Errorf("error while marshaling trackVolumeParam:%w", err)
+	}
 	return nil
 }
 
@@ -83,12 +92,16 @@ func (obj *Buy) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	if err = decoder.Decode(&obj.MaxQuoteAmountIn); err != nil {
 		return fmt.Errorf("error while unmarshaling MaxQuoteAmountIn:%w", err)
 	}
+	// Deserialize `TrackVolume`:
+	if err = decoder.Decode(&obj.TrackVolume); err != nil {
+		return fmt.Errorf("error while unmarshaling TrackVolume:%w", err)
+	}
 	return nil
 }
 
 func (obj *Buy) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
-	if len(accounts) < 21 {
-		return fmt.Errorf("too few accounts, expect %d actual %d", 21, len(accounts))
+	if len(accounts) < 23 {
+		return fmt.Errorf("too few accounts, expect %d actual %d", 23, len(accounts))
 	}
 	obj.Pool = accounts[0]
 	obj.User = accounts[1]
@@ -111,6 +124,8 @@ func (obj *Buy) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.CoinCreatorVaultAuthority = accounts[18]
 	obj.GlobalVolumeAccumulator = accounts[19]
 	obj.UserVolumeAccumulator = accounts[20]
+	obj.FeeConfig = accounts[21]
+	obj.FeeProgram = accounts[22]
 	obj.PublicKeySlice = accounts
 	return nil
 }
@@ -127,7 +142,10 @@ func (*Buy) NewInstance() programparser.Instruction {
 }
 
 func (obj *Buy) GetRemainingAccounts() solanago.PublicKeySlice {
-	return obj.PublicKeySlice[21:]
+	if len(obj.PublicKeySlice) <= 23 {
+		return nil
+	}
+	return obj.PublicKeySlice[23:]
 }
 
 // Builds a "buy" instruction.
@@ -135,6 +153,7 @@ func NewBuyInstruction(
 	// Params:
 	baseAmountOutParam uint64,
 	maxQuoteAmountInParam uint64,
+	trackVolumeParam OptionBool,
 
 	// Accounts:
 	pool solanago.PublicKey,
@@ -151,18 +170,18 @@ func NewBuyInstruction(
 	baseTokenProgram solanago.PublicKey,
 	quoteTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	coinCreatorVaultAta solanago.PublicKey,
 	coinCreatorVaultAuthority solanago.PublicKey,
 	globalVolumeAccumulator solanago.PublicKey,
 	userVolumeAccumulator solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
 	var (
 		err    error
 		buf__  = new(bytes.Buffer)
 		enc__  = binary.NewBorshEncoder(buf__)
-		metas_ = make(solanago.AccountMetaSlice, 21, 21+len(remaining__))
+		metas_ = make(solanago.AccountMetaSlice, 23, 23+len(remaining__))
 	)
 
 	// Encode the instruction discriminator.
@@ -178,6 +197,10 @@ func NewBuyInstruction(
 		// Serialize `maxQuoteAmountInParam`:
 		if err = enc__.Encode(maxQuoteAmountInParam); err != nil {
 			return nil, fmt.Errorf("error while marshaling maxQuoteAmountInParam:%w", err)
+		}
+		// Serialize `trackVolumeParam`:
+		if err = enc__.Encode(trackVolumeParam); err != nil {
+			return nil, fmt.Errorf("error while marshaling trackVolumeParam:%w", err)
 		}
 	}
 
@@ -215,8 +238,8 @@ func NewBuyInstruction(
 		metas_[14] = solanago.NewAccountMeta(AssociatedTokenProgram, false, false)
 		// [15] = [] event_authority
 		metas_[15] = solanago.NewAccountMeta(eventAuthority, false, false)
-		// [16] = [] program
-		metas_[16] = solanago.NewAccountMeta(program, false, false)
+		// [16] = [] program[pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA]
+		metas_[16] = solanago.NewAccountMeta(Program, false, false)
 		// [17] = [writable] coin_creator_vault_ata
 		metas_[17] = solanago.NewAccountMeta(coinCreatorVaultAta, true, false)
 		// [18] = [] coin_creator_vault_authority
@@ -225,6 +248,10 @@ func NewBuyInstruction(
 		metas_[19] = solanago.NewAccountMeta(globalVolumeAccumulator, true, false)
 		// [20] = [writable] user_volume_accumulator
 		metas_[20] = solanago.NewAccountMeta(userVolumeAccumulator, true, false)
+		// [21] = [,optional] fee_config
+		metas_[21] = solanago.NewAccountMeta(feeConfig, false, false)
+		// [22] = [,optional] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+		metas_[22] = solanago.NewAccountMeta(FeeProgram, false, false)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}
@@ -242,6 +269,7 @@ func BuildBuy(
 	// Params:
 	baseAmountOutParam uint64,
 	maxQuoteAmountInParam uint64,
+	trackVolumeParam OptionBool,
 
 	// Accounts:
 	pool solanago.PublicKey,
@@ -258,16 +286,17 @@ func BuildBuy(
 	baseTokenProgram solanago.PublicKey,
 	quoteTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	coinCreatorVaultAta solanago.PublicKey,
 	coinCreatorVaultAuthority solanago.PublicKey,
 	globalVolumeAccumulator solanago.PublicKey,
 	userVolumeAccumulator solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
 	instruction_, _ := NewBuyInstruction(
 		baseAmountOutParam,
 		maxQuoteAmountInParam,
+		trackVolumeParam,
 		pool,
 		user,
 		globalConfig,
@@ -282,11 +311,11 @@ func BuildBuy(
 		baseTokenProgram,
 		quoteTokenProgram,
 		eventAuthority,
-		program,
 		coinCreatorVaultAta,
 		coinCreatorVaultAuthority,
 		globalVolumeAccumulator,
 		userVolumeAccumulator,
+		feeConfig,
 		remaining__...,
 	)
 	return instruction_

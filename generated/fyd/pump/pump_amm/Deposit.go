@@ -118,6 +118,9 @@ func (*Deposit) NewInstance() programparser.Instruction {
 }
 
 func (obj *Deposit) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 15 {
+		return nil
+	}
 	return obj.PublicKeySlice[15:]
 }
 

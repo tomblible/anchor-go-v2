@@ -118,6 +118,9 @@ func (*Withdraw) NewInstance() programparser.Instruction {
 }
 
 func (obj *Withdraw) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 15 {
+		return nil
+	}
 	return obj.PublicKeySlice[15:]
 }
 

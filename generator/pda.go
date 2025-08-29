@@ -2,6 +2,8 @@ package generator
 
 import (
 	"errors"
+	"fmt"
+
 	. "github.com/dave/jennifer/jen"
 	"github.com/gagliardetto/anchor-go/idl"
 	"github.com/gagliardetto/anchor-go/idl/idltype"
@@ -28,7 +30,10 @@ func (g *Generator) genfile_pda() (*OutputFile, error) {
 						file.Add(parser)
 						file.Add(Empty().Line())
 					}
+				default:
+					fmt.Printf("unknown account type: %T\n", v)
 				}
+
 			}
 		}
 	}

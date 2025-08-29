@@ -48,12 +48,16 @@ type Sell struct {
 	AssociatedTokenProgram solanago.PublicKey `bin:"-"`
 	// [15] = [] event_authority
 	EventAuthority solanago.PublicKey `bin:"-"`
-	// [16] = [] program
+	// [16] = [] program[pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA]
 	Program solanago.PublicKey `bin:"-"`
 	// [17] = [writable] coin_creator_vault_ata
 	CoinCreatorVaultAta solanago.PublicKey `bin:"-"`
 	// [18] = [] coin_creator_vault_authority
 	CoinCreatorVaultAuthority solanago.PublicKey `bin:"-"`
+	// [19] = [,optional] fee_config
+	FeeConfig solanago.PublicKey `bin:"-"`
+	// [20] = [,optional] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+	FeeProgram solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
 }
@@ -83,8 +87,8 @@ func (obj *Sell) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 }
 
 func (obj *Sell) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
-	if len(accounts) < 19 {
-		return fmt.Errorf("too few accounts, expect %d actual %d", 19, len(accounts))
+	if len(accounts) < 21 {
+		return fmt.Errorf("too few accounts, expect %d actual %d", 21, len(accounts))
 	}
 	obj.Pool = accounts[0]
 	obj.User = accounts[1]
@@ -105,6 +109,8 @@ func (obj *Sell) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.Program = accounts[16]
 	obj.CoinCreatorVaultAta = accounts[17]
 	obj.CoinCreatorVaultAuthority = accounts[18]
+	obj.FeeConfig = accounts[19]
+	obj.FeeProgram = accounts[20]
 	obj.PublicKeySlice = accounts
 	return nil
 }
@@ -121,7 +127,10 @@ func (*Sell) NewInstance() programparser.Instruction {
 }
 
 func (obj *Sell) GetRemainingAccounts() solanago.PublicKeySlice {
-	return obj.PublicKeySlice[19:]
+	if len(obj.PublicKeySlice) <= 21 {
+		return nil
+	}
+	return obj.PublicKeySlice[21:]
 }
 
 // Builds a "sell" instruction.
@@ -145,16 +154,16 @@ func NewSellInstruction(
 	baseTokenProgram solanago.PublicKey,
 	quoteTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	coinCreatorVaultAta solanago.PublicKey,
 	coinCreatorVaultAuthority solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
 	var (
 		err    error
 		buf__  = new(bytes.Buffer)
 		enc__  = binary.NewBorshEncoder(buf__)
-		metas_ = make(solanago.AccountMetaSlice, 19, 19+len(remaining__))
+		metas_ = make(solanago.AccountMetaSlice, 21, 21+len(remaining__))
 	)
 
 	// Encode the instruction discriminator.
@@ -207,12 +216,16 @@ func NewSellInstruction(
 		metas_[14] = solanago.NewAccountMeta(AssociatedTokenProgram, false, false)
 		// [15] = [] event_authority
 		metas_[15] = solanago.NewAccountMeta(eventAuthority, false, false)
-		// [16] = [] program
-		metas_[16] = solanago.NewAccountMeta(program, false, false)
+		// [16] = [] program[pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA]
+		metas_[16] = solanago.NewAccountMeta(Program, false, false)
 		// [17] = [writable] coin_creator_vault_ata
 		metas_[17] = solanago.NewAccountMeta(coinCreatorVaultAta, true, false)
 		// [18] = [] coin_creator_vault_authority
 		metas_[18] = solanago.NewAccountMeta(coinCreatorVaultAuthority, false, false)
+		// [19] = [,optional] fee_config
+		metas_[19] = solanago.NewAccountMeta(feeConfig, false, false)
+		// [20] = [,optional] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+		metas_[20] = solanago.NewAccountMeta(FeeProgram, false, false)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}
@@ -246,9 +259,9 @@ func BuildSell(
 	baseTokenProgram solanago.PublicKey,
 	quoteTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	coinCreatorVaultAta solanago.PublicKey,
 	coinCreatorVaultAuthority solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
 	instruction_, _ := NewSellInstruction(
@@ -268,9 +281,9 @@ func BuildSell(
 		baseTokenProgram,
 		quoteTokenProgram,
 		eventAuthority,
-		program,
 		coinCreatorVaultAta,
 		coinCreatorVaultAuthority,
+		feeConfig,
 		remaining__...,
 	)
 	return instruction_
