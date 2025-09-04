@@ -5,7 +5,6 @@ package raydium_launchpad
 import (
 	"bytes"
 	"fmt"
-
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -56,6 +55,12 @@ type SellExactIn struct {
 	EventAuthority solanago.PublicKey `bin:"-"`
 	// [14] = [] program
 	Program solanago.PublicKey `bin:"-"`
+	// [15] = [] system_program
+	SystemProgram solanago.PublicKey `bin:"-"`
+	// [16] = [writable] creator_fee_quote_mint_token_account
+	CreatorFeeQuoteMintTokenAccount solanago.PublicKey `bin:"-"`
+	// [17] = [writable] platform_fee_quote_mint_token_account
+	PlatformFeeQuoteMintTokenAccount solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
 }
@@ -93,8 +98,8 @@ func (obj *SellExactIn) UnmarshalWithDecoder(decoder *binary.Decoder) (err error
 }
 
 func (obj *SellExactIn) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
-	if len(accounts) < 15 {
-		return fmt.Errorf("too few accounts, expect %d actual %d", 15, len(accounts))
+	if len(accounts) < 18 {
+		return fmt.Errorf("too few accounts, expect %d actual %d", 18, len(accounts))
 	}
 	obj.Payer = accounts[0]
 	obj.Authority = accounts[1]
@@ -111,6 +116,9 @@ func (obj *SellExactIn) SetAccounts(accounts solanago.PublicKeySlice) (err error
 	obj.QuoteTokenProgram = accounts[12]
 	obj.EventAuthority = accounts[13]
 	obj.Program = accounts[14]
+	obj.SystemProgram = accounts[15]
+	obj.CreatorFeeQuoteMintTokenAccount = accounts[16]
+	obj.PlatformFeeQuoteMintTokenAccount = accounts[17]
 	obj.PublicKeySlice = accounts
 	return nil
 }
@@ -127,10 +135,10 @@ func (*SellExactIn) NewInstance() programparser.Instruction {
 }
 
 func (obj *SellExactIn) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 15 {
+	if len(obj.PublicKeySlice) <= 18 {
 		return nil
 	}
-	return obj.PublicKeySlice[15:]
+	return obj.PublicKeySlice[18:]
 }
 
 // Builds a "sell_exact_in" instruction.
@@ -156,13 +164,15 @@ func NewSellExactInInstruction(
 	baseTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
 	program solanago.PublicKey,
+	creatorFeeQuoteMintTokenAccount solanago.PublicKey,
+	platformFeeQuoteMintTokenAccount solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
 	var (
 		err    error
 		buf__  = new(bytes.Buffer)
 		enc__  = binary.NewBorshEncoder(buf__)
-		metas_ = make(solanago.AccountMetaSlice, 15, 15+len(remaining__))
+		metas_ = make(solanago.AccountMetaSlice, 18, 18+len(remaining__))
 	)
 
 	// Encode the instruction discriminator.
@@ -240,6 +250,12 @@ func NewSellExactInInstruction(
 		metas_[13] = solanago.NewAccountMeta(eventAuthority, false, false)
 		// [14] = [] program
 		metas_[14] = solanago.NewAccountMeta(program, false, false)
+		// [15] = [] system_program
+		metas_[15] = solanago.NewAccountMeta(SystemProgram, false, false)
+		// [16] = [writable] creator_fee_quote_mint_token_account
+		metas_[16] = solanago.NewAccountMeta(creatorFeeQuoteMintTokenAccount, true, false)
+		// [17] = [writable] platform_fee_quote_mint_token_account
+		metas_[17] = solanago.NewAccountMeta(platformFeeQuoteMintTokenAccount, true, false)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}
@@ -275,6 +291,8 @@ func BuildSellExactIn(
 	baseTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
 	program solanago.PublicKey,
+	creatorFeeQuoteMintTokenAccount solanago.PublicKey,
+	platformFeeQuoteMintTokenAccount solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
 	instruction_, _ := NewSellExactInInstruction(
@@ -295,6 +313,8 @@ func BuildSellExactIn(
 		baseTokenProgram,
 		eventAuthority,
 		program,
+		creatorFeeQuoteMintTokenAccount,
+		platformFeeQuoteMintTokenAccount,
 		remaining__...,
 	)
 	return instruction_
