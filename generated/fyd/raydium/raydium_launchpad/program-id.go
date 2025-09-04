@@ -17,8 +17,8 @@ var (
 // program dependency address
 var (
 	QuoteTokenProgram      = solanago.MustPublicKeyFromBase58("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
-	SystemProgram          = solanago.MustPublicKeyFromBase58("11111111111111111111111111111111")
 	TokenProgram           = solanago.MustPublicKeyFromBase58("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
+	SystemProgram          = solanago.MustPublicKeyFromBase58("11111111111111111111111111111111")
 	AssociatedTokenProgram = solanago.MustPublicKeyFromBase58("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
 	BaseTokenProgram       = solanago.MustPublicKeyFromBase58("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
 	Owner                  = solanago.MustPublicKeyFromBase58("GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ")

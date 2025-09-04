@@ -55,12 +55,6 @@ type BuyExactOut struct {
 	EventAuthority solanago.PublicKey `bin:"-"`
 	// [14] = [] program
 	Program solanago.PublicKey `bin:"-"`
-	// [15] = [] system_program
-	SystemProgram solanago.PublicKey `bin:"-"`
-	// [16] = [writable] creator_fee_vault_quote_token_account
-	CreatorFeeVaultQuoteTokenAccount solanago.PublicKey `bin:"-"`
-	// [17] = [writable] platform_fee_vault_quote_token_account
-	PlatformFeeVaultQuoteTokenAccount solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
 }
@@ -98,8 +92,8 @@ func (obj *BuyExactOut) UnmarshalWithDecoder(decoder *binary.Decoder) (err error
 }
 
 func (obj *BuyExactOut) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
-	if len(accounts) < 18 {
-		return fmt.Errorf("too few accounts, expect %d actual %d", 18, len(accounts))
+	if len(accounts) < 15 {
+		return fmt.Errorf("too few accounts, expect %d actual %d", 15, len(accounts))
 	}
 	obj.Payer = accounts[0]
 	obj.Authority = accounts[1]
@@ -116,9 +110,6 @@ func (obj *BuyExactOut) SetAccounts(accounts solanago.PublicKeySlice) (err error
 	obj.QuoteTokenProgram = accounts[12]
 	obj.EventAuthority = accounts[13]
 	obj.Program = accounts[14]
-	obj.SystemProgram = accounts[15]
-	obj.CreatorFeeVaultQuoteTokenAccount = accounts[16]
-	obj.PlatformFeeVaultQuoteTokenAccount = accounts[17]
 	obj.PublicKeySlice = accounts
 	return nil
 }
@@ -135,10 +126,10 @@ func (*BuyExactOut) NewInstance() programparser.Instruction {
 }
 
 func (obj *BuyExactOut) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 18 {
+	if len(obj.PublicKeySlice) <= 15 {
 		return nil
 	}
-	return obj.PublicKeySlice[18:]
+	return obj.PublicKeySlice[15:]
 }
 
 // Builds a "buy_exact_out" instruction.
@@ -164,15 +155,13 @@ func NewBuyExactOutInstruction(
 	baseTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
 	program solanago.PublicKey,
-	creatorFeeVaultQuoteTokenAccount solanago.PublicKey,
-	platformFeeVaultQuoteTokenAccount solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
 	var (
 		err    error
 		buf__  = new(bytes.Buffer)
 		enc__  = binary.NewBorshEncoder(buf__)
-		metas_ = make(solanago.AccountMetaSlice, 18, 18+len(remaining__))
+		metas_ = make(solanago.AccountMetaSlice, 15, 15+len(remaining__))
 	)
 
 	// Encode the instruction discriminator.
@@ -250,12 +239,6 @@ func NewBuyExactOutInstruction(
 		metas_[13] = solanago.NewAccountMeta(eventAuthority, false, false)
 		// [14] = [] program
 		metas_[14] = solanago.NewAccountMeta(program, false, false)
-		// [15] = [] system_program
-		metas_[15] = solanago.NewAccountMeta(SystemProgram, false, false)
-		// [16] = [writable] creator_fee_vault_quote_token_account
-		metas_[16] = solanago.NewAccountMeta(creatorFeeVaultQuoteTokenAccount, true, false)
-		// [17] = [writable] platform_fee_vault_quote_token_account
-		metas_[17] = solanago.NewAccountMeta(platformFeeVaultQuoteTokenAccount, true, false)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}
@@ -291,8 +274,6 @@ func BuildBuyExactOut(
 	baseTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
 	program solanago.PublicKey,
-	creatorFeeVaultQuoteTokenAccount solanago.PublicKey,
-	platformFeeVaultQuoteTokenAccount solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
 	instruction_, _ := NewBuyExactOutInstruction(
@@ -313,8 +294,6 @@ func BuildBuyExactOut(
 		baseTokenProgram,
 		eventAuthority,
 		program,
-		creatorFeeVaultQuoteTokenAccount,
-		platformFeeVaultQuoteTokenAccount,
 		remaining__...,
 	)
 	return instruction_
