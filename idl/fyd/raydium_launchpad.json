@@ -180,18 +180,6 @@
         },
         {
           "name": "program"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "creator_fee_vault_quote_token_account",
-          "writable":true
-        },
-        {
-          "name": "platform_fee_vault_quote_token_account",
-          "writable":true
         }
       ],
       "args": [
@@ -381,18 +369,6 @@
         },
         {
           "name": "program"
-        },
-         {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "creator_fee_vault_quote_token_account",
-          "writable":true
-        },
-        {
-          "name": "platform_fee_vault_quote_token_account",
-          "writable":true
         }
       ],
       "args": [
@@ -3849,18 +3825,6 @@
         },
         {
           "name": "program"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "creator_fee_vault_quote_token_account",
-          "writable":true
-        },
-        {
-          "name": "platform_fee_vault_quote_token_account",
-          "writable":true
         }
       ],
       "args": [
@@ -4051,18 +4015,6 @@
         },
         {
           "name": "program"
-        },
-         {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "creator_fee_vault_quote_token_account",
-          "writable":true
-        },
-        {
-          "name": "platform_fee_vault_quote_token_account",
-          "writable":true
         }
       ],
       "args": [

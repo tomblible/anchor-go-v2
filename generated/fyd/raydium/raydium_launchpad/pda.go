@@ -32,27 +32,41 @@ func MustFindEventAuthorityAddress() (pda solanago.PublicKey) {
 	return
 }
 
-func FindFeeVaultAuthorityAddressForCreateFee() (pda solanago.PublicKey, bumpSeed uint8, err error) {
+func FindPlatformVaultAddress(platformId solanago.PublicKey, mintB solanago.PublicKey) (pda solanago.PublicKey, bumpSeed uint8, err error) {
+	seeds := make([][]byte, 2)
+	seeds[0] = platformId.Bytes()
+	seeds[1] = mintB.Bytes()
+	pda, bumpSeed, err = solanago.FindProgramAddress(seeds, ProgramID)
+	return
+}
+
+func MustFindPlatformVaultAddress(platformId solanago.PublicKey, mintB solanago.PublicKey) (pda solanago.PublicKey) {
+	pda, _, _ = FindPlatformVaultAddress(platformId, mintB)
+	return
+}
+
+func FindCreatorVaultAddress(platformId solanago.PublicKey, mintB solanago.PublicKey) (pda solanago.PublicKey, bumpSeed uint8, err error) {
+	seeds := make([][]byte, 2)
+	seeds[0] = platformId.Bytes()
+	seeds[1] = mintB.Bytes()
+	pda, bumpSeed, err = solanago.FindProgramAddress(seeds, ProgramID)
+	return
+}
+
+func MustFindCreatorVaultAddress(platformId solanago.PublicKey, mintB solanago.PublicKey) (pda solanago.PublicKey) {
+	pda, _, _ = FindCreatorVaultAddress(platformId, mintB)
+	return
+}
+
+func FindFeeVaultAuthorityAddress() (pda solanago.PublicKey, bumpSeed uint8, err error) {
 	seeds := make([][]byte, 1)
 	seeds[0] = []byte{99, 114, 101, 97, 116, 111, 114, 95, 102, 101, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104, 95, 115, 101, 101, 100}
 	pda, bumpSeed, err = solanago.FindProgramAddress(seeds, ProgramID)
 	return
 }
 
-func MustFindFeeVaultAuthorityAddressForCreateFee() (pda solanago.PublicKey) {
-	pda, _, _ = FindFeeVaultAuthorityAddressForCreateFee()
-	return
-}
-
-func FindFeeVaultAuthorityAddressForPlatformfee() (pda solanago.PublicKey, bumpSeed uint8, err error) {
-	seeds := make([][]byte, 1)
-	seeds[0] = []byte{112, 108, 97, 116, 102, 111, 114, 109, 95, 102, 101, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104, 95, 115, 101, 101, 100}
-	pda, bumpSeed, err = solanago.FindProgramAddress(seeds, ProgramID)
-	return
-}
-
-func MustFindFeeVaultAuthorityAddressForPlatformfee() (pda solanago.PublicKey) {
-	pda, _, _ = FindFeeVaultAuthorityAddressForPlatformfee()
+func MustFindFeeVaultAuthorityAddress() (pda solanago.PublicKey) {
+	pda, _, _ = FindFeeVaultAuthorityAddress()
 	return
 }
 
