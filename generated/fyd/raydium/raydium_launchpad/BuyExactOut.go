@@ -57,10 +57,10 @@ type BuyExactOut struct {
 	Program solanago.PublicKey `bin:"-"`
 	// [15] = [] system_program
 	SystemProgram solanago.PublicKey `bin:"-"`
-	// [16] = [writable] creator_fee_quote_mint_token_account
-	CreatorFeeQuoteMintTokenAccount solanago.PublicKey `bin:"-"`
-	// [17] = [writable] platform_fee_quote_mint_token_account
-	PlatformFeeQuoteMintTokenAccount solanago.PublicKey `bin:"-"`
+	// [16] = [writable] creator_fee_vault_quote_token_account
+	CreatorFeeVaultQuoteTokenAccount solanago.PublicKey `bin:"-"`
+	// [17] = [writable] platform_fee_vault_quote_token_account
+	PlatformFeeVaultQuoteTokenAccount solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
 }
@@ -117,8 +117,8 @@ func (obj *BuyExactOut) SetAccounts(accounts solanago.PublicKeySlice) (err error
 	obj.EventAuthority = accounts[13]
 	obj.Program = accounts[14]
 	obj.SystemProgram = accounts[15]
-	obj.CreatorFeeQuoteMintTokenAccount = accounts[16]
-	obj.PlatformFeeQuoteMintTokenAccount = accounts[17]
+	obj.CreatorFeeVaultQuoteTokenAccount = accounts[16]
+	obj.PlatformFeeVaultQuoteTokenAccount = accounts[17]
 	obj.PublicKeySlice = accounts
 	return nil
 }
@@ -164,8 +164,8 @@ func NewBuyExactOutInstruction(
 	baseTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
 	program solanago.PublicKey,
-	creatorFeeQuoteMintTokenAccount solanago.PublicKey,
-	platformFeeQuoteMintTokenAccount solanago.PublicKey,
+	creatorFeeVaultQuoteTokenAccount solanago.PublicKey,
+	platformFeeVaultQuoteTokenAccount solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
 	var (
@@ -252,10 +252,10 @@ func NewBuyExactOutInstruction(
 		metas_[14] = solanago.NewAccountMeta(program, false, false)
 		// [15] = [] system_program
 		metas_[15] = solanago.NewAccountMeta(SystemProgram, false, false)
-		// [16] = [writable] creator_fee_quote_mint_token_account
-		metas_[16] = solanago.NewAccountMeta(creatorFeeQuoteMintTokenAccount, true, false)
-		// [17] = [writable] platform_fee_quote_mint_token_account
-		metas_[17] = solanago.NewAccountMeta(platformFeeQuoteMintTokenAccount, true, false)
+		// [16] = [writable] creator_fee_vault_quote_token_account
+		metas_[16] = solanago.NewAccountMeta(creatorFeeVaultQuoteTokenAccount, true, false)
+		// [17] = [writable] platform_fee_vault_quote_token_account
+		metas_[17] = solanago.NewAccountMeta(platformFeeVaultQuoteTokenAccount, true, false)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}
@@ -291,8 +291,8 @@ func BuildBuyExactOut(
 	baseTokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
 	program solanago.PublicKey,
-	creatorFeeQuoteMintTokenAccount solanago.PublicKey,
-	platformFeeQuoteMintTokenAccount solanago.PublicKey,
+	creatorFeeVaultQuoteTokenAccount solanago.PublicKey,
+	platformFeeVaultQuoteTokenAccount solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
 	instruction_, _ := NewBuyExactOutInstruction(
@@ -313,8 +313,8 @@ func BuildBuyExactOut(
 		baseTokenProgram,
 		eventAuthority,
 		program,
-		creatorFeeQuoteMintTokenAccount,
-		platformFeeQuoteMintTokenAccount,
+		creatorFeeVaultQuoteTokenAccount,
+		platformFeeVaultQuoteTokenAccount,
 		remaining__...,
 	)
 	return instruction_

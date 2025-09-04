@@ -186,11 +186,11 @@
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "creator_fee_quote_mint_token_account",
+          "name": "creator_fee_vault_quote_token_account",
           "writable":true
         },
         {
-          "name": "platform_fee_quote_mint_token_account",
+          "name": "platform_fee_vault_quote_token_account",
           "writable":true
         }
       ],
@@ -387,11 +387,11 @@
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "creator_fee_quote_mint_token_account",
+          "name": "creator_fee_vault_quote_token_account",
           "writable":true
         },
         {
-          "name": "platform_fee_quote_mint_token_account",
+          "name": "platform_fee_vault_quote_token_account",
           "writable":true
         }
       ],
@@ -3855,11 +3855,11 @@
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "creator_fee_quote_mint_token_account",
+          "name": "creator_fee_vault_quote_token_account",
           "writable":true
         },
         {
-          "name": "platform_fee_quote_mint_token_account",
+          "name": "platform_fee_vault_quote_token_account",
           "writable":true
         }
       ],
@@ -4057,11 +4057,11 @@
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "creator_fee_quote_mint_token_account",
+          "name": "creator_fee_vault_quote_token_account",
           "writable":true
         },
         {
-          "name": "platform_fee_quote_mint_token_account",
+          "name": "platform_fee_vault_quote_token_account",
           "writable":true
         }
       ],
