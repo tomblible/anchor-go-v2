@@ -12,7 +12,7 @@ var (
 	AuthorityAddress                       = MustFindAuthorityAddress()
 	EventAuthorityAddress                  = MustFindEventAuthorityAddress()
 	FeeVaultAuthorityAddressForPlatformfee = MustFindFeeVaultAuthorityAddressForPlatformfee()
-	FeeVaultAuthorityAddressByCreateFee    = MustFindFeeVaultAuthorityAddressByCreateFee()
+	FeeVaultAuthorityAddressByCreateFee    = MustFindFeeVaultAuthorityAddressForCreateFee()
 )
 
 // program dependency address

@@ -39,7 +39,7 @@ func FindFeeVaultAuthorityAddressForCreateFee() (pda solanago.PublicKey, bumpSee
 	return
 }
 
-func MustFindFeeVaultAuthorityAddressByCreateFee() (pda solanago.PublicKey) {
+func MustFindFeeVaultAuthorityAddressForCreateFee() (pda solanago.PublicKey) {
 	pda, _, _ = FindFeeVaultAuthorityAddressForCreateFee()
 	return
 }
