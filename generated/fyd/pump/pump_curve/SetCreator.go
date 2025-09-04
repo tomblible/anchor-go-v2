@@ -78,6 +78,9 @@ func (*SetCreator) NewInstance() programparser.Instruction {
 }
 
 func (obj *SetCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 7 {
+		return nil
+	}
 	return obj.PublicKeySlice[7:]
 }
 

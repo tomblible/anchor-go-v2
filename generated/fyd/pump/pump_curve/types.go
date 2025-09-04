@@ -4,6 +4,8 @@
 package pump_curve
 
 import (
+	"bytes"
+	"fmt"
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 )
@@ -12,4 +14,172 @@ type Instruction interface {
 	TypeID() binary.TypeID
 	SetAccounts(accounts solanago.PublicKeySlice) error
 	Copy() Instruction
+}
+
+type FeeTier struct {
+	MarketCapLamportsThreshold binary.Uint128
+	Fees                       Fees
+}
+
+func (obj FeeTier) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `MarketCapLamportsThreshold`:
+	if err = encoder.Encode(obj.MarketCapLamportsThreshold); err != nil {
+		return fmt.Errorf("error while marshaling MarketCapLamportsThreshold:%w", err)
+	}
+	// Serialize `Fees`:
+	if err = encoder.Encode(obj.Fees); err != nil {
+		return fmt.Errorf("error while marshaling Fees:%w", err)
+	}
+	return nil
+}
+
+func (obj FeeTier) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding FeeTier: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *FeeTier) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `MarketCapLamportsThreshold`:
+	if err = decoder.Decode(&obj.MarketCapLamportsThreshold); err != nil {
+		return fmt.Errorf("error while unmarshaling MarketCapLamportsThreshold:%w", err)
+	}
+	// Deserialize `Fees`:
+	if err = decoder.Decode(&obj.Fees); err != nil {
+		return fmt.Errorf("error while unmarshaling Fees:%w", err)
+	}
+	return nil
+}
+
+func (obj *FeeTier) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling FeeTier: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalFeeTier(buf []byte) (*FeeTier, error) {
+	obj := new(FeeTier)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+type Fees struct {
+	LpFeeBps       uint64
+	ProtocolFeeBps uint64
+	CreatorFeeBps  uint64
+}
+
+func (obj Fees) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `LpFeeBps`:
+	if err = encoder.Encode(obj.LpFeeBps); err != nil {
+		return fmt.Errorf("error while marshaling LpFeeBps:%w", err)
+	}
+	// Serialize `ProtocolFeeBps`:
+	if err = encoder.Encode(obj.ProtocolFeeBps); err != nil {
+		return fmt.Errorf("error while marshaling ProtocolFeeBps:%w", err)
+	}
+	// Serialize `CreatorFeeBps`:
+	if err = encoder.Encode(obj.CreatorFeeBps); err != nil {
+		return fmt.Errorf("error while marshaling CreatorFeeBps:%w", err)
+	}
+	return nil
+}
+
+func (obj Fees) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding Fees: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *Fees) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `LpFeeBps`:
+	if err = decoder.Decode(&obj.LpFeeBps); err != nil {
+		return fmt.Errorf("error while unmarshaling LpFeeBps:%w", err)
+	}
+	// Deserialize `ProtocolFeeBps`:
+	if err = decoder.Decode(&obj.ProtocolFeeBps); err != nil {
+		return fmt.Errorf("error while unmarshaling ProtocolFeeBps:%w", err)
+	}
+	// Deserialize `CreatorFeeBps`:
+	if err = decoder.Decode(&obj.CreatorFeeBps); err != nil {
+		return fmt.Errorf("error while unmarshaling CreatorFeeBps:%w", err)
+	}
+	return nil
+}
+
+func (obj *Fees) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling Fees: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalFees(buf []byte) (*Fees, error) {
+	obj := new(Fees)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+type OptionBool struct {
+	V0 bool
+}
+
+func (obj OptionBool) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `V0`:
+	if err = encoder.Encode(obj.V0); err != nil {
+		return fmt.Errorf("error while marshaling V0:%w", err)
+	}
+	return nil
+}
+
+func (obj OptionBool) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding OptionBool: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *OptionBool) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `V0`:
+	if err = decoder.Decode(&obj.V0); err != nil {
+		return fmt.Errorf("error while unmarshaling V0:%w", err)
+	}
+	return nil
+}
+
+func (obj *OptionBool) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling OptionBool: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalOptionBool(buf []byte) (*OptionBool, error) {
+	obj := new(OptionBool)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
 }

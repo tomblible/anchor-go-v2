@@ -120,6 +120,9 @@ func (*Migrate) NewInstance() programparser.Instruction {
 }
 
 func (obj *Migrate) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 24 {
+		return nil
+	}
 	return obj.PublicKeySlice[24:]
 }
 

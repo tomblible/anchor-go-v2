@@ -15,8 +15,9 @@ import (
 // Buys tokens from a bonding curve.
 type Buy struct {
 	// Params:
-	Amount     uint64
-	MaxSolCost uint64
+	Amount      uint64
+	MaxSolCost  uint64
+	TrackVolume OptionBool
 	// Accounts:
 	// [0] = [] global
 	Global solanago.PublicKey `bin:"-"`
@@ -40,12 +41,16 @@ type Buy struct {
 	CreatorVault solanago.PublicKey `bin:"-"`
 	// [10] = [] event_authority
 	EventAuthority solanago.PublicKey `bin:"-"`
-	// [11] = [] program
+	// [11] = [] program[6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P]
 	Program solanago.PublicKey `bin:"-"`
 	// [12] = [writable] global_volume_accumulator
 	GlobalVolumeAccumulator solanago.PublicKey `bin:"-"`
 	// [13] = [writable] user_volume_accumulator
 	UserVolumeAccumulator solanago.PublicKey `bin:"-"`
+	// [14] = [] fee_config
+	FeeConfig solanago.PublicKey `bin:"-"`
+	// [15] = [] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+	FeeProgram solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
 }
@@ -59,6 +64,10 @@ func (obj Buy) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	if err = encoder.Encode(obj.MaxSolCost); err != nil {
 		return fmt.Errorf("error while marshaling maxSolCostParam:%w", err)
 	}
+	// Serialize `trackVolumeParam`:
+	if err = encoder.Encode(obj.TrackVolume); err != nil {
+		return fmt.Errorf("error while marshaling trackVolumeParam:%w", err)
+	}
 	return nil
 }
 
@@ -71,12 +80,16 @@ func (obj *Buy) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	if err = decoder.Decode(&obj.MaxSolCost); err != nil {
 		return fmt.Errorf("error while unmarshaling MaxSolCost:%w", err)
 	}
+	// Deserialize `TrackVolume`:
+	if err = decoder.Decode(&obj.TrackVolume); err != nil {
+		return fmt.Errorf("error while unmarshaling TrackVolume:%w", err)
+	}
 	return nil
 }
 
 func (obj *Buy) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
-	if len(accounts) < 14 {
-		return fmt.Errorf("too few accounts, expect %d actual %d", 14, len(accounts))
+	if len(accounts) < 16 {
+		return fmt.Errorf("too few accounts, expect %d actual %d", 16, len(accounts))
 	}
 	obj.Global = accounts[0]
 	obj.FeeRecipient = accounts[1]
@@ -92,6 +105,8 @@ func (obj *Buy) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.Program = accounts[11]
 	obj.GlobalVolumeAccumulator = accounts[12]
 	obj.UserVolumeAccumulator = accounts[13]
+	obj.FeeConfig = accounts[14]
+	obj.FeeProgram = accounts[15]
 	obj.PublicKeySlice = accounts
 	return nil
 }
@@ -108,7 +123,10 @@ func (*Buy) NewInstance() programparser.Instruction {
 }
 
 func (obj *Buy) GetRemainingAccounts() solanago.PublicKeySlice {
-	return obj.PublicKeySlice[14:]
+	if len(obj.PublicKeySlice) <= 16 {
+		return nil
+	}
+	return obj.PublicKeySlice[16:]
 }
 
 // Builds a "buy" instruction.
@@ -117,6 +135,7 @@ func NewBuyInstruction(
 	// Params:
 	amountParam uint64,
 	maxSolCostParam uint64,
+	trackVolumeParam OptionBool,
 
 	// Accounts:
 	global solanago.PublicKey,
@@ -128,16 +147,16 @@ func NewBuyInstruction(
 	user solanago.PublicKey,
 	creatorVault solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	globalVolumeAccumulator solanago.PublicKey,
 	userVolumeAccumulator solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
 	var (
 		err    error
 		buf__  = new(bytes.Buffer)
 		enc__  = binary.NewBorshEncoder(buf__)
-		metas_ = make(solanago.AccountMetaSlice, 14, 14+len(remaining__))
+		metas_ = make(solanago.AccountMetaSlice, 16, 16+len(remaining__))
 	)
 
 	// Encode the instruction discriminator.
@@ -153,6 +172,10 @@ func NewBuyInstruction(
 		// Serialize `maxSolCostParam`:
 		if err = enc__.Encode(maxSolCostParam); err != nil {
 			return nil, fmt.Errorf("error while marshaling maxSolCostParam:%w", err)
+		}
+		// Serialize `trackVolumeParam`:
+		if err = enc__.Encode(trackVolumeParam); err != nil {
+			return nil, fmt.Errorf("error while marshaling trackVolumeParam:%w", err)
 		}
 	}
 
@@ -180,12 +203,16 @@ func NewBuyInstruction(
 		metas_[9] = solanago.NewAccountMeta(creatorVault, true, false)
 		// [10] = [] event_authority
 		metas_[10] = solanago.NewAccountMeta(eventAuthority, false, false)
-		// [11] = [] program
-		metas_[11] = solanago.NewAccountMeta(program, false, false)
+		// [11] = [] program[6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P]
+		metas_[11] = solanago.NewAccountMeta(Program, false, false)
 		// [12] = [writable] global_volume_accumulator
 		metas_[12] = solanago.NewAccountMeta(globalVolumeAccumulator, true, false)
 		// [13] = [writable] user_volume_accumulator
 		metas_[13] = solanago.NewAccountMeta(userVolumeAccumulator, true, false)
+		// [14] = [] fee_config
+		metas_[14] = solanago.NewAccountMeta(feeConfig, false, false)
+		// [15] = [] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+		metas_[15] = solanago.NewAccountMeta(FeeProgram, false, false)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}
@@ -204,6 +231,7 @@ func BuildBuy(
 	// Params:
 	amountParam uint64,
 	maxSolCostParam uint64,
+	trackVolumeParam OptionBool,
 
 	// Accounts:
 	global solanago.PublicKey,
@@ -215,14 +243,15 @@ func BuildBuy(
 	user solanago.PublicKey,
 	creatorVault solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	globalVolumeAccumulator solanago.PublicKey,
 	userVolumeAccumulator solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
 	instruction_, _ := NewBuyInstruction(
 		amountParam,
 		maxSolCostParam,
+		trackVolumeParam,
 		global,
 		feeRecipient,
 		mint,
@@ -232,9 +261,9 @@ func BuildBuy(
 		user,
 		creatorVault,
 		eventAuthority,
-		program,
 		globalVolumeAccumulator,
 		userVolumeAccumulator,
+		feeConfig,
 		remaining__...,
 	)
 	return instruction_

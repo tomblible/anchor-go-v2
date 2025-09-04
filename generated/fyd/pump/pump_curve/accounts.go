@@ -126,6 +126,98 @@ func UnmarshalBondingCurve(buf []byte) (*BondingCurve, error) {
 	return obj, nil
 }
 
+type FeeConfig struct {
+	Bump     uint8
+	Admin    solanago.PublicKey
+	FlatFees Fees
+	FeeTiers []FeeTier
+}
+
+func (obj FeeConfig) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Account_FeeConfig[:], false)
+	if err != nil {
+		return err
+	}
+	// Serialize `Bump`:
+	if err = encoder.Encode(obj.Bump); err != nil {
+		return fmt.Errorf("error while marshaling Bump:%w", err)
+	}
+	// Serialize `Admin`:
+	if err = encoder.Encode(obj.Admin); err != nil {
+		return fmt.Errorf("error while marshaling Admin:%w", err)
+	}
+	// Serialize `FlatFees`:
+	if err = encoder.Encode(obj.FlatFees); err != nil {
+		return fmt.Errorf("error while marshaling FlatFees:%w", err)
+	}
+	// Serialize `FeeTiers`:
+	if err = encoder.Encode(obj.FeeTiers); err != nil {
+		return fmt.Errorf("error while marshaling FeeTiers:%w", err)
+	}
+	return nil
+}
+
+func (obj FeeConfig) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding FeeConfig: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *FeeConfig) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Account_FeeConfig[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Account_FeeConfig[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
+	// Deserialize `Bump`:
+	if err = decoder.Decode(&obj.Bump); err != nil {
+		return fmt.Errorf("error while unmarshaling Bump:%w", err)
+	}
+	// Deserialize `Admin`:
+	if err = decoder.Decode(&obj.Admin); err != nil {
+		return fmt.Errorf("error while unmarshaling Admin:%w", err)
+	}
+	// Deserialize `FlatFees`:
+	if err = decoder.Decode(&obj.FlatFees); err != nil {
+		return fmt.Errorf("error while unmarshaling FlatFees:%w", err)
+	}
+	// Deserialize `FeeTiers`:
+	if err = decoder.Decode(&obj.FeeTiers); err != nil {
+		return fmt.Errorf("error while unmarshaling FeeTiers:%w", err)
+	}
+	return nil
+}
+
+func (obj *FeeConfig) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling FeeConfig: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalFeeConfig(buf []byte) (*FeeConfig, error) {
+	obj := new(FeeConfig)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
 type Global struct {
 	// Unused
 	Initialized                 bool

@@ -117,11 +117,79 @@ func UnmarshalAdminSetCreatorEvent(buf []byte) (*AdminSetCreatorEvent, error) {
 	return obj, nil
 }
 
+type AdminSetIdlAuthorityEvent struct {
+	IdlAuthority solanago.PublicKey
+}
+
+func (obj AdminSetIdlAuthorityEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Event_AdminSetIdlAuthorityEvent[:], false)
+	if err != nil {
+		return err
+	}
+	// Serialize `IdlAuthority`:
+	if err = encoder.Encode(obj.IdlAuthority); err != nil {
+		return fmt.Errorf("error while marshaling IdlAuthority:%w", err)
+	}
+	return nil
+}
+
+func (obj AdminSetIdlAuthorityEvent) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding AdminSetIdlAuthorityEvent: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *AdminSetIdlAuthorityEvent) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Event_AdminSetIdlAuthorityEvent[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Event_AdminSetIdlAuthorityEvent[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
+	// Deserialize `IdlAuthority`:
+	if err = decoder.Decode(&obj.IdlAuthority); err != nil {
+		return fmt.Errorf("error while unmarshaling IdlAuthority:%w", err)
+	}
+	return nil
+}
+
+func (obj *AdminSetIdlAuthorityEvent) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling AdminSetIdlAuthorityEvent: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalAdminSetIdlAuthorityEvent(buf []byte) (*AdminSetIdlAuthorityEvent, error) {
+	obj := new(AdminSetIdlAuthorityEvent)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
 type AdminUpdateTokenIncentivesEvent struct {
 	StartTime         int64
 	EndTime           int64
 	DayNumber         uint64
 	TokenSupplyPerDay uint64
+	Mint              solanago.PublicKey
+	SecondsInADay     int64
+	Timestamp         int64
 }
 
 func (obj AdminUpdateTokenIncentivesEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
@@ -145,6 +213,18 @@ func (obj AdminUpdateTokenIncentivesEvent) MarshalWithEncoder(encoder *binary.En
 	// Serialize `TokenSupplyPerDay`:
 	if err = encoder.Encode(obj.TokenSupplyPerDay); err != nil {
 		return fmt.Errorf("error while marshaling TokenSupplyPerDay:%w", err)
+	}
+	// Serialize `Mint`:
+	if err = encoder.Encode(obj.Mint); err != nil {
+		return fmt.Errorf("error while marshaling Mint:%w", err)
+	}
+	// Serialize `SecondsInADay`:
+	if err = encoder.Encode(obj.SecondsInADay); err != nil {
+		return fmt.Errorf("error while marshaling SecondsInADay:%w", err)
+	}
+	// Serialize `Timestamp`:
+	if err = encoder.Encode(obj.Timestamp); err != nil {
+		return fmt.Errorf("error while marshaling Timestamp:%w", err)
 	}
 	return nil
 }
@@ -189,6 +269,18 @@ func (obj *AdminUpdateTokenIncentivesEvent) UnmarshalWithDecoder(decoder *binary
 	if err = decoder.Decode(&obj.TokenSupplyPerDay); err != nil {
 		return fmt.Errorf("error while unmarshaling TokenSupplyPerDay:%w", err)
 	}
+	// Deserialize `Mint`:
+	if err = decoder.Decode(&obj.Mint); err != nil {
+		return fmt.Errorf("error while unmarshaling Mint:%w", err)
+	}
+	// Deserialize `SecondsInADay`:
+	if err = decoder.Decode(&obj.SecondsInADay); err != nil {
+		return fmt.Errorf("error while unmarshaling SecondsInADay:%w", err)
+	}
+	// Deserialize `Timestamp`:
+	if err = decoder.Decode(&obj.Timestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling Timestamp:%w", err)
+	}
 	return nil
 }
 
@@ -210,9 +302,12 @@ func UnmarshalAdminUpdateTokenIncentivesEvent(buf []byte) (*AdminUpdateTokenInce
 }
 
 type ClaimTokenIncentivesEvent struct {
-	User   solanago.PublicKey
-	Mint   solanago.PublicKey
-	Amount uint64
+	User               solanago.PublicKey
+	Mint               solanago.PublicKey
+	Amount             uint64
+	Timestamp          int64
+	TotalClaimedTokens uint64
+	CurrentSolVolume   uint64
 }
 
 func (obj ClaimTokenIncentivesEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
@@ -232,6 +327,18 @@ func (obj ClaimTokenIncentivesEvent) MarshalWithEncoder(encoder *binary.Encoder)
 	// Serialize `Amount`:
 	if err = encoder.Encode(obj.Amount); err != nil {
 		return fmt.Errorf("error while marshaling Amount:%w", err)
+	}
+	// Serialize `Timestamp`:
+	if err = encoder.Encode(obj.Timestamp); err != nil {
+		return fmt.Errorf("error while marshaling Timestamp:%w", err)
+	}
+	// Serialize `TotalClaimedTokens`:
+	if err = encoder.Encode(obj.TotalClaimedTokens); err != nil {
+		return fmt.Errorf("error while marshaling TotalClaimedTokens:%w", err)
+	}
+	// Serialize `CurrentSolVolume`:
+	if err = encoder.Encode(obj.CurrentSolVolume); err != nil {
+		return fmt.Errorf("error while marshaling CurrentSolVolume:%w", err)
 	}
 	return nil
 }
@@ -272,6 +379,18 @@ func (obj *ClaimTokenIncentivesEvent) UnmarshalWithDecoder(decoder *binary.Decod
 	if err = decoder.Decode(&obj.Amount); err != nil {
 		return fmt.Errorf("error while unmarshaling Amount:%w", err)
 	}
+	// Deserialize `Timestamp`:
+	if err = decoder.Decode(&obj.Timestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling Timestamp:%w", err)
+	}
+	// Deserialize `TotalClaimedTokens`:
+	if err = decoder.Decode(&obj.TotalClaimedTokens); err != nil {
+		return fmt.Errorf("error while unmarshaling TotalClaimedTokens:%w", err)
+	}
+	// Deserialize `CurrentSolVolume`:
+	if err = decoder.Decode(&obj.CurrentSolVolume); err != nil {
+		return fmt.Errorf("error while unmarshaling CurrentSolVolume:%w", err)
+	}
 	return nil
 }
 
@@ -285,6 +404,116 @@ func (obj *ClaimTokenIncentivesEvent) Unmarshal(buf []byte) error {
 
 func UnmarshalClaimTokenIncentivesEvent(buf []byte) (*ClaimTokenIncentivesEvent, error) {
 	obj := new(ClaimTokenIncentivesEvent)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+type CloseUserVolumeAccumulatorEvent struct {
+	User                 solanago.PublicKey
+	Timestamp            int64
+	TotalUnclaimedTokens uint64
+	TotalClaimedTokens   uint64
+	CurrentSolVolume     uint64
+	LastUpdateTimestamp  int64
+}
+
+func (obj CloseUserVolumeAccumulatorEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Event_CloseUserVolumeAccumulatorEvent[:], false)
+	if err != nil {
+		return err
+	}
+	// Serialize `User`:
+	if err = encoder.Encode(obj.User); err != nil {
+		return fmt.Errorf("error while marshaling User:%w", err)
+	}
+	// Serialize `Timestamp`:
+	if err = encoder.Encode(obj.Timestamp); err != nil {
+		return fmt.Errorf("error while marshaling Timestamp:%w", err)
+	}
+	// Serialize `TotalUnclaimedTokens`:
+	if err = encoder.Encode(obj.TotalUnclaimedTokens); err != nil {
+		return fmt.Errorf("error while marshaling TotalUnclaimedTokens:%w", err)
+	}
+	// Serialize `TotalClaimedTokens`:
+	if err = encoder.Encode(obj.TotalClaimedTokens); err != nil {
+		return fmt.Errorf("error while marshaling TotalClaimedTokens:%w", err)
+	}
+	// Serialize `CurrentSolVolume`:
+	if err = encoder.Encode(obj.CurrentSolVolume); err != nil {
+		return fmt.Errorf("error while marshaling CurrentSolVolume:%w", err)
+	}
+	// Serialize `LastUpdateTimestamp`:
+	if err = encoder.Encode(obj.LastUpdateTimestamp); err != nil {
+		return fmt.Errorf("error while marshaling LastUpdateTimestamp:%w", err)
+	}
+	return nil
+}
+
+func (obj CloseUserVolumeAccumulatorEvent) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding CloseUserVolumeAccumulatorEvent: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *CloseUserVolumeAccumulatorEvent) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Event_CloseUserVolumeAccumulatorEvent[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Event_CloseUserVolumeAccumulatorEvent[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
+	// Deserialize `User`:
+	if err = decoder.Decode(&obj.User); err != nil {
+		return fmt.Errorf("error while unmarshaling User:%w", err)
+	}
+	// Deserialize `Timestamp`:
+	if err = decoder.Decode(&obj.Timestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling Timestamp:%w", err)
+	}
+	// Deserialize `TotalUnclaimedTokens`:
+	if err = decoder.Decode(&obj.TotalUnclaimedTokens); err != nil {
+		return fmt.Errorf("error while unmarshaling TotalUnclaimedTokens:%w", err)
+	}
+	// Deserialize `TotalClaimedTokens`:
+	if err = decoder.Decode(&obj.TotalClaimedTokens); err != nil {
+		return fmt.Errorf("error while unmarshaling TotalClaimedTokens:%w", err)
+	}
+	// Deserialize `CurrentSolVolume`:
+	if err = decoder.Decode(&obj.CurrentSolVolume); err != nil {
+		return fmt.Errorf("error while unmarshaling CurrentSolVolume:%w", err)
+	}
+	// Deserialize `LastUpdateTimestamp`:
+	if err = decoder.Decode(&obj.LastUpdateTimestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling LastUpdateTimestamp:%w", err)
+	}
+	return nil
+}
+
+func (obj *CloseUserVolumeAccumulatorEvent) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling CloseUserVolumeAccumulatorEvent: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalCloseUserVolumeAccumulatorEvent(buf []byte) (*CloseUserVolumeAccumulatorEvent, error) {
+	obj := new(CloseUserVolumeAccumulatorEvent)
 	err := obj.Unmarshal(buf)
 	if err != nil {
 		return nil, err
@@ -860,6 +1089,89 @@ func UnmarshalExtendAccountEvent(buf []byte) (*ExtendAccountEvent, error) {
 	return obj, nil
 }
 
+type InitUserVolumeAccumulatorEvent struct {
+	Payer     solanago.PublicKey
+	User      solanago.PublicKey
+	Timestamp int64
+}
+
+func (obj InitUserVolumeAccumulatorEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(Event_InitUserVolumeAccumulatorEvent[:], false)
+	if err != nil {
+		return err
+	}
+	// Serialize `Payer`:
+	if err = encoder.Encode(obj.Payer); err != nil {
+		return fmt.Errorf("error while marshaling Payer:%w", err)
+	}
+	// Serialize `User`:
+	if err = encoder.Encode(obj.User); err != nil {
+		return fmt.Errorf("error while marshaling User:%w", err)
+	}
+	// Serialize `Timestamp`:
+	if err = encoder.Encode(obj.Timestamp); err != nil {
+		return fmt.Errorf("error while marshaling Timestamp:%w", err)
+	}
+	return nil
+}
+
+func (obj InitUserVolumeAccumulatorEvent) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding InitUserVolumeAccumulatorEvent: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *InitUserVolumeAccumulatorEvent) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadDiscriminator()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(Event_InitUserVolumeAccumulatorEvent[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				Event_InitUserVolumeAccumulatorEvent[:],
+				fmt.Sprint(discriminator[:]))
+		}
+	}
+	// Deserialize `Payer`:
+	if err = decoder.Decode(&obj.Payer); err != nil {
+		return fmt.Errorf("error while unmarshaling Payer:%w", err)
+	}
+	// Deserialize `User`:
+	if err = decoder.Decode(&obj.User); err != nil {
+		return fmt.Errorf("error while unmarshaling User:%w", err)
+	}
+	// Deserialize `Timestamp`:
+	if err = decoder.Decode(&obj.Timestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling Timestamp:%w", err)
+	}
+	return nil
+}
+
+func (obj *InitUserVolumeAccumulatorEvent) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling InitUserVolumeAccumulatorEvent: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalInitUserVolumeAccumulatorEvent(buf []byte) (*InitUserVolumeAccumulatorEvent, error) {
+	obj := new(InitUserVolumeAccumulatorEvent)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
 type SetCreatorEvent struct {
 	Timestamp    int64
 	Mint         solanago.PublicKey
@@ -1239,6 +1551,7 @@ type SyncUserVolumeAccumulatorEvent struct {
 	User                     solanago.PublicKey
 	TotalClaimedTokensBefore uint64
 	TotalClaimedTokensAfter  uint64
+	Timestamp                int64
 }
 
 func (obj SyncUserVolumeAccumulatorEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
@@ -1258,6 +1571,10 @@ func (obj SyncUserVolumeAccumulatorEvent) MarshalWithEncoder(encoder *binary.Enc
 	// Serialize `TotalClaimedTokensAfter`:
 	if err = encoder.Encode(obj.TotalClaimedTokensAfter); err != nil {
 		return fmt.Errorf("error while marshaling TotalClaimedTokensAfter:%w", err)
+	}
+	// Serialize `Timestamp`:
+	if err = encoder.Encode(obj.Timestamp); err != nil {
+		return fmt.Errorf("error while marshaling Timestamp:%w", err)
 	}
 	return nil
 }
@@ -1298,6 +1615,10 @@ func (obj *SyncUserVolumeAccumulatorEvent) UnmarshalWithDecoder(decoder *binary.
 	if err = decoder.Decode(&obj.TotalClaimedTokensAfter); err != nil {
 		return fmt.Errorf("error while unmarshaling TotalClaimedTokensAfter:%w", err)
 	}
+	// Deserialize `Timestamp`:
+	if err = decoder.Decode(&obj.Timestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling Timestamp:%w", err)
+	}
 	return nil
 }
 
@@ -1335,6 +1656,11 @@ type TradeEvent struct {
 	Creator               solanago.PublicKey
 	CreatorFeeBasisPoints uint64
 	CreatorFee            uint64
+	TrackVolume           bool
+	TotalUnclaimedTokens  uint64
+	TotalClaimedTokens    uint64
+	CurrentSolVolume      uint64
+	LastUpdateTimestamp   int64
 }
 
 func (obj TradeEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
@@ -1406,6 +1732,26 @@ func (obj TradeEvent) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Serialize `CreatorFee`:
 	if err = encoder.Encode(obj.CreatorFee); err != nil {
 		return fmt.Errorf("error while marshaling CreatorFee:%w", err)
+	}
+	// Serialize `TrackVolume`:
+	if err = encoder.Encode(obj.TrackVolume); err != nil {
+		return fmt.Errorf("error while marshaling TrackVolume:%w", err)
+	}
+	// Serialize `TotalUnclaimedTokens`:
+	if err = encoder.Encode(obj.TotalUnclaimedTokens); err != nil {
+		return fmt.Errorf("error while marshaling TotalUnclaimedTokens:%w", err)
+	}
+	// Serialize `TotalClaimedTokens`:
+	if err = encoder.Encode(obj.TotalClaimedTokens); err != nil {
+		return fmt.Errorf("error while marshaling TotalClaimedTokens:%w", err)
+	}
+	// Serialize `CurrentSolVolume`:
+	if err = encoder.Encode(obj.CurrentSolVolume); err != nil {
+		return fmt.Errorf("error while marshaling CurrentSolVolume:%w", err)
+	}
+	// Serialize `LastUpdateTimestamp`:
+	if err = encoder.Encode(obj.LastUpdateTimestamp); err != nil {
+		return fmt.Errorf("error while marshaling LastUpdateTimestamp:%w", err)
 	}
 	return nil
 }
@@ -1497,6 +1843,26 @@ func (obj *TradeEvent) UnmarshalWithDecoder(decoder *binary.Decoder) (err error)
 	// Deserialize `CreatorFee`:
 	if err = decoder.Decode(&obj.CreatorFee); err != nil {
 		return fmt.Errorf("error while unmarshaling CreatorFee:%w", err)
+	}
+	// Deserialize `TrackVolume`:
+	if err = decoder.Decode(&obj.TrackVolume); err != nil {
+		return fmt.Errorf("error while unmarshaling TrackVolume:%w", err)
+	}
+	// Deserialize `TotalUnclaimedTokens`:
+	if err = decoder.Decode(&obj.TotalUnclaimedTokens); err != nil {
+		return fmt.Errorf("error while unmarshaling TotalUnclaimedTokens:%w", err)
+	}
+	// Deserialize `TotalClaimedTokens`:
+	if err = decoder.Decode(&obj.TotalClaimedTokens); err != nil {
+		return fmt.Errorf("error while unmarshaling TotalClaimedTokens:%w", err)
+	}
+	// Deserialize `CurrentSolVolume`:
+	if err = decoder.Decode(&obj.CurrentSolVolume); err != nil {
+		return fmt.Errorf("error while unmarshaling CurrentSolVolume:%w", err)
+	}
+	// Deserialize `LastUpdateTimestamp`:
+	if err = decoder.Decode(&obj.LastUpdateTimestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling LastUpdateTimestamp:%w", err)
 	}
 	return nil
 }

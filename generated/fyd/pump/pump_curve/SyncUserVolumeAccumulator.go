@@ -61,6 +61,9 @@ func (*SyncUserVolumeAccumulator) NewInstance() programparser.Instruction {
 }
 
 func (obj *SyncUserVolumeAccumulator) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 5 {
+		return nil
+	}
 	return obj.PublicKeySlice[5:]
 }
 

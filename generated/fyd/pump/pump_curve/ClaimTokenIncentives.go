@@ -34,7 +34,7 @@ type ClaimTokenIncentives struct {
 	AssociatedTokenProgram solanago.PublicKey `bin:"-"`
 	// [9] = [] event_authority
 	EventAuthority solanago.PublicKey `bin:"-"`
-	// [10] = [] program
+	// [10] = [] program[6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P]
 	Program solanago.PublicKey `bin:"-"`
 	// [11] = [writable,signer] payer
 	Payer solanago.PublicKey `bin:"-"`
@@ -82,6 +82,9 @@ func (*ClaimTokenIncentives) NewInstance() programparser.Instruction {
 }
 
 func (obj *ClaimTokenIncentives) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 12 {
+		return nil
+	}
 	return obj.PublicKeySlice[12:]
 }
 
@@ -95,7 +98,6 @@ func NewClaimTokenIncentivesInstruction(
 	mint solanago.PublicKey,
 	tokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	payer solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
@@ -133,8 +135,8 @@ func NewClaimTokenIncentivesInstruction(
 		metas_[8] = solanago.NewAccountMeta(AssociatedTokenProgram, false, false)
 		// [9] = [] event_authority
 		metas_[9] = solanago.NewAccountMeta(eventAuthority, false, false)
-		// [10] = [] program
-		metas_[10] = solanago.NewAccountMeta(program, false, false)
+		// [10] = [] program[6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P]
+		metas_[10] = solanago.NewAccountMeta(Program, false, false)
 		// [11] = [writable,signer] payer
 		metas_[11] = solanago.NewAccountMeta(payer, true, true)
 		// append remaining metas
@@ -159,7 +161,6 @@ func BuildClaimTokenIncentives(
 	mint solanago.PublicKey,
 	tokenProgram solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
 	payer solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
@@ -172,7 +173,6 @@ func BuildClaimTokenIncentives(
 		mint,
 		tokenProgram,
 		eventAuthority,
-		program,
 		payer,
 		remaining__...,
 	)

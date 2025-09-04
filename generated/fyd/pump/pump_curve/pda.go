@@ -42,6 +42,17 @@ func MustFindEventAuthorityAddress() (pda solanago.PublicKey) {
 	return
 }
 
+func FindProgramSignerAddress() (pda solanago.PublicKey, bumpSeed uint8, err error) {
+	seeds := make([][]byte, 0)
+	pda, bumpSeed, err = solanago.FindProgramAddress(seeds, ProgramID)
+	return
+}
+
+func MustFindProgramSignerAddress() (pda solanago.PublicKey) {
+	pda, _, _ = FindProgramSignerAddress()
+	return
+}
+
 func FindGlobalVolumeAccumulatorAddress() (pda solanago.PublicKey, bumpSeed uint8, err error) {
 	seeds := make([][]byte, 1)
 	seeds[0] = []byte{103, 108, 111, 98, 97, 108, 95, 118, 111, 108, 117, 109, 101, 95, 97, 99, 99, 117, 109, 117, 108, 97, 116, 111, 114}
@@ -102,5 +113,18 @@ func FindPoolAuthorityAddress(mint solanago.PublicKey) (pda solanago.PublicKey, 
 
 func MustFindPoolAuthorityAddress(mint solanago.PublicKey) (pda solanago.PublicKey) {
 	pda, _, _ = FindPoolAuthorityAddress(mint)
+	return
+}
+
+func FindFeeConfigAddress() (pda solanago.PublicKey, bumpSeed uint8, err error) {
+	seeds := make([][]byte, 2)
+	seeds[0] = []byte{102, 101, 101, 95, 99, 111, 110, 102, 105, 103}
+	seeds[1] = []byte{1, 86, 224, 246, 147, 102, 90, 207, 68, 219, 21, 104, 191, 23, 91, 170, 81, 137, 203, 151, 245, 210, 255, 59, 101, 93, 43, 182, 253, 109, 24, 176}
+	pda, bumpSeed, err = solanago.FindProgramAddress(seeds, FeeProgram)
+	return
+}
+
+func MustFindFeeConfigAddress() (pda solanago.PublicKey) {
+	pda, _, _ = FindFeeConfigAddress()
 	return
 }

@@ -121,6 +121,9 @@ func (*AdminUpdateTokenIncentives) NewInstance() programparser.Instruction {
 }
 
 func (obj *AdminUpdateTokenIncentives) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 10 {
+		return nil
+	}
 	return obj.PublicKeySlice[10:]
 }
 

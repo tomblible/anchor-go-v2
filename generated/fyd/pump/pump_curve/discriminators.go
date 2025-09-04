@@ -8,6 +8,7 @@ import binary "github.com/gagliardetto/binary"
 // Account discriminators
 var (
 	Account_BondingCurve            = []byte{23, 183, 248, 55, 96, 216, 172, 96}
+	Account_FeeConfig               = []byte{143, 52, 146, 187, 219, 123, 76, 155}
 	Account_Global                  = []byte{167, 232, 232, 177, 200, 108, 114, 127}
 	Account_GlobalVolumeAccumulator = []byte{202, 42, 246, 43, 142, 190, 30, 255}
 	Account_UserVolumeAccumulator   = []byte{86, 255, 112, 14, 102, 53, 154, 250}
@@ -16,13 +17,16 @@ var (
 // Event discriminators
 var (
 	Event_AdminSetCreatorEvent            = []byte{64, 69, 192, 104, 29, 30, 25, 107}
+	Event_AdminSetIdlAuthorityEvent       = []byte{245, 59, 70, 34, 75, 185, 109, 92}
 	Event_AdminUpdateTokenIncentivesEvent = []byte{147, 250, 108, 120, 247, 29, 67, 222}
 	Event_ClaimTokenIncentivesEvent       = []byte{79, 172, 246, 49, 205, 91, 206, 232}
+	Event_CloseUserVolumeAccumulatorEvent = []byte{146, 159, 189, 172, 146, 88, 56, 244}
 	Event_CollectCreatorFeeEvent          = []byte{122, 2, 127, 1, 14, 191, 12, 175}
 	Event_CompleteEvent                   = []byte{95, 114, 97, 156, 212, 46, 152, 8}
 	Event_CompletePumpAmmMigrationEvent   = []byte{189, 233, 93, 185, 92, 148, 234, 148}
 	Event_CreateEvent                     = []byte{27, 114, 169, 77, 222, 235, 99, 118}
 	Event_ExtendAccountEvent              = []byte{97, 97, 215, 144, 93, 146, 22, 124}
+	Event_InitUserVolumeAccumulatorEvent  = []byte{134, 36, 13, 72, 232, 101, 130, 216}
 	Event_SetCreatorEvent                 = []byte{237, 52, 123, 37, 245, 251, 72, 210}
 	Event_SetMetaplexCreatorEvent         = []byte{142, 203, 6, 32, 127, 105, 191, 162}
 	Event_SetParamsEvent                  = []byte{223, 195, 159, 246, 62, 48, 143, 131}
@@ -36,12 +40,15 @@ const InstructionTypeIDEncoding = binary.AnchorTypeIDEncoding
 // Instruction discriminators
 var (
 	Instruction_AdminSetCreator            = []byte{69, 25, 171, 142, 57, 239, 13, 4}
+	Instruction_AdminSetIdlAuthority       = []byte{8, 217, 96, 231, 144, 104, 192, 5}
 	Instruction_AdminUpdateTokenIncentives = []byte{209, 11, 115, 87, 213, 23, 124, 204}
 	Instruction_Buy                        = []byte{102, 6, 61, 18, 1, 218, 235, 234}
 	Instruction_ClaimTokenIncentives       = []byte{16, 4, 71, 28, 204, 1, 40, 27}
+	Instruction_CloseUserVolumeAccumulator = []byte{249, 69, 164, 218, 150, 103, 84, 138}
 	Instruction_CollectCreatorFee          = []byte{20, 22, 86, 123, 198, 28, 219, 132}
 	Instruction_Create                     = []byte{24, 30, 200, 40, 5, 28, 7, 119}
 	Instruction_ExtendAccount              = []byte{234, 102, 194, 203, 150, 72, 62, 229}
+	Instruction_InitUserVolumeAccumulator  = []byte{94, 6, 202, 115, 255, 96, 232, 183}
 	Instruction_Initialize                 = []byte{175, 175, 109, 31, 13, 152, 155, 237}
 	Instruction_Migrate                    = []byte{155, 234, 231, 146, 236, 158, 162, 30}
 	Instruction_Sell                       = []byte{51, 230, 133, 164, 1, 127, 131, 173}

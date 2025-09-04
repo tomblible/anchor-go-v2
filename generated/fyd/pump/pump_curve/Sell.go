@@ -40,8 +40,12 @@ type Sell struct {
 	TokenProgram solanago.PublicKey `bin:"-"`
 	// [10] = [] event_authority
 	EventAuthority solanago.PublicKey `bin:"-"`
-	// [11] = [] program
+	// [11] = [] program[6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P]
 	Program solanago.PublicKey `bin:"-"`
+	// [12] = [] fee_config
+	FeeConfig solanago.PublicKey `bin:"-"`
+	// [13] = [] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+	FeeProgram solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
 }
@@ -71,8 +75,8 @@ func (obj *Sell) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 }
 
 func (obj *Sell) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
-	if len(accounts) < 12 {
-		return fmt.Errorf("too few accounts, expect %d actual %d", 12, len(accounts))
+	if len(accounts) < 14 {
+		return fmt.Errorf("too few accounts, expect %d actual %d", 14, len(accounts))
 	}
 	obj.Global = accounts[0]
 	obj.FeeRecipient = accounts[1]
@@ -86,6 +90,8 @@ func (obj *Sell) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.TokenProgram = accounts[9]
 	obj.EventAuthority = accounts[10]
 	obj.Program = accounts[11]
+	obj.FeeConfig = accounts[12]
+	obj.FeeProgram = accounts[13]
 	obj.PublicKeySlice = accounts
 	return nil
 }
@@ -102,7 +108,10 @@ func (*Sell) NewInstance() programparser.Instruction {
 }
 
 func (obj *Sell) GetRemainingAccounts() solanago.PublicKeySlice {
-	return obj.PublicKeySlice[12:]
+	if len(obj.PublicKeySlice) <= 14 {
+		return nil
+	}
+	return obj.PublicKeySlice[14:]
 }
 
 // Builds a "sell" instruction.
@@ -122,14 +131,14 @@ func NewSellInstruction(
 	user solanago.PublicKey,
 	creatorVault solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) (*solanago.GenericInstruction, error) {
 	var (
 		err    error
 		buf__  = new(bytes.Buffer)
 		enc__  = binary.NewBorshEncoder(buf__)
-		metas_ = make(solanago.AccountMetaSlice, 12, 12+len(remaining__))
+		metas_ = make(solanago.AccountMetaSlice, 14, 14+len(remaining__))
 	)
 
 	// Encode the instruction discriminator.
@@ -172,8 +181,12 @@ func NewSellInstruction(
 		metas_[9] = solanago.NewAccountMeta(TokenProgram, false, false)
 		// [10] = [] event_authority
 		metas_[10] = solanago.NewAccountMeta(eventAuthority, false, false)
-		// [11] = [] program
-		metas_[11] = solanago.NewAccountMeta(program, false, false)
+		// [11] = [] program[6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P]
+		metas_[11] = solanago.NewAccountMeta(Program, false, false)
+		// [12] = [] fee_config
+		metas_[12] = solanago.NewAccountMeta(feeConfig, false, false)
+		// [13] = [] fee_program[pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ]
+		metas_[13] = solanago.NewAccountMeta(FeeProgram, false, false)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}
@@ -203,7 +216,7 @@ func BuildSell(
 	user solanago.PublicKey,
 	creatorVault solanago.PublicKey,
 	eventAuthority solanago.PublicKey,
-	program solanago.PublicKey,
+	feeConfig solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
 	instruction_, _ := NewSellInstruction(
@@ -218,7 +231,7 @@ func BuildSell(
 		user,
 		creatorVault,
 		eventAuthority,
-		program,
+		feeConfig,
 		remaining__...,
 	)
 	return instruction_

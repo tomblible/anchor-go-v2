@@ -11,15 +11,18 @@ var ProgramID = solanago.MustPublicKeyFromBase58("6EF8rrecthR5Dkzon8Nwu78hRvfCKu
 var (
 	GlobalAddress                  = MustFindGlobalAddress()
 	EventAuthorityAddress          = MustFindEventAuthorityAddress()
+	ProgramSignerAddress           = MustFindProgramSignerAddress()
 	GlobalVolumeAccumulatorAddress = MustFindGlobalVolumeAccumulatorAddress()
 	MintAuthorityAddress           = MustFindMintAuthorityAddress()
 )
 
 // program dependency address
 var (
-	AssociatedTokenProgram = solanago.MustPublicKeyFromBase58("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
 	SystemProgram          = solanago.MustPublicKeyFromBase58("11111111111111111111111111111111")
+	AssociatedTokenProgram = solanago.MustPublicKeyFromBase58("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")
 	TokenProgram           = solanago.MustPublicKeyFromBase58("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
+	Program                = solanago.MustPublicKeyFromBase58("6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P")
+	FeeProgram             = solanago.MustPublicKeyFromBase58("pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ")
 	MplTokenMetadata       = solanago.MustPublicKeyFromBase58("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
 	Rent                   = solanago.MustPublicKeyFromBase58("SysvarRent111111111111111111111111111111111")
 	PumpAmm                = solanago.MustPublicKeyFromBase58("pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA")

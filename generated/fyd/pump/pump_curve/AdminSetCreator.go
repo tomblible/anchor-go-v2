@@ -75,6 +75,9 @@ func (*AdminSetCreator) NewInstance() programparser.Instruction {
 }
 
 func (obj *AdminSetCreator) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 6 {
+		return nil
+	}
 	return obj.PublicKeySlice[6:]
 }
 
