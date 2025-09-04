@@ -5,6 +5,7 @@ package raydium_clmm
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -221,6 +222,9 @@ func (*OpenPositionWithToken22Nft) NewInstance() programparser.Instruction {
 }
 
 func (obj *OpenPositionWithToken22Nft) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 20 {
+		return nil
+	}
 	return obj.PublicKeySlice[20:]
 }
 

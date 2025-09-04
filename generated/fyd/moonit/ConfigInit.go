@@ -5,6 +5,7 @@ package moonit
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -64,6 +65,9 @@ func (*ConfigInit) NewInstance() programparser.Instruction {
 }
 
 func (obj *ConfigInit) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 3 {
+		return nil
+	}
 	return obj.PublicKeySlice[3:]
 }
 

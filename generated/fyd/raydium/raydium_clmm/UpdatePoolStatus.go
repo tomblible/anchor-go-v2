@@ -5,6 +5,7 @@ package raydium_clmm
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -68,6 +69,9 @@ func (*UpdatePoolStatus) NewInstance() programparser.Instruction {
 }
 
 func (obj *UpdatePoolStatus) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 2 {
+		return nil
+	}
 	return obj.PublicKeySlice[2:]
 }
 

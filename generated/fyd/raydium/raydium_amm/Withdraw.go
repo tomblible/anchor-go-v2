@@ -5,6 +5,7 @@ package raydium_amm
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -121,6 +122,9 @@ func (*Withdraw) NewInstance() programparser.Instruction {
 }
 
 func (obj *Withdraw) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 22 {
+		return nil
+	}
 	return obj.PublicKeySlice[22:]
 }
 

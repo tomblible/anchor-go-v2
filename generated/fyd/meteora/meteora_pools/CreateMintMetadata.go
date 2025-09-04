@@ -5,6 +5,7 @@ package meteora_pools
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -69,6 +70,9 @@ func (*CreateMintMetadata) NewInstance() programparser.Instruction {
 }
 
 func (obj *CreateMintMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 7 {
+		return nil
+	}
 	return obj.PublicKeySlice[7:]
 }
 

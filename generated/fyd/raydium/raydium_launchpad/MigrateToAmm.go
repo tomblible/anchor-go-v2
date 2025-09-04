@@ -5,6 +5,7 @@ package raydium_launchpad
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -173,6 +174,9 @@ func (*MigrateToAmm) NewInstance() programparser.Instruction {
 }
 
 func (obj *MigrateToAmm) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 32 {
+		return nil
+	}
 	return obj.PublicKeySlice[32:]
 }
 

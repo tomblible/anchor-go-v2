@@ -5,6 +5,7 @@ package meteora_dlmm
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -76,6 +77,9 @@ func (*MigratePosition) NewInstance() programparser.Instruction {
 }
 
 func (obj *MigratePosition) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 10 {
+		return nil
+	}
 	return obj.PublicKeySlice[10:]
 }
 

@@ -5,6 +5,7 @@ package meteora_curve
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -97,6 +98,9 @@ func (*InitializeVirtualPoolWithToken2022) NewInstance() programparser.Instructi
 }
 
 func (obj *InitializeVirtualPoolWithToken2022) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 14 {
+		return nil
+	}
 	return obj.PublicKeySlice[14:]
 }
 

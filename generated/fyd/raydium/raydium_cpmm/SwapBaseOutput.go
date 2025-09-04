@@ -5,6 +5,7 @@ package raydium_cpmm
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -111,6 +112,9 @@ func (*SwapBaseOutput) NewInstance() programparser.Instruction {
 }
 
 func (obj *SwapBaseOutput) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 13 {
+		return nil
+	}
 	return obj.PublicKeySlice[13:]
 }
 

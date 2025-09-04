@@ -5,6 +5,7 @@ package meteora_curve
 import (
 	"bytes"
 	"fmt"
+
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
@@ -67,6 +68,9 @@ func (*MigrationDammV2CreateMetadata) NewInstance() programparser.Instruction {
 }
 
 func (obj *MigrationDammV2CreateMetadata) GetRemainingAccounts() solanago.PublicKeySlice {
+	if len(obj.PublicKeySlice) <= 7 {
+		return nil
+	}
 	return obj.PublicKeySlice[7:]
 }
 
