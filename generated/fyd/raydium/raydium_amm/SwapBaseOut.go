@@ -81,31 +81,56 @@ func (obj *SwapBaseOut) UnmarshalWithDecoder(decoder *binary.Decoder) (err error
 	return nil
 }
 
-func (obj *SwapBaseOut) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
-	if len(accounts) < 18 {
-		return fmt.Errorf("too few accounts, expect %d actual %d", 18, len(accounts))
+func (obj *SwapBaseOut) SetAccounts(accounts solanago.PublicKeySlice) error {
+	n := len(accounts)
+	if n != 17 && n != 18 {
+		return fmt.Errorf("invalid accounts length, expect 17 or 18, got %d", n)
 	}
+
+	// 通用字段（17 和 18 都需要）
 	obj.TokenProgram = accounts[0]
 	obj.Amm = accounts[1]
 	obj.AmmAuthority = accounts[2]
 	obj.AmmOpenOrders = accounts[3]
-	obj.AmmTargetOrders = accounts[4]
-	obj.PoolCoinTokenAccount = accounts[5]
-	obj.PoolPcTokenAccount = accounts[6]
-	obj.SerumProgram = accounts[7]
-	obj.SerumMarket = accounts[8]
-	obj.SerumBids = accounts[9]
-	obj.SerumAsks = accounts[10]
-	obj.SerumEventQueue = accounts[11]
-	obj.SerumCoinVaultAccount = accounts[12]
-	obj.SerumPcVaultAccount = accounts[13]
-	obj.SerumVaultSigner = accounts[14]
-	obj.UerSourceTokenAccount = accounts[15]
-	obj.UerDestinationTokenAccount = accounts[16]
-	obj.UserSourceOwner = accounts[17]
+
+	if n == 18 {
+		// 18 个账户时
+		obj.AmmTargetOrders = accounts[4]
+		obj.PoolCoinTokenAccount = accounts[5]
+		obj.PoolPcTokenAccount = accounts[6]
+		obj.SerumProgram = accounts[7]
+		obj.SerumMarket = accounts[8]
+		obj.SerumBids = accounts[9]
+		obj.SerumAsks = accounts[10]
+		obj.SerumEventQueue = accounts[11]
+		obj.SerumCoinVaultAccount = accounts[12]
+		obj.SerumPcVaultAccount = accounts[13]
+		obj.SerumVaultSigner = accounts[14]
+		obj.UerSourceTokenAccount = accounts[15]
+		obj.UerDestinationTokenAccount = accounts[16]
+		obj.UserSourceOwner = accounts[17]
+	} else {
+		// 17 个账户时
+		obj.AmmTargetOrders = accounts[2] // 注意和 18 个账户时不一样
+		obj.PoolCoinTokenAccount = accounts[4]
+		obj.PoolPcTokenAccount = accounts[5]
+		obj.SerumProgram = accounts[6]
+		obj.SerumMarket = accounts[7]
+		obj.SerumBids = accounts[8]
+		obj.SerumAsks = accounts[9]
+		obj.SerumEventQueue = accounts[10]
+		obj.SerumCoinVaultAccount = accounts[11]
+		obj.SerumPcVaultAccount = accounts[12]
+		obj.SerumVaultSigner = accounts[13]
+		obj.UerSourceTokenAccount = accounts[14]
+		obj.UerDestinationTokenAccount = accounts[15]
+		obj.UserSourceOwner = accounts[16]
+	}
+
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
 func (obj *SwapBaseOut) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
