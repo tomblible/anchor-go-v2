@@ -24,7 +24,7 @@ type Transfer struct {
 	Source solanago.PublicKey `bin:"-"`
 	// [1] = [writable] destination
 	Destination solanago.PublicKey `bin:"-"`
-	// [2] = [] owner
+	// [2] = [,signer] owner
 	Owner solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
@@ -56,6 +56,15 @@ func (obj *Transfer) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *Transfer) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *Transfer) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Owner}
+}
+
 func (obj *Transfer) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -66,13 +75,6 @@ func (*Transfer) TypeID() binary.TypeID {
 
 func (*Transfer) NewInstance() programparser.Instruction {
 	return new(Transfer)
-}
-
-func (obj *Transfer) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "transfer" instruction.
@@ -114,9 +116,9 @@ func NewTransferInstruction(
 		// [1] = [writable] destination
 		// The destination account.
 		metas_[1] = solanago.NewAccountMeta(destination, true, false)
-		// [2] = [] owner
+		// [2] = [,signer] owner
 		// The source account owner/delegate.
-		metas_[2] = solanago.NewAccountMeta(owner, false, false)
+		metas_[2] = solanago.NewAccountMeta(owner, false, true)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}

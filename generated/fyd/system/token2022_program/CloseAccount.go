@@ -45,6 +45,15 @@ func (obj *CloseAccount) SetAccounts(accounts solanago.PublicKeySlice) (err erro
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *CloseAccount) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *CloseAccount) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *CloseAccount) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -55,13 +64,6 @@ func (*CloseAccount) TypeID() binary.TypeID {
 
 func (*CloseAccount) NewInstance() programparser.Instruction {
 	return new(CloseAccount)
-}
-
-func (obj *CloseAccount) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "close_account" instruction.

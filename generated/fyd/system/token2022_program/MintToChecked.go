@@ -66,6 +66,15 @@ func (obj *MintToChecked) SetAccounts(accounts solanago.PublicKeySlice) (err err
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *MintToChecked) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *MintToChecked) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *MintToChecked) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -76,13 +85,6 @@ func (*MintToChecked) TypeID() binary.TypeID {
 
 func (*MintToChecked) NewInstance() programparser.Instruction {
 	return new(MintToChecked)
-}
-
-func (obj *MintToChecked) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "mint_to_checked" instruction.

@@ -63,6 +63,15 @@ func (obj *GetAccountDataSize) SetAccounts(accounts solanago.PublicKeySlice) (er
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *GetAccountDataSize) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *GetAccountDataSize) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *GetAccountDataSize) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -73,13 +82,6 @@ func (*GetAccountDataSize) TypeID() binary.TypeID {
 
 func (*GetAccountDataSize) NewInstance() programparser.Instruction {
 	return new(GetAccountDataSize)
-}
-
-func (obj *GetAccountDataSize) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 1 {
-		return nil
-	}
-	return obj.PublicKeySlice[1:]
 }
 
 // Builds a "get_account_data_size" instruction.

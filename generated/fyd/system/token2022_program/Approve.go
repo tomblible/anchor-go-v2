@@ -22,7 +22,7 @@ type Approve struct {
 	Source solanago.PublicKey `bin:"-"`
 	// [1] = [] delegate
 	Delegate solanago.PublicKey `bin:"-"`
-	// [2] = [] owner
+	// [2] = [,signer] owner
 	Owner solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
@@ -54,6 +54,15 @@ func (obj *Approve) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *Approve) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *Approve) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Owner}
+}
+
 func (obj *Approve) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -64,13 +73,6 @@ func (*Approve) TypeID() binary.TypeID {
 
 func (*Approve) NewInstance() programparser.Instruction {
 	return new(Approve)
-}
-
-func (obj *Approve) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "approve" instruction.
@@ -112,9 +114,9 @@ func NewApproveInstruction(
 		// [1] = [] delegate
 		// The delegate.
 		metas_[1] = solanago.NewAccountMeta(delegate, false, false)
-		// [2] = [] owner
+		// [2] = [,signer] owner
 		// The source account owner.
-		metas_[2] = solanago.NewAccountMeta(owner, false, false)
+		metas_[2] = solanago.NewAccountMeta(owner, false, true)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}

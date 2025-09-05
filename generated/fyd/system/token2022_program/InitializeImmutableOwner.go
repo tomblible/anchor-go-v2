@@ -35,6 +35,15 @@ func (obj *InitializeImmutableOwner) SetAccounts(accounts solanago.PublicKeySlic
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *InitializeImmutableOwner) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *InitializeImmutableOwner) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *InitializeImmutableOwner) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -45,13 +54,6 @@ func (*InitializeImmutableOwner) TypeID() binary.TypeID {
 
 func (*InitializeImmutableOwner) NewInstance() programparser.Instruction {
 	return new(InitializeImmutableOwner)
-}
-
-func (obj *InitializeImmutableOwner) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 0 {
-		return nil
-	}
-	return obj.PublicKeySlice[0:]
 }
 
 // Builds a "initialize_immutable_owner" instruction.

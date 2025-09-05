@@ -94,6 +94,15 @@ func (obj *InitializeMint) SetAccounts(accounts solanago.PublicKeySlice) (err er
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *InitializeMint) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *InitializeMint) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *InitializeMint) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -104,13 +113,6 @@ func (*InitializeMint) TypeID() binary.TypeID {
 
 func (*InitializeMint) NewInstance() programparser.Instruction {
 	return new(InitializeMint)
-}
-
-func (obj *InitializeMint) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 2 {
-		return nil
-	}
-	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "initialize_mint" instruction.

@@ -44,6 +44,15 @@ func (obj *FreezeAccount) SetAccounts(accounts solanago.PublicKeySlice) (err err
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *FreezeAccount) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *FreezeAccount) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *FreezeAccount) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -54,13 +63,6 @@ func (*FreezeAccount) TypeID() binary.TypeID {
 
 func (*FreezeAccount) NewInstance() programparser.Instruction {
 	return new(FreezeAccount)
-}
-
-func (obj *FreezeAccount) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "freeze_account" instruction.

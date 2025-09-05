@@ -48,6 +48,15 @@ func (obj *UiAmountToAmount) SetAccounts(accounts solanago.PublicKeySlice) (err 
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *UiAmountToAmount) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *UiAmountToAmount) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *UiAmountToAmount) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -58,13 +67,6 @@ func (*UiAmountToAmount) TypeID() binary.TypeID {
 
 func (*UiAmountToAmount) NewInstance() programparser.Instruction {
 	return new(UiAmountToAmount)
-}
-
-func (obj *UiAmountToAmount) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 1 {
-		return nil
-	}
-	return obj.PublicKeySlice[1:]
 }
 
 // Builds a "ui_amount_to_amount" instruction.

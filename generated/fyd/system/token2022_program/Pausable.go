@@ -10,10 +10,10 @@ import (
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
 )
 
-// Builds a "pausable_extension" instruction.
-type PausableExtension struct {
+// Builds a "pausable" instruction.
+type Pausable struct {
 	// Params:
-	State PausableInstruction
+	Arg PausableArg
 	// Accounts:
 	// [0] = [writable] mint
 	Mint solanago.PublicKey `bin:"-"`
@@ -21,21 +21,21 @@ type PausableExtension struct {
 	solanago.PublicKeySlice `bin:"-"`
 }
 
-func (obj PausableExtension) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
-	// Serialize `stateParam`:
+func (obj Pausable) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `argParam`:
 	{
-		if err = EncodePausableInstruction(encoder, obj.State); err != nil {
-			return fmt.Errorf("error while marshalingstateParam:%w", err)
+		if err = EncodePausableArg(encoder, obj.Arg); err != nil {
+			return fmt.Errorf("error while marshalingargParam:%w", err)
 		}
 	}
 	return nil
 }
 
-func (obj *PausableExtension) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
-	// Deserialize `State`:
+func (obj *Pausable) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Arg`:
 	{
 		var err error
-		obj.State, err = DecodePausableInstruction(decoder)
+		obj.Arg, err = DecodePausableArg(decoder)
 		if err != nil {
 			return err
 		}
@@ -43,7 +43,7 @@ func (obj *PausableExtension) UnmarshalWithDecoder(decoder *binary.Decoder) (err
 	return nil
 }
 
-func (obj *PausableExtension) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
+func (obj *Pausable) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	if len(accounts) < 1 {
 		return fmt.Errorf("too few accounts, expect %d actual %d", 1, len(accounts))
 	}
@@ -51,29 +51,31 @@ func (obj *PausableExtension) SetAccounts(accounts solanago.PublicKeySlice) (err
 	obj.PublicKeySlice = accounts
 	return nil
 }
-func (obj *PausableExtension) PublicKeys() solanago.PublicKeySlice {
+
+func (obj *Pausable) Accounts() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
 
-func (*PausableExtension) TypeID() binary.TypeID {
-	return binary.TypeIDFromBytes(Instruction_PausableExtension)
+func (obj *Pausable) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
 }
 
-func (*PausableExtension) NewInstance() programparser.Instruction {
-	return new(PausableExtension)
+func (obj *Pausable) PublicKeys() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
 }
 
-func (obj *PausableExtension) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 1 {
-		return nil
-	}
-	return obj.PublicKeySlice[1:]
+func (*Pausable) TypeID() binary.TypeID {
+	return binary.TypeIDFromBytes(Instruction_Pausable)
 }
 
-// Builds a "pausable_extension" instruction.
-func NewPausableExtensionInstruction(
+func (*Pausable) NewInstance() programparser.Instruction {
+	return new(Pausable)
+}
+
+// Builds a "pausable" instruction.
+func NewPausableInstruction(
 	// Params:
-	stateParam PausableInstruction,
+	argParam PausableArg,
 
 	// Accounts:
 	mint solanago.PublicKey,
@@ -87,15 +89,15 @@ func NewPausableExtensionInstruction(
 	)
 
 	// Encode the instruction discriminator.
-	if err = enc__.WriteBytes(Instruction_PausableExtension[:], false); err != nil {
+	if err = enc__.WriteBytes(Instruction_Pausable[:], false); err != nil {
 		return nil, fmt.Errorf("failed to write instruction discriminator: %w", err)
 	}
 
 	{
-		// Serialize `stateParam`:
+		// Serialize `argParam`:
 		{
-			if err = EncodePausableInstruction(enc__, stateParam); err != nil {
-				return nil, fmt.Errorf("error while marshalingstateParam:%w", err)
+			if err = EncodePausableArg(enc__, argParam); err != nil {
+				return nil, fmt.Errorf("error while marshalingargParam:%w", err)
 			}
 		}
 	}
@@ -116,17 +118,17 @@ func NewPausableExtensionInstruction(
 	), nil
 }
 
-// Builds a "BuildPausableExtension" instruction.
-func BuildPausableExtension(
+// Builds a "BuildPausable" instruction.
+func BuildPausable(
 	// Params:
-	stateParam PausableInstruction,
+	argParam PausableArg,
 
 	// Accounts:
 	mint solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
-	instruction_, _ := NewPausableExtensionInstruction(
-		stateParam,
+	instruction_, _ := NewPausableInstruction(
+		argParam,
 		mint,
 		remaining__...,
 	)

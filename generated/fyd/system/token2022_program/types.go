@@ -6,16 +6,9 @@ package token2022_program
 import (
 	"bytes"
 	"fmt"
-
 	binary "github.com/gagliardetto/binary"
 	solanago "github.com/gagliardetto/solana-go"
 )
-
-type Instruction interface {
-	TypeID() binary.TypeID
-	SetAccounts(accounts solanago.PublicKeySlice) error
-	Copy() Instruction
-}
 
 type AccountType binary.BorshEnum
 
@@ -122,13 +115,13 @@ func (value AuthorityType) String() string {
 	}
 }
 
-type TransferFee struct {
+type TokenTransferFee struct {
 	Epoch                  uint64
 	MaximumFee             uint64
 	TransferFeeBasisPoints uint16
 }
 
-func (obj TransferFee) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj TokenTransferFee) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Serialize `Epoch`:
 	if err = encoder.Encode(obj.Epoch); err != nil {
 		return fmt.Errorf("error while marshaling Epoch:%w", err)
@@ -144,17 +137,17 @@ func (obj TransferFee) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	return nil
 }
 
-func (obj TransferFee) Marshal() ([]byte, error) {
+func (obj TokenTransferFee) Marshal() ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 	encoder := binary.NewBorshEncoder(buf)
 	err := obj.MarshalWithEncoder(encoder)
 	if err != nil {
-		return nil, fmt.Errorf("error while encoding TransferFee: %w", err)
+		return nil, fmt.Errorf("error while encoding TokenTransferFee: %w", err)
 	}
 	return buf.Bytes(), nil
 }
 
-func (obj *TransferFee) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *TokenTransferFee) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	// Deserialize `Epoch`:
 	if err = decoder.Decode(&obj.Epoch); err != nil {
 		return fmt.Errorf("error while unmarshaling Epoch:%w", err)
@@ -170,16 +163,16 @@ func (obj *TransferFee) UnmarshalWithDecoder(decoder *binary.Decoder) (err error
 	return nil
 }
 
-func (obj *TransferFee) Unmarshal(buf []byte) error {
+func (obj *TokenTransferFee) Unmarshal(buf []byte) error {
 	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
 	if err != nil {
-		return fmt.Errorf("error while unmarshaling TransferFee: %w", err)
+		return fmt.Errorf("error while unmarshaling TokenTransferFee: %w", err)
 	}
 	return nil
 }
 
-func UnmarshalTransferFee(buf []byte) (*TransferFee, error) {
-	obj := new(TransferFee)
+func UnmarshalTokenTransferFee(buf []byte) (*TokenTransferFee, error) {
+	obj := new(TokenTransferFee)
 	err := obj.Unmarshal(buf)
 	if err != nil {
 		return nil, err
@@ -266,199 +259,286 @@ type Extension interface {
 	isExtension()
 }
 
-type extensionEnumContainer struct {
-	Enum                          binary.BorshEnum `bin:"enum"`
-	Uninitialized                 Extension_Uninitialized
-	TransferFeeConfig             Extension_TransferFeeConfig
-	TransferFeeAmount             Extension_TransferFeeAmount
-	MintCloseAuthority            Extension_MintCloseAuthority
-	ConfidentialTransferMint      Extension_ConfidentialTransferMint
-	ConfidentialTransferAccount   Extension_ConfidentialTransferAccount
-	DefaultAccountState           Extension_DefaultAccountState
-	ImmutableOwner                Extension_ImmutableOwner
-	MemoTransfer                  Extension_MemoTransfer
-	NonTransferable               Extension_NonTransferable
-	InterestBearingConfig         Extension_InterestBearingConfig
-	CpiGuard                      Extension_CpiGuard
-	PermanentDelegate             Extension_PermanentDelegate
-	NonTransferableAccount        Extension_NonTransferableAccount
-	TransferHook                  Extension_TransferHook
-	TransferHookAccount           Extension_TransferHookAccount
-	ConfidentialTransferFee       Extension_ConfidentialTransferFee
-	ConfidentialTransferFeeAmount Extension_ConfidentialTransferFeeAmount
-	MetadataPointer               Extension_MetadataPointer
-	TokenMetadata                 Extension_TokenMetadata
-	GroupPointer                  Extension_GroupPointer
-	TokenGroup                    Extension_TokenGroup
-	GroupMemberPointer            Extension_GroupMemberPointer
-	TokenGroupMember              Extension_TokenGroupMember
-	ConfidentialMintBurn          Extension_ConfidentialMintBurn
-	ScaledUiAmountConfig          Extension_ScaledUiAmountConfig
-	PausableConfig                Extension_PausableConfig
-	PausableAccount               Extension_PausableAccount
-}
-
 func DecodeExtension(decoder *binary.Decoder) (Extension, error) {
-	{
-		tmp := new(extensionEnumContainer)
-		err := decoder.Decode(tmp)
-		if err != nil {
-			return nil, fmt.Errorf("failed parsing Extension: %w", err)
+	enum, err := decoder.ReadUint16(binary.LE)
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing Extension: %w", err)
+	}
+	if _, err = decoder.ReadUint16(binary.LE);err != nil {
+		return nil, fmt.Errorf("failed parsing Extension: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj Extension_Uninitialized
+		return &obj, nil
+	case 1:
+		var obj Extension_TransferFeeConfig
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_TransferFeeConfig: %w", err)
 		}
-		switch tmp.Enum {
-		case 0:
-			return (*Extension_Uninitialized)(&tmp.Enum), nil
-		case 1:
-			return &tmp.TransferFeeConfig, nil
-		case 2:
-			return &tmp.TransferFeeAmount, nil
-		case 3:
-			return &tmp.MintCloseAuthority, nil
-		case 4:
-			return &tmp.ConfidentialTransferMint, nil
-		case 5:
-			return &tmp.ConfidentialTransferAccount, nil
-		case 6:
-			return &tmp.DefaultAccountState, nil
-		case 7:
-			return (*Extension_ImmutableOwner)(&tmp.Enum), nil
-		case 8:
-			return &tmp.MemoTransfer, nil
-		case 9:
-			return (*Extension_NonTransferable)(&tmp.Enum), nil
-		case 10:
-			return &tmp.InterestBearingConfig, nil
-		case 11:
-			return &tmp.CpiGuard, nil
-		case 12:
-			return &tmp.PermanentDelegate, nil
-		case 13:
-			return (*Extension_NonTransferableAccount)(&tmp.Enum), nil
-		case 14:
-			return &tmp.TransferHook, nil
-		case 15:
-			return &tmp.TransferHookAccount, nil
-		case 16:
-			return &tmp.ConfidentialTransferFee, nil
-		case 17:
-			return &tmp.ConfidentialTransferFeeAmount, nil
-		case 18:
-			return &tmp.MetadataPointer, nil
-		case 19:
-			return &tmp.TokenMetadata, nil
-		case 20:
-			return &tmp.GroupPointer, nil
-		case 21:
-			return &tmp.TokenGroup, nil
-		case 22:
-			return &tmp.GroupMemberPointer, nil
-		case 23:
-			return &tmp.TokenGroupMember, nil
-		case 24:
-			return (*Extension_ConfidentialMintBurn)(&tmp.Enum), nil
-		case 25:
-			return &tmp.ScaledUiAmountConfig, nil
-		case 26:
-			return &tmp.PausableConfig, nil
-		case 27:
-			return (*Extension_PausableAccount)(&tmp.Enum), nil
-		default:
-			return nil, fmt.Errorf("Extension: unknown enum index: %v", tmp.Enum)
+		return &obj, nil
+	case 2:
+		var obj Extension_TransferFeeAmount
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_TransferFeeAmount: %w", err)
 		}
+		return &obj, nil
+	case 3:
+		var obj Extension_MintCloseAuthority
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_MintCloseAuthority: %w", err)
+		}
+		return &obj, nil
+	case 4:
+		var obj Extension_ConfidentialTransferMint
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_ConfidentialTransferMint: %w", err)
+		}
+		return &obj, nil
+	case 5:
+		var obj Extension_ConfidentialTransferAccount
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_ConfidentialTransferAccount: %w", err)
+		}
+		return &obj, nil
+	case 6:
+		var obj Extension_DefaultAccountState
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_DefaultAccountState: %w", err)
+		}
+		return &obj, nil
+	case 7:
+		var obj Extension_ImmutableOwner
+		return &obj, nil
+	case 8:
+		var obj Extension_MemoTransfer
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_MemoTransfer: %w", err)
+		}
+		return &obj, nil
+	case 9:
+		var obj Extension_NonTransferable
+		return &obj, nil
+	case 10:
+		var obj Extension_InterestBearingConfig
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_InterestBearingConfig: %w", err)
+		}
+		return &obj, nil
+	case 11:
+		var obj Extension_CpiGuard
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_CpiGuard: %w", err)
+		}
+		return &obj, nil
+	case 12:
+		var obj Extension_PermanentDelegate
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_PermanentDelegate: %w", err)
+		}
+		return &obj, nil
+	case 13:
+		var obj Extension_NonTransferableAccount
+		return &obj, nil
+	case 14:
+		var obj Extension_TransferHook
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_TransferHook: %w", err)
+		}
+		return &obj, nil
+	case 15:
+		var obj Extension_TransferHookAccount
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_TransferHookAccount: %w", err)
+		}
+		return &obj, nil
+	case 16:
+		var obj Extension_ConfidentialTransferFee
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_ConfidentialTransferFee: %w", err)
+		}
+		return &obj, nil
+	case 17:
+		var obj Extension_ConfidentialTransferFeeAmount
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_ConfidentialTransferFeeAmount: %w", err)
+		}
+		return &obj, nil
+	case 18:
+		var obj Extension_MetadataPointer
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_MetadataPointer: %w", err)
+		}
+		return &obj, nil
+	case 19:
+		var obj Extension_TokenMetadata
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_TokenMetadata: %w", err)
+		}
+		return &obj, nil
+	case 20:
+		var obj Extension_GroupPointer
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_GroupPointer: %w", err)
+		}
+		return &obj, nil
+	case 21:
+		var obj Extension_TokenGroup
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_TokenGroup: %w", err)
+		}
+		return &obj, nil
+	case 22:
+		var obj Extension_GroupMemberPointer
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_GroupMemberPointer: %w", err)
+		}
+		return &obj, nil
+	case 23:
+		var obj Extension_TokenGroupMember
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_TokenGroupMember: %w", err)
+		}
+		return &obj, nil
+	case 24:
+		var obj Extension_ConfidentialMintBurn
+		return &obj, nil
+	case 25:
+		var obj Extension_ScaledUiAmountConfig
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_ScaledUiAmountConfig: %w", err)
+		}
+		return &obj, nil
+	case 26:
+		var obj Extension_PausableConfig
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing Extension_PausableConfig: %w", err)
+		}
+		return &obj, nil
+	case 27:
+		var obj Extension_PausableAccount
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("Extension: unknown enum index: %v", enum)
 	}
 }
 
-func EncodeExtension(encoder *binary.Encoder, value Extension) error {
-	{
-		tmp := extensionEnumContainer{}
-		switch realvalue := value.(type) {
-		case *Extension_Uninitialized:
-			tmp.Enum = 0
-			tmp.Uninitialized = *realvalue
-		case *Extension_TransferFeeConfig:
-			tmp.Enum = 1
-			tmp.TransferFeeConfig = *realvalue
-		case *Extension_TransferFeeAmount:
-			tmp.Enum = 2
-			tmp.TransferFeeAmount = *realvalue
-		case *Extension_MintCloseAuthority:
-			tmp.Enum = 3
-			tmp.MintCloseAuthority = *realvalue
-		case *Extension_ConfidentialTransferMint:
-			tmp.Enum = 4
-			tmp.ConfidentialTransferMint = *realvalue
-		case *Extension_ConfidentialTransferAccount:
-			tmp.Enum = 5
-			tmp.ConfidentialTransferAccount = *realvalue
-		case *Extension_DefaultAccountState:
-			tmp.Enum = 6
-			tmp.DefaultAccountState = *realvalue
-		case *Extension_ImmutableOwner:
-			tmp.Enum = 7
-			tmp.ImmutableOwner = *realvalue
-		case *Extension_MemoTransfer:
-			tmp.Enum = 8
-			tmp.MemoTransfer = *realvalue
-		case *Extension_NonTransferable:
-			tmp.Enum = 9
-			tmp.NonTransferable = *realvalue
-		case *Extension_InterestBearingConfig:
-			tmp.Enum = 10
-			tmp.InterestBearingConfig = *realvalue
-		case *Extension_CpiGuard:
-			tmp.Enum = 11
-			tmp.CpiGuard = *realvalue
-		case *Extension_PermanentDelegate:
-			tmp.Enum = 12
-			tmp.PermanentDelegate = *realvalue
-		case *Extension_NonTransferableAccount:
-			tmp.Enum = 13
-			tmp.NonTransferableAccount = *realvalue
-		case *Extension_TransferHook:
-			tmp.Enum = 14
-			tmp.TransferHook = *realvalue
-		case *Extension_TransferHookAccount:
-			tmp.Enum = 15
-			tmp.TransferHookAccount = *realvalue
-		case *Extension_ConfidentialTransferFee:
-			tmp.Enum = 16
-			tmp.ConfidentialTransferFee = *realvalue
-		case *Extension_ConfidentialTransferFeeAmount:
-			tmp.Enum = 17
-			tmp.ConfidentialTransferFeeAmount = *realvalue
-		case *Extension_MetadataPointer:
-			tmp.Enum = 18
-			tmp.MetadataPointer = *realvalue
-		case *Extension_TokenMetadata:
-			tmp.Enum = 19
-			tmp.TokenMetadata = *realvalue
-		case *Extension_GroupPointer:
-			tmp.Enum = 20
-			tmp.GroupPointer = *realvalue
-		case *Extension_TokenGroup:
-			tmp.Enum = 21
-			tmp.TokenGroup = *realvalue
-		case *Extension_GroupMemberPointer:
-			tmp.Enum = 22
-			tmp.GroupMemberPointer = *realvalue
-		case *Extension_TokenGroupMember:
-			tmp.Enum = 23
-			tmp.TokenGroupMember = *realvalue
-		case *Extension_ConfidentialMintBurn:
-			tmp.Enum = 24
-			tmp.ConfidentialMintBurn = *realvalue
-		case *Extension_ScaledUiAmountConfig:
-			tmp.Enum = 25
-			tmp.ScaledUiAmountConfig = *realvalue
-		case *Extension_PausableConfig:
-			tmp.Enum = 26
-			tmp.PausableConfig = *realvalue
-		case *Extension_PausableAccount:
-			tmp.Enum = 27
-			tmp.PausableAccount = *realvalue
+func EncodeExtension(encoder *binary.Encoder, value Extension) (err error) {
+	switch value.(type) {
+	case *Extension_Uninitialized:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
 		}
-		return encoder.Encode(tmp)
+	case *Extension_TransferFeeConfig:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	case *Extension_TransferFeeAmount:
+		if err = encoder.WriteUint8(2); err != nil {
+			return err
+		}
+	case *Extension_MintCloseAuthority:
+		if err = encoder.WriteUint8(3); err != nil {
+			return err
+		}
+	case *Extension_ConfidentialTransferMint:
+		if err = encoder.WriteUint8(4); err != nil {
+			return err
+		}
+	case *Extension_ConfidentialTransferAccount:
+		if err = encoder.WriteUint8(5); err != nil {
+			return err
+		}
+	case *Extension_DefaultAccountState:
+		if err = encoder.WriteUint8(6); err != nil {
+			return err
+		}
+	case *Extension_ImmutableOwner:
+		if err = encoder.WriteUint8(7); err != nil {
+			return err
+		}
+	case *Extension_MemoTransfer:
+		if err = encoder.WriteUint8(8); err != nil {
+			return err
+		}
+	case *Extension_NonTransferable:
+		if err = encoder.WriteUint8(9); err != nil {
+			return err
+		}
+	case *Extension_InterestBearingConfig:
+		if err = encoder.WriteUint8(10); err != nil {
+			return err
+		}
+	case *Extension_CpiGuard:
+		if err = encoder.WriteUint8(11); err != nil {
+			return err
+		}
+	case *Extension_PermanentDelegate:
+		if err = encoder.WriteUint8(12); err != nil {
+			return err
+		}
+	case *Extension_NonTransferableAccount:
+		if err = encoder.WriteUint8(13); err != nil {
+			return err
+		}
+	case *Extension_TransferHook:
+		if err = encoder.WriteUint8(14); err != nil {
+			return err
+		}
+	case *Extension_TransferHookAccount:
+		if err = encoder.WriteUint8(15); err != nil {
+			return err
+		}
+	case *Extension_ConfidentialTransferFee:
+		if err = encoder.WriteUint8(16); err != nil {
+			return err
+		}
+	case *Extension_ConfidentialTransferFeeAmount:
+		if err = encoder.WriteUint8(17); err != nil {
+			return err
+		}
+	case *Extension_MetadataPointer:
+		if err = encoder.WriteUint8(18); err != nil {
+			return err
+		}
+	case *Extension_TokenMetadata:
+		if err = encoder.WriteUint8(19); err != nil {
+			return err
+		}
+	case *Extension_GroupPointer:
+		if err = encoder.WriteUint8(20); err != nil {
+			return err
+		}
+	case *Extension_TokenGroup:
+		if err = encoder.WriteUint8(21); err != nil {
+			return err
+		}
+	case *Extension_GroupMemberPointer:
+		if err = encoder.WriteUint8(22); err != nil {
+			return err
+		}
+	case *Extension_TokenGroupMember:
+		if err = encoder.WriteUint8(23); err != nil {
+			return err
+		}
+	case *Extension_ConfidentialMintBurn:
+		if err = encoder.WriteUint8(24); err != nil {
+			return err
+		}
+	case *Extension_ScaledUiAmountConfig:
+		if err = encoder.WriteUint8(25); err != nil {
+			return err
+		}
+	case *Extension_PausableConfig:
+		if err = encoder.WriteUint8(26); err != nil {
+			return err
+		}
+	case *Extension_PausableAccount:
+		if err = encoder.WriteUint8(27); err != nil {
+			return err
+		}
 	}
+	return encoder.Encode(value)
 }
 
 type Extension_Uninitialized uint8
@@ -478,8 +558,8 @@ type Extension_TransferFeeConfig struct {
 	TransferFeeConfigAuthority solanago.PublicKey `json:"transferFeeConfigAuthority"`
 	WithdrawWithheldAuthority  solanago.PublicKey `json:"withdrawWithheldAuthority"`
 	WithheldAmount             uint64             `json:"withheldAmount"`
-	OlderTransferFee           TransferFee        `json:"olderTransferFee"`
-	NewerTransferFee           TransferFee        `json:"newerTransferFee"`
+	OlderTransferFee           TokenTransferFee   `json:"olderTransferFee"`
+	NewerTransferFee           TokenTransferFee   `json:"newerTransferFee"`
 }
 
 func (obj Extension_TransferFeeConfig) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
@@ -2026,62 +2106,58 @@ func (value TokenMetadataField) String() string {
 	}
 }
 
-// The "isPausableInstruction" interface for the "PausableInstruction" complex enum.
-type PausableInstruction interface {
-	isPausableInstruction()
+// The "isPausableArg" interface for the "PausableArg" complex enum.
+type PausableArg interface {
+	isPausableArg()
 }
 
-type pausableInstructionEnumContainer struct {
-	Enum       binary.BorshEnum `bin:"enum"`
-	Initialize PausableInstruction_Initialize
-	Pause      PausableInstruction_Pause
-	Resume     PausableInstruction_Resume
-}
-
-func DecodePausableInstruction(decoder *binary.Decoder) (PausableInstruction, error) {
-	{
-		tmp := new(pausableInstructionEnumContainer)
-		err := decoder.Decode(tmp)
-		if err != nil {
-			return nil, fmt.Errorf("failed parsing PausableInstruction: %w", err)
+func DecodePausableArg(decoder *binary.Decoder) (PausableArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing PausableArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj PausableArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing PausableArg_Initialize: %w", err)
 		}
-		switch tmp.Enum {
-		case 0:
-			return &tmp.Initialize, nil
-		case 1:
-			return (*PausableInstruction_Pause)(&tmp.Enum), nil
-		case 2:
-			return (*PausableInstruction_Resume)(&tmp.Enum), nil
-		default:
-			return nil, fmt.Errorf("PausableInstruction: unknown enum index: %v", tmp.Enum)
-		}
+		return &obj, nil
+	case 1:
+		var obj PausableArg_Pause
+		return &obj, nil
+	case 2:
+		var obj PausableArg_Resume
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("PausableArg: unknown enum index: %v", enum)
 	}
 }
 
-func EncodePausableInstruction(encoder *binary.Encoder, value PausableInstruction) error {
-	{
-		tmp := pausableInstructionEnumContainer{}
-		switch realvalue := value.(type) {
-		case *PausableInstruction_Initialize:
-			tmp.Enum = 0
-			tmp.Initialize = *realvalue
-		case *PausableInstruction_Pause:
-			tmp.Enum = 1
-			tmp.Pause = *realvalue
-		case *PausableInstruction_Resume:
-			tmp.Enum = 2
-			tmp.Resume = *realvalue
+func EncodePausableArg(encoder *binary.Encoder, value PausableArg) (err error) {
+	switch value.(type) {
+	case *PausableArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
 		}
-		return encoder.Encode(tmp)
+	case *PausableArg_Pause:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	case *PausableArg_Resume:
+		if err = encoder.WriteUint8(2); err != nil {
+			return err
+		}
 	}
+	return encoder.Encode(value)
 }
 
-// Variant "initialize" of enum "PausableInstruction"
-type PausableInstruction_Initialize struct {
+// Variant "initialize" of enum "PausableArg"
+type PausableArg_Initialize struct {
 	Authority solanago.PublicKey `json:"authority"`
 }
 
-func (obj PausableInstruction_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj PausableArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Serialize `Authority`:
 	if err = encoder.Encode(obj.Authority); err != nil {
 		return fmt.Errorf("error while marshaling Authority:%w", err)
@@ -2089,17 +2165,17 @@ func (obj PausableInstruction_Initialize) MarshalWithEncoder(encoder *binary.Enc
 	return nil
 }
 
-func (obj PausableInstruction_Initialize) Marshal() ([]byte, error) {
+func (obj PausableArg_Initialize) Marshal() ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 	encoder := binary.NewBorshEncoder(buf)
 	err := obj.MarshalWithEncoder(encoder)
 	if err != nil {
-		return nil, fmt.Errorf("error while encoding PausableInstruction_Initialize: %w", err)
+		return nil, fmt.Errorf("error while encoding PausableArg_Initialize: %w", err)
 	}
 	return buf.Bytes(), nil
 }
 
-func (obj *PausableInstruction_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *PausableArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	// Deserialize `Authority`:
 	if err = decoder.Decode(&obj.Authority); err != nil {
 		return fmt.Errorf("error while unmarshaling Authority:%w", err)
@@ -2107,16 +2183,16 @@ func (obj *PausableInstruction_Initialize) UnmarshalWithDecoder(decoder *binary.
 	return nil
 }
 
-func (obj *PausableInstruction_Initialize) Unmarshal(buf []byte) error {
+func (obj *PausableArg_Initialize) Unmarshal(buf []byte) error {
 	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
 	if err != nil {
-		return fmt.Errorf("error while unmarshaling PausableInstruction_Initialize: %w", err)
+		return fmt.Errorf("error while unmarshaling PausableArg_Initialize: %w", err)
 	}
 	return nil
 }
 
-func UnmarshalPausableInstruction_Initialize(buf []byte) (*PausableInstruction_Initialize, error) {
-	obj := new(PausableInstruction_Initialize)
+func UnmarshalPausableArg_Initialize(buf []byte) (*PausableArg_Initialize, error) {
+	obj := new(PausableArg_Initialize)
 	err := obj.Unmarshal(buf)
 	if err != nil {
 		return nil, err
@@ -2124,28 +2200,3028 @@ func UnmarshalPausableInstruction_Initialize(buf []byte) (*PausableInstruction_I
 	return obj, nil
 }
 
-func (_ *PausableInstruction_Initialize) isPausableInstruction() {}
+func (_ *PausableArg_Initialize) isPausableArg() {}
 
-type PausableInstruction_Pause uint8
+type PausableArg_Pause uint8
 
-func (obj PausableInstruction_Pause) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj PausableArg_Pause) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	return nil
 }
 
-func (obj *PausableInstruction_Pause) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *PausableArg_Pause) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	return nil
 }
 
-func (_ *PausableInstruction_Pause) isPausableInstruction() {}
+func (_ *PausableArg_Pause) isPausableArg() {}
 
-type PausableInstruction_Resume uint8
+type PausableArg_Resume uint8
 
-func (obj PausableInstruction_Resume) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj PausableArg_Resume) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	return nil
 }
 
-func (obj *PausableInstruction_Resume) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *PausableArg_Resume) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	return nil
 }
 
-func (_ *PausableInstruction_Resume) isPausableInstruction() {}
+func (_ *PausableArg_Resume) isPausableArg() {}
+
+// The "isScaledUiAmountArg" interface for the "ScaledUiAmountArg" complex enum.
+type ScaledUiAmountArg interface {
+	isScaledUiAmountArg()
+}
+
+func DecodeScaledUiAmountArg(decoder *binary.Decoder) (ScaledUiAmountArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing ScaledUiAmountArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj ScaledUiAmountArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ScaledUiAmountArg_Initialize: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj ScaledUiAmountArg_UpdateMultiplier
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ScaledUiAmountArg_UpdateMultiplier: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("ScaledUiAmountArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeScaledUiAmountArg(encoder *binary.Encoder, value ScaledUiAmountArg) (err error) {
+	switch value.(type) {
+	case *ScaledUiAmountArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *ScaledUiAmountArg_UpdateMultiplier:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize" of enum "ScaledUiAmountArg"
+type ScaledUiAmountArg_Initialize struct {
+	Authority  solanago.PublicKey `json:"authority"`
+	Multiplier float64            `json:"multiplier"`
+}
+
+func (obj ScaledUiAmountArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Authority`:
+	if err = encoder.Encode(obj.Authority); err != nil {
+		return fmt.Errorf("error while marshaling Authority:%w", err)
+	}
+	// Serialize `Multiplier`:
+	if err = encoder.Encode(obj.Multiplier); err != nil {
+		return fmt.Errorf("error while marshaling Multiplier:%w", err)
+	}
+	return nil
+}
+
+func (obj ScaledUiAmountArg_Initialize) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ScaledUiAmountArg_Initialize: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ScaledUiAmountArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Authority`:
+	if err = decoder.Decode(&obj.Authority); err != nil {
+		return fmt.Errorf("error while unmarshaling Authority:%w", err)
+	}
+	// Deserialize `Multiplier`:
+	if err = decoder.Decode(&obj.Multiplier); err != nil {
+		return fmt.Errorf("error while unmarshaling Multiplier:%w", err)
+	}
+	return nil
+}
+
+func (obj *ScaledUiAmountArg_Initialize) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ScaledUiAmountArg_Initialize: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalScaledUiAmountArg_Initialize(buf []byte) (*ScaledUiAmountArg_Initialize, error) {
+	obj := new(ScaledUiAmountArg_Initialize)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ScaledUiAmountArg_Initialize) isScaledUiAmountArg() {}
+
+// Variant "update_multiplier" of enum "ScaledUiAmountArg"
+type ScaledUiAmountArg_UpdateMultiplier struct {
+	Multiplier         float64 `json:"multiplier"`
+	EffectiveTimestamp int64   `json:"effectiveTimestamp"`
+}
+
+func (obj ScaledUiAmountArg_UpdateMultiplier) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Multiplier`:
+	if err = encoder.Encode(obj.Multiplier); err != nil {
+		return fmt.Errorf("error while marshaling Multiplier:%w", err)
+	}
+	// Serialize `EffectiveTimestamp`:
+	if err = encoder.Encode(obj.EffectiveTimestamp); err != nil {
+		return fmt.Errorf("error while marshaling EffectiveTimestamp:%w", err)
+	}
+	return nil
+}
+
+func (obj ScaledUiAmountArg_UpdateMultiplier) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ScaledUiAmountArg_UpdateMultiplier: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ScaledUiAmountArg_UpdateMultiplier) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Multiplier`:
+	if err = decoder.Decode(&obj.Multiplier); err != nil {
+		return fmt.Errorf("error while unmarshaling Multiplier:%w", err)
+	}
+	// Deserialize `EffectiveTimestamp`:
+	if err = decoder.Decode(&obj.EffectiveTimestamp); err != nil {
+		return fmt.Errorf("error while unmarshaling EffectiveTimestamp:%w", err)
+	}
+	return nil
+}
+
+func (obj *ScaledUiAmountArg_UpdateMultiplier) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ScaledUiAmountArg_UpdateMultiplier: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalScaledUiAmountArg_UpdateMultiplier(buf []byte) (*ScaledUiAmountArg_UpdateMultiplier, error) {
+	obj := new(ScaledUiAmountArg_UpdateMultiplier)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ScaledUiAmountArg_UpdateMultiplier) isScaledUiAmountArg() {}
+
+// The "isTransferHookArg" interface for the "TransferHookArg" complex enum.
+type TransferHookArg interface {
+	isTransferHookArg()
+}
+
+func DecodeTransferHookArg(decoder *binary.Decoder) (TransferHookArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing TransferHookArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj TransferHookArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing TransferHookArg_Initialize: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj TransferHookArg_Update
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing TransferHookArg_Update: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("TransferHookArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeTransferHookArg(encoder *binary.Encoder, value TransferHookArg) (err error) {
+	switch value.(type) {
+	case *TransferHookArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *TransferHookArg_Update:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize" of enum "TransferHookArg"
+type TransferHookArg_Initialize struct {
+	Authority solanago.PublicKey `json:"authority"`
+	ProgramId solanago.PublicKey `json:"programId"`
+}
+
+func (obj TransferHookArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Authority`:
+	if err = encoder.Encode(obj.Authority); err != nil {
+		return fmt.Errorf("error while marshaling Authority:%w", err)
+	}
+	// Serialize `ProgramId`:
+	if err = encoder.Encode(obj.ProgramId); err != nil {
+		return fmt.Errorf("error while marshaling ProgramId:%w", err)
+	}
+	return nil
+}
+
+func (obj TransferHookArg_Initialize) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding TransferHookArg_Initialize: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *TransferHookArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Authority`:
+	if err = decoder.Decode(&obj.Authority); err != nil {
+		return fmt.Errorf("error while unmarshaling Authority:%w", err)
+	}
+	// Deserialize `ProgramId`:
+	if err = decoder.Decode(&obj.ProgramId); err != nil {
+		return fmt.Errorf("error while unmarshaling ProgramId:%w", err)
+	}
+	return nil
+}
+
+func (obj *TransferHookArg_Initialize) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling TransferHookArg_Initialize: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalTransferHookArg_Initialize(buf []byte) (*TransferHookArg_Initialize, error) {
+	obj := new(TransferHookArg_Initialize)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *TransferHookArg_Initialize) isTransferHookArg() {}
+
+// Variant "update" of enum "TransferHookArg"
+type TransferHookArg_Update struct {
+	ProgramId solanago.PublicKey `json:"programId"`
+}
+
+func (obj TransferHookArg_Update) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `ProgramId`:
+	if err = encoder.Encode(obj.ProgramId); err != nil {
+		return fmt.Errorf("error while marshaling ProgramId:%w", err)
+	}
+	return nil
+}
+
+func (obj TransferHookArg_Update) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding TransferHookArg_Update: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *TransferHookArg_Update) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `ProgramId`:
+	if err = decoder.Decode(&obj.ProgramId); err != nil {
+		return fmt.Errorf("error while unmarshaling ProgramId:%w", err)
+	}
+	return nil
+}
+
+func (obj *TransferHookArg_Update) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling TransferHookArg_Update: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalTransferHookArg_Update(buf []byte) (*TransferHookArg_Update, error) {
+	obj := new(TransferHookArg_Update)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *TransferHookArg_Update) isTransferHookArg() {}
+
+// The "isMetadataPointerArg" interface for the "MetadataPointerArg" complex enum.
+type MetadataPointerArg interface {
+	isMetadataPointerArg()
+}
+
+func DecodeMetadataPointerArg(decoder *binary.Decoder) (MetadataPointerArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing MetadataPointerArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj MetadataPointerArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing MetadataPointerArg_Initialize: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj MetadataPointerArg_Update
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing MetadataPointerArg_Update: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("MetadataPointerArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeMetadataPointerArg(encoder *binary.Encoder, value MetadataPointerArg) (err error) {
+	switch value.(type) {
+	case *MetadataPointerArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *MetadataPointerArg_Update:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize" of enum "MetadataPointerArg"
+type MetadataPointerArg_Initialize struct {
+	Authority       solanago.PublicKey `json:"authority"`
+	MetadataAddress solanago.PublicKey `json:"metadataAddress"`
+}
+
+func (obj MetadataPointerArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Authority`:
+	if err = encoder.Encode(obj.Authority); err != nil {
+		return fmt.Errorf("error while marshaling Authority:%w", err)
+	}
+	// Serialize `MetadataAddress`:
+	if err = encoder.Encode(obj.MetadataAddress); err != nil {
+		return fmt.Errorf("error while marshaling MetadataAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj MetadataPointerArg_Initialize) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding MetadataPointerArg_Initialize: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *MetadataPointerArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Authority`:
+	if err = decoder.Decode(&obj.Authority); err != nil {
+		return fmt.Errorf("error while unmarshaling Authority:%w", err)
+	}
+	// Deserialize `MetadataAddress`:
+	if err = decoder.Decode(&obj.MetadataAddress); err != nil {
+		return fmt.Errorf("error while unmarshaling MetadataAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj *MetadataPointerArg_Initialize) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling MetadataPointerArg_Initialize: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalMetadataPointerArg_Initialize(buf []byte) (*MetadataPointerArg_Initialize, error) {
+	obj := new(MetadataPointerArg_Initialize)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *MetadataPointerArg_Initialize) isMetadataPointerArg() {}
+
+// Variant "update" of enum "MetadataPointerArg"
+type MetadataPointerArg_Update struct {
+	MetadataAddress solanago.PublicKey `json:"metadataAddress"`
+}
+
+func (obj MetadataPointerArg_Update) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `MetadataAddress`:
+	if err = encoder.Encode(obj.MetadataAddress); err != nil {
+		return fmt.Errorf("error while marshaling MetadataAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj MetadataPointerArg_Update) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding MetadataPointerArg_Update: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *MetadataPointerArg_Update) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `MetadataAddress`:
+	if err = decoder.Decode(&obj.MetadataAddress); err != nil {
+		return fmt.Errorf("error while unmarshaling MetadataAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj *MetadataPointerArg_Update) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling MetadataPointerArg_Update: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalMetadataPointerArg_Update(buf []byte) (*MetadataPointerArg_Update, error) {
+	obj := new(MetadataPointerArg_Update)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *MetadataPointerArg_Update) isMetadataPointerArg() {}
+
+// The "isInterestBearingMintArg" interface for the "InterestBearingMintArg" complex enum.
+type InterestBearingMintArg interface {
+	isInterestBearingMintArg()
+}
+
+func DecodeInterestBearingMintArg(decoder *binary.Decoder) (InterestBearingMintArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing InterestBearingMintArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj InterestBearingMintArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing InterestBearingMintArg_Initialize: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj InterestBearingMintArg_Update
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing InterestBearingMintArg_Update: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("InterestBearingMintArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeInterestBearingMintArg(encoder *binary.Encoder, value InterestBearingMintArg) (err error) {
+	switch value.(type) {
+	case *InterestBearingMintArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *InterestBearingMintArg_Update:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize" of enum "InterestBearingMintArg"
+type InterestBearingMintArg_Initialize struct {
+	RateAuthority solanago.PublicKey `json:"rateAuthority"`
+	Rate          uint16             `json:"rate"`
+}
+
+func (obj InterestBearingMintArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `RateAuthority`:
+	if err = encoder.Encode(obj.RateAuthority); err != nil {
+		return fmt.Errorf("error while marshaling RateAuthority:%w", err)
+	}
+	// Serialize `Rate`:
+	if err = encoder.Encode(obj.Rate); err != nil {
+		return fmt.Errorf("error while marshaling Rate:%w", err)
+	}
+	return nil
+}
+
+func (obj InterestBearingMintArg_Initialize) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding InterestBearingMintArg_Initialize: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *InterestBearingMintArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `RateAuthority`:
+	if err = decoder.Decode(&obj.RateAuthority); err != nil {
+		return fmt.Errorf("error while unmarshaling RateAuthority:%w", err)
+	}
+	// Deserialize `Rate`:
+	if err = decoder.Decode(&obj.Rate); err != nil {
+		return fmt.Errorf("error while unmarshaling Rate:%w", err)
+	}
+	return nil
+}
+
+func (obj *InterestBearingMintArg_Initialize) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling InterestBearingMintArg_Initialize: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalInterestBearingMintArg_Initialize(buf []byte) (*InterestBearingMintArg_Initialize, error) {
+	obj := new(InterestBearingMintArg_Initialize)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *InterestBearingMintArg_Initialize) isInterestBearingMintArg() {}
+
+// Variant "update" of enum "InterestBearingMintArg"
+type InterestBearingMintArg_Update struct {
+	ProgramId solanago.PublicKey `json:"programId"`
+}
+
+func (obj InterestBearingMintArg_Update) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `ProgramId`:
+	if err = encoder.Encode(obj.ProgramId); err != nil {
+		return fmt.Errorf("error while marshaling ProgramId:%w", err)
+	}
+	return nil
+}
+
+func (obj InterestBearingMintArg_Update) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding InterestBearingMintArg_Update: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *InterestBearingMintArg_Update) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `ProgramId`:
+	if err = decoder.Decode(&obj.ProgramId); err != nil {
+		return fmt.Errorf("error while unmarshaling ProgramId:%w", err)
+	}
+	return nil
+}
+
+func (obj *InterestBearingMintArg_Update) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling InterestBearingMintArg_Update: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalInterestBearingMintArg_Update(buf []byte) (*InterestBearingMintArg_Update, error) {
+	obj := new(InterestBearingMintArg_Update)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *InterestBearingMintArg_Update) isInterestBearingMintArg() {}
+
+// The "isDefaultAccountStateArg" interface for the "DefaultAccountStateArg" complex enum.
+type DefaultAccountStateArg interface {
+	isDefaultAccountStateArg()
+}
+
+func DecodeDefaultAccountStateArg(decoder *binary.Decoder) (DefaultAccountStateArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing DefaultAccountStateArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj DefaultAccountStateArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing DefaultAccountStateArg_Initialize: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj DefaultAccountStateArg_Update
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing DefaultAccountStateArg_Update: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("DefaultAccountStateArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeDefaultAccountStateArg(encoder *binary.Encoder, value DefaultAccountStateArg) (err error) {
+	switch value.(type) {
+	case *DefaultAccountStateArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *DefaultAccountStateArg_Update:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize" of enum "DefaultAccountStateArg"
+type DefaultAccountStateArg_Initialize struct {
+	State AccountState `json:"state"`
+}
+
+func (obj DefaultAccountStateArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `State`:
+	if err = encoder.Encode(obj.State); err != nil {
+		return fmt.Errorf("error while marshaling State:%w", err)
+	}
+	return nil
+}
+
+func (obj DefaultAccountStateArg_Initialize) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding DefaultAccountStateArg_Initialize: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *DefaultAccountStateArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `State`:
+	if err = decoder.Decode(&obj.State); err != nil {
+		return fmt.Errorf("error while unmarshaling State:%w", err)
+	}
+	return nil
+}
+
+func (obj *DefaultAccountStateArg_Initialize) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling DefaultAccountStateArg_Initialize: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalDefaultAccountStateArg_Initialize(buf []byte) (*DefaultAccountStateArg_Initialize, error) {
+	obj := new(DefaultAccountStateArg_Initialize)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *DefaultAccountStateArg_Initialize) isDefaultAccountStateArg() {}
+
+// Variant "update" of enum "DefaultAccountStateArg"
+type DefaultAccountStateArg_Update struct {
+	State AccountState `json:"state"`
+}
+
+func (obj DefaultAccountStateArg_Update) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `State`:
+	if err = encoder.Encode(obj.State); err != nil {
+		return fmt.Errorf("error while marshaling State:%w", err)
+	}
+	return nil
+}
+
+func (obj DefaultAccountStateArg_Update) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding DefaultAccountStateArg_Update: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *DefaultAccountStateArg_Update) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `State`:
+	if err = decoder.Decode(&obj.State); err != nil {
+		return fmt.Errorf("error while unmarshaling State:%w", err)
+	}
+	return nil
+}
+
+func (obj *DefaultAccountStateArg_Update) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling DefaultAccountStateArg_Update: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalDefaultAccountStateArg_Update(buf []byte) (*DefaultAccountStateArg_Update, error) {
+	obj := new(DefaultAccountStateArg_Update)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *DefaultAccountStateArg_Update) isDefaultAccountStateArg() {}
+
+// The "isTransferFeeArg" interface for the "TransferFeeArg" complex enum.
+type TransferFeeArg interface {
+	isTransferFeeArg()
+}
+
+func DecodeTransferFeeArg(decoder *binary.Decoder) (TransferFeeArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing TransferFeeArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj TransferFeeArg_InitializeTransferFeeConfig
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing TransferFeeArg_InitializeTransferFeeConfig: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj TransferFeeArg_TransferCheckedWithFee
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing TransferFeeArg_TransferCheckedWithFee: %w", err)
+		}
+		return &obj, nil
+	case 2:
+		var obj TransferFeeArg_WithdrawWithheldTokensFromMint
+		return &obj, nil
+	case 3:
+		var obj TransferFeeArg_WithdrawWithheldTokensFromAccounts
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing TransferFeeArg_WithdrawWithheldTokensFromAccounts: %w", err)
+		}
+		return &obj, nil
+	case 4:
+		var obj TransferFeeArg_HarvestWithheldTokensToMint
+		return &obj, nil
+	case 5:
+		var obj TransferFeeArg_SetTransferFee
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing TransferFeeArg_SetTransferFee: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("TransferFeeArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeTransferFeeArg(encoder *binary.Encoder, value TransferFeeArg) (err error) {
+	switch value.(type) {
+	case *TransferFeeArg_InitializeTransferFeeConfig:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *TransferFeeArg_TransferCheckedWithFee:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	case *TransferFeeArg_WithdrawWithheldTokensFromMint:
+		if err = encoder.WriteUint8(2); err != nil {
+			return err
+		}
+	case *TransferFeeArg_WithdrawWithheldTokensFromAccounts:
+		if err = encoder.WriteUint8(3); err != nil {
+			return err
+		}
+	case *TransferFeeArg_HarvestWithheldTokensToMint:
+		if err = encoder.WriteUint8(4); err != nil {
+			return err
+		}
+	case *TransferFeeArg_SetTransferFee:
+		if err = encoder.WriteUint8(5); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize_transfer_fee_config" of enum "TransferFeeArg"
+type TransferFeeArg_InitializeTransferFeeConfig struct {
+	TransferFeeConfigAuthority *solanago.PublicKey `bin:"optional" json:"transferFeeConfigAuthority,omitempty"`
+	WithdrawWithheldAuthority  *solanago.PublicKey `bin:"optional" json:"withdrawWithheldAuthority,omitempty"`
+	TransferFeeBasisPoints     uint16              `json:"transferFeeBasisPoints"`
+	MaximumFee                 uint64              `json:"maximumFee"`
+}
+
+func (obj TransferFeeArg_InitializeTransferFeeConfig) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `TransferFeeConfigAuthority` (optional):
+	{
+		if obj.TransferFeeConfigAuthority == nil {
+			if err = encoder.WriteOption(false); err != nil {
+				return fmt.Errorf("error while marshaling TransferFeeConfigAuthority optionality: %w", err)
+			}
+		} else {
+			if err = encoder.WriteOption(true); err != nil {
+				return fmt.Errorf("error while marshaling TransferFeeConfigAuthority optionality: %w", err)
+			}
+			if err = encoder.Encode(obj.TransferFeeConfigAuthority); err != nil {
+				return fmt.Errorf("error while marshaling TransferFeeConfigAuthority: %w", err)
+			}
+		}
+	}
+	// Serialize `WithdrawWithheldAuthority` (optional):
+	{
+		if obj.WithdrawWithheldAuthority == nil {
+			if err = encoder.WriteOption(false); err != nil {
+				return fmt.Errorf("error while marshaling WithdrawWithheldAuthority optionality: %w", err)
+			}
+		} else {
+			if err = encoder.WriteOption(true); err != nil {
+				return fmt.Errorf("error while marshaling WithdrawWithheldAuthority optionality: %w", err)
+			}
+			if err = encoder.Encode(obj.WithdrawWithheldAuthority); err != nil {
+				return fmt.Errorf("error while marshaling WithdrawWithheldAuthority: %w", err)
+			}
+		}
+	}
+	// Serialize `TransferFeeBasisPoints`:
+	if err = encoder.Encode(obj.TransferFeeBasisPoints); err != nil {
+		return fmt.Errorf("error while marshaling TransferFeeBasisPoints:%w", err)
+	}
+	// Serialize `MaximumFee`:
+	if err = encoder.Encode(obj.MaximumFee); err != nil {
+		return fmt.Errorf("error while marshaling MaximumFee:%w", err)
+	}
+	return nil
+}
+
+func (obj TransferFeeArg_InitializeTransferFeeConfig) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding TransferFeeArg_InitializeTransferFeeConfig: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *TransferFeeArg_InitializeTransferFeeConfig) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `TransferFeeConfigAuthority` (optional):
+	{
+		ok, err := decoder.ReadOption()
+		if err != nil {
+			return fmt.Errorf("error while unmarshaling TransferFeeConfigAuthority:%w", err)
+		}
+		if ok {
+			if err = decoder.Decode(&obj.TransferFeeConfigAuthority); err != nil {
+				return fmt.Errorf("error while unmarshaling TransferFeeConfigAuthority:%w", err)
+			}
+		}
+	}
+	// Deserialize `WithdrawWithheldAuthority` (optional):
+	{
+		ok, err := decoder.ReadOption()
+		if err != nil {
+			return fmt.Errorf("error while unmarshaling WithdrawWithheldAuthority:%w", err)
+		}
+		if ok {
+			if err = decoder.Decode(&obj.WithdrawWithheldAuthority); err != nil {
+				return fmt.Errorf("error while unmarshaling WithdrawWithheldAuthority:%w", err)
+			}
+		}
+	}
+	// Deserialize `TransferFeeBasisPoints`:
+	if err = decoder.Decode(&obj.TransferFeeBasisPoints); err != nil {
+		return fmt.Errorf("error while unmarshaling TransferFeeBasisPoints:%w", err)
+	}
+	// Deserialize `MaximumFee`:
+	if err = decoder.Decode(&obj.MaximumFee); err != nil {
+		return fmt.Errorf("error while unmarshaling MaximumFee:%w", err)
+	}
+	return nil
+}
+
+func (obj *TransferFeeArg_InitializeTransferFeeConfig) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling TransferFeeArg_InitializeTransferFeeConfig: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalTransferFeeArg_InitializeTransferFeeConfig(buf []byte) (*TransferFeeArg_InitializeTransferFeeConfig, error) {
+	obj := new(TransferFeeArg_InitializeTransferFeeConfig)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *TransferFeeArg_InitializeTransferFeeConfig) isTransferFeeArg() {}
+
+// Variant "transfer_checked_with_fee" of enum "TransferFeeArg"
+type TransferFeeArg_TransferCheckedWithFee struct {
+	Amount   uint64 `json:"amount"`
+	Decimals uint8  `json:"decimals"`
+	Fee      uint64 `json:"fee"`
+}
+
+func (obj TransferFeeArg_TransferCheckedWithFee) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Amount`:
+	if err = encoder.Encode(obj.Amount); err != nil {
+		return fmt.Errorf("error while marshaling Amount:%w", err)
+	}
+	// Serialize `Decimals`:
+	if err = encoder.Encode(obj.Decimals); err != nil {
+		return fmt.Errorf("error while marshaling Decimals:%w", err)
+	}
+	// Serialize `Fee`:
+	if err = encoder.Encode(obj.Fee); err != nil {
+		return fmt.Errorf("error while marshaling Fee:%w", err)
+	}
+	return nil
+}
+
+func (obj TransferFeeArg_TransferCheckedWithFee) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding TransferFeeArg_TransferCheckedWithFee: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *TransferFeeArg_TransferCheckedWithFee) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Amount`:
+	if err = decoder.Decode(&obj.Amount); err != nil {
+		return fmt.Errorf("error while unmarshaling Amount:%w", err)
+	}
+	// Deserialize `Decimals`:
+	if err = decoder.Decode(&obj.Decimals); err != nil {
+		return fmt.Errorf("error while unmarshaling Decimals:%w", err)
+	}
+	// Deserialize `Fee`:
+	if err = decoder.Decode(&obj.Fee); err != nil {
+		return fmt.Errorf("error while unmarshaling Fee:%w", err)
+	}
+	return nil
+}
+
+func (obj *TransferFeeArg_TransferCheckedWithFee) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling TransferFeeArg_TransferCheckedWithFee: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalTransferFeeArg_TransferCheckedWithFee(buf []byte) (*TransferFeeArg_TransferCheckedWithFee, error) {
+	obj := new(TransferFeeArg_TransferCheckedWithFee)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *TransferFeeArg_TransferCheckedWithFee) isTransferFeeArg() {}
+
+type TransferFeeArg_WithdrawWithheldTokensFromMint uint8
+
+func (obj TransferFeeArg_WithdrawWithheldTokensFromMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *TransferFeeArg_WithdrawWithheldTokensFromMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *TransferFeeArg_WithdrawWithheldTokensFromMint) isTransferFeeArg() {}
+
+// Variant "withdraw_withheld_tokens_from_accounts" of enum "TransferFeeArg"
+type TransferFeeArg_WithdrawWithheldTokensFromAccounts struct {
+	NumTokenAccounts uint8 `json:"numTokenAccounts"`
+}
+
+func (obj TransferFeeArg_WithdrawWithheldTokensFromAccounts) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NumTokenAccounts`:
+	if err = encoder.Encode(obj.NumTokenAccounts); err != nil {
+		return fmt.Errorf("error while marshaling NumTokenAccounts:%w", err)
+	}
+	return nil
+}
+
+func (obj TransferFeeArg_WithdrawWithheldTokensFromAccounts) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding TransferFeeArg_WithdrawWithheldTokensFromAccounts: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *TransferFeeArg_WithdrawWithheldTokensFromAccounts) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NumTokenAccounts`:
+	if err = decoder.Decode(&obj.NumTokenAccounts); err != nil {
+		return fmt.Errorf("error while unmarshaling NumTokenAccounts:%w", err)
+	}
+	return nil
+}
+
+func (obj *TransferFeeArg_WithdrawWithheldTokensFromAccounts) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling TransferFeeArg_WithdrawWithheldTokensFromAccounts: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalTransferFeeArg_WithdrawWithheldTokensFromAccounts(buf []byte) (*TransferFeeArg_WithdrawWithheldTokensFromAccounts, error) {
+	obj := new(TransferFeeArg_WithdrawWithheldTokensFromAccounts)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *TransferFeeArg_WithdrawWithheldTokensFromAccounts) isTransferFeeArg() {}
+
+type TransferFeeArg_HarvestWithheldTokensToMint uint8
+
+func (obj TransferFeeArg_HarvestWithheldTokensToMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *TransferFeeArg_HarvestWithheldTokensToMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *TransferFeeArg_HarvestWithheldTokensToMint) isTransferFeeArg() {}
+
+// Variant "set_transfer_fee" of enum "TransferFeeArg"
+type TransferFeeArg_SetTransferFee struct {
+	TransferFeeBasisPoints uint16 `json:"transferFeeBasisPoints"`
+	MaximumFee             uint64 `json:"maximumFee"`
+}
+
+func (obj TransferFeeArg_SetTransferFee) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `TransferFeeBasisPoints`:
+	if err = encoder.Encode(obj.TransferFeeBasisPoints); err != nil {
+		return fmt.Errorf("error while marshaling TransferFeeBasisPoints:%w", err)
+	}
+	// Serialize `MaximumFee`:
+	if err = encoder.Encode(obj.MaximumFee); err != nil {
+		return fmt.Errorf("error while marshaling MaximumFee:%w", err)
+	}
+	return nil
+}
+
+func (obj TransferFeeArg_SetTransferFee) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding TransferFeeArg_SetTransferFee: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *TransferFeeArg_SetTransferFee) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `TransferFeeBasisPoints`:
+	if err = decoder.Decode(&obj.TransferFeeBasisPoints); err != nil {
+		return fmt.Errorf("error while unmarshaling TransferFeeBasisPoints:%w", err)
+	}
+	// Deserialize `MaximumFee`:
+	if err = decoder.Decode(&obj.MaximumFee); err != nil {
+		return fmt.Errorf("error while unmarshaling MaximumFee:%w", err)
+	}
+	return nil
+}
+
+func (obj *TransferFeeArg_SetTransferFee) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling TransferFeeArg_SetTransferFee: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalTransferFeeArg_SetTransferFee(buf []byte) (*TransferFeeArg_SetTransferFee, error) {
+	obj := new(TransferFeeArg_SetTransferFee)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *TransferFeeArg_SetTransferFee) isTransferFeeArg() {}
+
+type CpiGuardArg binary.BorshEnum
+
+const (
+	CpiGuardArg_Enable CpiGuardArg = iota
+	CpiGuardArg_Disable
+)
+
+func (value CpiGuardArg) String() string {
+	switch value {
+	case CpiGuardArg_Enable:
+		return "enable"
+	case CpiGuardArg_Disable:
+		return "disable"
+	default:
+		return ""
+	}
+}
+
+type MemoTransferArg binary.BorshEnum
+
+const (
+	MemoTransferArg_Enable MemoTransferArg = iota
+	MemoTransferArg_Disable
+)
+
+func (value MemoTransferArg) String() string {
+	switch value {
+	case MemoTransferArg_Enable:
+		return "enable"
+	case MemoTransferArg_Disable:
+		return "disable"
+	default:
+		return ""
+	}
+}
+
+// The "isGroupPointerArg" interface for the "GroupPointerArg" complex enum.
+type GroupPointerArg interface {
+	isGroupPointerArg()
+}
+
+func DecodeGroupPointerArg(decoder *binary.Decoder) (GroupPointerArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing GroupPointerArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj GroupPointerArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing GroupPointerArg_Initialize: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj GroupPointerArg_Update
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing GroupPointerArg_Update: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("GroupPointerArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeGroupPointerArg(encoder *binary.Encoder, value GroupPointerArg) (err error) {
+	switch value.(type) {
+	case *GroupPointerArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *GroupPointerArg_Update:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize" of enum "GroupPointerArg"
+type GroupPointerArg_Initialize struct {
+	Authority    solanago.PublicKey `json:"authority"`
+	GroupAddress solanago.PublicKey `json:"groupAddress"`
+}
+
+func (obj GroupPointerArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Authority`:
+	if err = encoder.Encode(obj.Authority); err != nil {
+		return fmt.Errorf("error while marshaling Authority:%w", err)
+	}
+	// Serialize `GroupAddress`:
+	if err = encoder.Encode(obj.GroupAddress); err != nil {
+		return fmt.Errorf("error while marshaling GroupAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj GroupPointerArg_Initialize) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding GroupPointerArg_Initialize: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *GroupPointerArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Authority`:
+	if err = decoder.Decode(&obj.Authority); err != nil {
+		return fmt.Errorf("error while unmarshaling Authority:%w", err)
+	}
+	// Deserialize `GroupAddress`:
+	if err = decoder.Decode(&obj.GroupAddress); err != nil {
+		return fmt.Errorf("error while unmarshaling GroupAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj *GroupPointerArg_Initialize) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling GroupPointerArg_Initialize: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalGroupPointerArg_Initialize(buf []byte) (*GroupPointerArg_Initialize, error) {
+	obj := new(GroupPointerArg_Initialize)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *GroupPointerArg_Initialize) isGroupPointerArg() {}
+
+// Variant "update" of enum "GroupPointerArg"
+type GroupPointerArg_Update struct {
+	GroupAddress solanago.PublicKey `json:"groupAddress"`
+}
+
+func (obj GroupPointerArg_Update) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `GroupAddress`:
+	if err = encoder.Encode(obj.GroupAddress); err != nil {
+		return fmt.Errorf("error while marshaling GroupAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj GroupPointerArg_Update) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding GroupPointerArg_Update: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *GroupPointerArg_Update) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `GroupAddress`:
+	if err = decoder.Decode(&obj.GroupAddress); err != nil {
+		return fmt.Errorf("error while unmarshaling GroupAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj *GroupPointerArg_Update) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling GroupPointerArg_Update: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalGroupPointerArg_Update(buf []byte) (*GroupPointerArg_Update, error) {
+	obj := new(GroupPointerArg_Update)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *GroupPointerArg_Update) isGroupPointerArg() {}
+
+// The "isGroupMemberPointerArg" interface for the "GroupMemberPointerArg" complex enum.
+type GroupMemberPointerArg interface {
+	isGroupMemberPointerArg()
+}
+
+func DecodeGroupMemberPointerArg(decoder *binary.Decoder) (GroupMemberPointerArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing GroupMemberPointerArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj GroupMemberPointerArg_Initialize
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing GroupMemberPointerArg_Initialize: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj GroupMemberPointerArg_Update
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing GroupMemberPointerArg_Update: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("GroupMemberPointerArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeGroupMemberPointerArg(encoder *binary.Encoder, value GroupMemberPointerArg) (err error) {
+	switch value.(type) {
+	case *GroupMemberPointerArg_Initialize:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *GroupMemberPointerArg_Update:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize" of enum "GroupMemberPointerArg"
+type GroupMemberPointerArg_Initialize struct {
+	Authority     solanago.PublicKey `json:"authority"`
+	MemberAddress solanago.PublicKey `json:"memberAddress"`
+}
+
+func (obj GroupMemberPointerArg_Initialize) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Authority`:
+	if err = encoder.Encode(obj.Authority); err != nil {
+		return fmt.Errorf("error while marshaling Authority:%w", err)
+	}
+	// Serialize `MemberAddress`:
+	if err = encoder.Encode(obj.MemberAddress); err != nil {
+		return fmt.Errorf("error while marshaling MemberAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj GroupMemberPointerArg_Initialize) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding GroupMemberPointerArg_Initialize: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *GroupMemberPointerArg_Initialize) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Authority`:
+	if err = decoder.Decode(&obj.Authority); err != nil {
+		return fmt.Errorf("error while unmarshaling Authority:%w", err)
+	}
+	// Deserialize `MemberAddress`:
+	if err = decoder.Decode(&obj.MemberAddress); err != nil {
+		return fmt.Errorf("error while unmarshaling MemberAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj *GroupMemberPointerArg_Initialize) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling GroupMemberPointerArg_Initialize: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalGroupMemberPointerArg_Initialize(buf []byte) (*GroupMemberPointerArg_Initialize, error) {
+	obj := new(GroupMemberPointerArg_Initialize)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *GroupMemberPointerArg_Initialize) isGroupMemberPointerArg() {}
+
+// Variant "update" of enum "GroupMemberPointerArg"
+type GroupMemberPointerArg_Update struct {
+	MemberAddress solanago.PublicKey `json:"memberAddress"`
+}
+
+func (obj GroupMemberPointerArg_Update) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `MemberAddress`:
+	if err = encoder.Encode(obj.MemberAddress); err != nil {
+		return fmt.Errorf("error while marshaling MemberAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj GroupMemberPointerArg_Update) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding GroupMemberPointerArg_Update: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *GroupMemberPointerArg_Update) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `MemberAddress`:
+	if err = decoder.Decode(&obj.MemberAddress); err != nil {
+		return fmt.Errorf("error while unmarshaling MemberAddress:%w", err)
+	}
+	return nil
+}
+
+func (obj *GroupMemberPointerArg_Update) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling GroupMemberPointerArg_Update: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalGroupMemberPointerArg_Update(buf []byte) (*GroupMemberPointerArg_Update, error) {
+	obj := new(GroupMemberPointerArg_Update)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *GroupMemberPointerArg_Update) isGroupMemberPointerArg() {}
+
+// The "isConfidentialTransferFeeArg" interface for the "ConfidentialTransferFeeArg" complex enum.
+type ConfidentialTransferFeeArg interface {
+	isConfidentialTransferFeeArg()
+}
+
+func DecodeConfidentialTransferFeeArg(decoder *binary.Decoder) (ConfidentialTransferFeeArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing ConfidentialTransferFeeArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint: %w", err)
+		}
+		return &obj, nil
+	case 2:
+		var obj ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts: %w", err)
+		}
+		return &obj, nil
+	case 3:
+		var obj ConfidentialTransferFeeArg_HarvestWithheldTokensToMint
+		return &obj, nil
+	case 4:
+		var obj ConfidentialTransferFeeArg_EnableHarvestToMint
+		return &obj, nil
+	case 5:
+		var obj ConfidentialTransferFeeArg_DisableHarvestToMint
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("ConfidentialTransferFeeArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeConfidentialTransferFeeArg(encoder *binary.Encoder, value ConfidentialTransferFeeArg) (err error) {
+	switch value.(type) {
+	case *ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	case *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts:
+		if err = encoder.WriteUint8(2); err != nil {
+			return err
+		}
+	case *ConfidentialTransferFeeArg_HarvestWithheldTokensToMint:
+		if err = encoder.WriteUint8(3); err != nil {
+			return err
+		}
+	case *ConfidentialTransferFeeArg_EnableHarvestToMint:
+		if err = encoder.WriteUint8(4); err != nil {
+			return err
+		}
+	case *ConfidentialTransferFeeArg_DisableHarvestToMint:
+		if err = encoder.WriteUint8(5); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize_confidential_transfer_fee_config" of enum "ConfidentialTransferFeeArg"
+type ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig struct {
+	Authority                              solanago.PublicKey `json:"authority"`
+	WithdrawWithheldAuthorityElgamalPubkey solanago.PublicKey `json:"withdrawWithheldAuthorityElgamalPubkey"`
+}
+
+func (obj ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Authority`:
+	if err = encoder.Encode(obj.Authority); err != nil {
+		return fmt.Errorf("error while marshaling Authority:%w", err)
+	}
+	// Serialize `WithdrawWithheldAuthorityElgamalPubkey`:
+	if err = encoder.Encode(obj.WithdrawWithheldAuthorityElgamalPubkey); err != nil {
+		return fmt.Errorf("error while marshaling WithdrawWithheldAuthorityElgamalPubkey:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Authority`:
+	if err = decoder.Decode(&obj.Authority); err != nil {
+		return fmt.Errorf("error while unmarshaling Authority:%w", err)
+	}
+	// Deserialize `WithdrawWithheldAuthorityElgamalPubkey`:
+	if err = decoder.Decode(&obj.WithdrawWithheldAuthorityElgamalPubkey); err != nil {
+		return fmt.Errorf("error while unmarshaling WithdrawWithheldAuthorityElgamalPubkey:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig(buf []byte) (*ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig, error) {
+	obj := new(ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferFeeArg_InitializeConfidentialTransferFeeConfig) isConfidentialTransferFeeArg() {
+}
+
+// Variant "withdraw_withheld_tokens_from_mint" of enum "ConfidentialTransferFeeArg"
+type ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint struct {
+	ProofInstructionOffset         int8      `json:"proofInstructionOffset"`
+	NewDecryptableAvailableBalance [36]uint8 `json:"newDecryptableAvailableBalance"`
+}
+
+func (obj ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `ProofInstructionOffset`:
+	if err = encoder.Encode(obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling ProofInstructionOffset:%w", err)
+	}
+	// Serialize `NewDecryptableAvailableBalance`:
+	if err = encoder.Encode(obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while marshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `ProofInstructionOffset`:
+	if err = decoder.Decode(&obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling ProofInstructionOffset:%w", err)
+	}
+	// Deserialize `NewDecryptableAvailableBalance`:
+	if err = decoder.Decode(&obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint(buf []byte) (*ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint, error) {
+	obj := new(ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromMint) isConfidentialTransferFeeArg() {}
+
+// Variant "withdraw_withheld_tokens_from_accounts" of enum "ConfidentialTransferFeeArg"
+type ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts struct {
+	NumTokenAccounts               uint8     `json:"numTokenAccounts"`
+	ProofInstructionOffset         int8      `json:"proofInstructionOffset"`
+	NewDecryptableAvailableBalance [36]uint8 `json:"newDecryptableAvailableBalance"`
+}
+
+func (obj ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NumTokenAccounts`:
+	if err = encoder.Encode(obj.NumTokenAccounts); err != nil {
+		return fmt.Errorf("error while marshaling NumTokenAccounts:%w", err)
+	}
+	// Serialize `ProofInstructionOffset`:
+	if err = encoder.Encode(obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling ProofInstructionOffset:%w", err)
+	}
+	// Serialize `NewDecryptableAvailableBalance`:
+	if err = encoder.Encode(obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while marshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NumTokenAccounts`:
+	if err = decoder.Decode(&obj.NumTokenAccounts); err != nil {
+		return fmt.Errorf("error while unmarshaling NumTokenAccounts:%w", err)
+	}
+	// Deserialize `ProofInstructionOffset`:
+	if err = decoder.Decode(&obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling ProofInstructionOffset:%w", err)
+	}
+	// Deserialize `NewDecryptableAvailableBalance`:
+	if err = decoder.Decode(&obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts(buf []byte) (*ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts, error) {
+	obj := new(ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferFeeArg_WithdrawWithheldTokensFromAccounts) isConfidentialTransferFeeArg() {
+}
+
+type ConfidentialTransferFeeArg_HarvestWithheldTokensToMint uint8
+
+func (obj ConfidentialTransferFeeArg_HarvestWithheldTokensToMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *ConfidentialTransferFeeArg_HarvestWithheldTokensToMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *ConfidentialTransferFeeArg_HarvestWithheldTokensToMint) isConfidentialTransferFeeArg() {}
+
+type ConfidentialTransferFeeArg_EnableHarvestToMint uint8
+
+func (obj ConfidentialTransferFeeArg_EnableHarvestToMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *ConfidentialTransferFeeArg_EnableHarvestToMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *ConfidentialTransferFeeArg_EnableHarvestToMint) isConfidentialTransferFeeArg() {}
+
+type ConfidentialTransferFeeArg_DisableHarvestToMint uint8
+
+func (obj ConfidentialTransferFeeArg_DisableHarvestToMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *ConfidentialTransferFeeArg_DisableHarvestToMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *ConfidentialTransferFeeArg_DisableHarvestToMint) isConfidentialTransferFeeArg() {}
+
+// The "isConfidentialTransferArg" interface for the "ConfidentialTransferArg" complex enum.
+type ConfidentialTransferArg interface {
+	isConfidentialTransferArg()
+}
+
+func DecodeConfidentialTransferArg(decoder *binary.Decoder) (ConfidentialTransferArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing ConfidentialTransferArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj ConfidentialTransferArg_InitializeMint
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_InitializeMint: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj ConfidentialTransferArg_UpdateMint
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_UpdateMint: %w", err)
+		}
+		return &obj, nil
+	case 2:
+		var obj ConfidentialTransferArg_ConfigureAccount
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_ConfigureAccount: %w", err)
+		}
+		return &obj, nil
+	case 3:
+		var obj ConfidentialTransferArg_EmptyAccount
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_EmptyAccount: %w", err)
+		}
+		return &obj, nil
+	case 4:
+		var obj ConfidentialTransferArg_Deposit
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_Deposit: %w", err)
+		}
+		return &obj, nil
+	case 5:
+		var obj ConfidentialTransferArg_Withdraw
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_Withdraw: %w", err)
+		}
+		return &obj, nil
+	case 6:
+		var obj ConfidentialTransferArg_Transfer
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_Transfer: %w", err)
+		}
+		return &obj, nil
+	case 7:
+		var obj ConfidentialTransferArg_ApplyPendingBalance
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_ApplyPendingBalance: %w", err)
+		}
+		return &obj, nil
+	case 8:
+		var obj ConfidentialTransferArg_TransferWithFee
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialTransferArg_TransferWithFee: %w", err)
+		}
+		return &obj, nil
+	case 9:
+		var obj ConfidentialTransferArg_ConfigureAccountWithRegistry
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("ConfidentialTransferArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeConfidentialTransferArg(encoder *binary.Encoder, value ConfidentialTransferArg) (err error) {
+	switch value.(type) {
+	case *ConfidentialTransferArg_InitializeMint:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_UpdateMint:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_ConfigureAccount:
+		if err = encoder.WriteUint8(2); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_EmptyAccount:
+		if err = encoder.WriteUint8(3); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_Deposit:
+		if err = encoder.WriteUint8(4); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_Withdraw:
+		if err = encoder.WriteUint8(5); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_Transfer:
+		if err = encoder.WriteUint8(6); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_ApplyPendingBalance:
+		if err = encoder.WriteUint8(7); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_TransferWithFee:
+		if err = encoder.WriteUint8(8); err != nil {
+			return err
+		}
+	case *ConfidentialTransferArg_ConfigureAccountWithRegistry:
+		if err = encoder.WriteUint8(9); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize_mint" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_InitializeMint struct {
+	Authority              solanago.PublicKey `json:"authority"`
+	AutoApproveNewAccounts bool               `json:"autoApproveNewAccounts"`
+	AuditorElgamalPubkey   solanago.PublicKey `json:"auditorElgamalPubkey"`
+}
+
+func (obj ConfidentialTransferArg_InitializeMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Authority`:
+	if err = encoder.Encode(obj.Authority); err != nil {
+		return fmt.Errorf("error while marshaling Authority:%w", err)
+	}
+	// Serialize `AutoApproveNewAccounts`:
+	if err = encoder.Encode(obj.AutoApproveNewAccounts); err != nil {
+		return fmt.Errorf("error while marshaling AutoApproveNewAccounts:%w", err)
+	}
+	// Serialize `AuditorElgamalPubkey`:
+	if err = encoder.Encode(obj.AuditorElgamalPubkey); err != nil {
+		return fmt.Errorf("error while marshaling AuditorElgamalPubkey:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_InitializeMint) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_InitializeMint: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_InitializeMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Authority`:
+	if err = decoder.Decode(&obj.Authority); err != nil {
+		return fmt.Errorf("error while unmarshaling Authority:%w", err)
+	}
+	// Deserialize `AutoApproveNewAccounts`:
+	if err = decoder.Decode(&obj.AutoApproveNewAccounts); err != nil {
+		return fmt.Errorf("error while unmarshaling AutoApproveNewAccounts:%w", err)
+	}
+	// Deserialize `AuditorElgamalPubkey`:
+	if err = decoder.Decode(&obj.AuditorElgamalPubkey); err != nil {
+		return fmt.Errorf("error while unmarshaling AuditorElgamalPubkey:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_InitializeMint) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_InitializeMint: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_InitializeMint(buf []byte) (*ConfidentialTransferArg_InitializeMint, error) {
+	obj := new(ConfidentialTransferArg_InitializeMint)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_InitializeMint) isConfidentialTransferArg() {}
+
+// Variant "update_mint" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_UpdateMint struct {
+	AutoApproveNewAccounts bool               `json:"autoApproveNewAccounts"`
+	AuditorElgamalPubkey   solanago.PublicKey `json:"auditorElgamalPubkey"`
+}
+
+func (obj ConfidentialTransferArg_UpdateMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `AutoApproveNewAccounts`:
+	if err = encoder.Encode(obj.AutoApproveNewAccounts); err != nil {
+		return fmt.Errorf("error while marshaling AutoApproveNewAccounts:%w", err)
+	}
+	// Serialize `AuditorElgamalPubkey`:
+	if err = encoder.Encode(obj.AuditorElgamalPubkey); err != nil {
+		return fmt.Errorf("error while marshaling AuditorElgamalPubkey:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_UpdateMint) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_UpdateMint: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_UpdateMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `AutoApproveNewAccounts`:
+	if err = decoder.Decode(&obj.AutoApproveNewAccounts); err != nil {
+		return fmt.Errorf("error while unmarshaling AutoApproveNewAccounts:%w", err)
+	}
+	// Deserialize `AuditorElgamalPubkey`:
+	if err = decoder.Decode(&obj.AuditorElgamalPubkey); err != nil {
+		return fmt.Errorf("error while unmarshaling AuditorElgamalPubkey:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_UpdateMint) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_UpdateMint: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_UpdateMint(buf []byte) (*ConfidentialTransferArg_UpdateMint, error) {
+	obj := new(ConfidentialTransferArg_UpdateMint)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_UpdateMint) isConfidentialTransferArg() {}
+
+// Variant "configure_account" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_ConfigureAccount struct {
+	DecryptableZeroBalance             [36]uint8 `json:"decryptableZeroBalance"`
+	MaximumPendingBalanceCreditCounter uint64    `json:"maximumPendingBalanceCreditCounter"`
+	ProofInstructionOffset             int8      `json:"proofInstructionOffset"`
+}
+
+func (obj ConfidentialTransferArg_ConfigureAccount) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `DecryptableZeroBalance`:
+	if err = encoder.Encode(obj.DecryptableZeroBalance); err != nil {
+		return fmt.Errorf("error while marshaling DecryptableZeroBalance:%w", err)
+	}
+	// Serialize `MaximumPendingBalanceCreditCounter`:
+	if err = encoder.Encode(obj.MaximumPendingBalanceCreditCounter); err != nil {
+		return fmt.Errorf("error while marshaling MaximumPendingBalanceCreditCounter:%w", err)
+	}
+	// Serialize `ProofInstructionOffset`:
+	if err = encoder.Encode(obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling ProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_ConfigureAccount) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_ConfigureAccount: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_ConfigureAccount) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `DecryptableZeroBalance`:
+	if err = decoder.Decode(&obj.DecryptableZeroBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling DecryptableZeroBalance:%w", err)
+	}
+	// Deserialize `MaximumPendingBalanceCreditCounter`:
+	if err = decoder.Decode(&obj.MaximumPendingBalanceCreditCounter); err != nil {
+		return fmt.Errorf("error while unmarshaling MaximumPendingBalanceCreditCounter:%w", err)
+	}
+	// Deserialize `ProofInstructionOffset`:
+	if err = decoder.Decode(&obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling ProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_ConfigureAccount) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_ConfigureAccount: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_ConfigureAccount(buf []byte) (*ConfidentialTransferArg_ConfigureAccount, error) {
+	obj := new(ConfidentialTransferArg_ConfigureAccount)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_ConfigureAccount) isConfidentialTransferArg() {}
+
+// Variant "empty_account" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_EmptyAccount struct {
+	ProofInstructionOffset int8 `json:"proofInstructionOffset"`
+}
+
+func (obj ConfidentialTransferArg_EmptyAccount) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `ProofInstructionOffset`:
+	if err = encoder.Encode(obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling ProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_EmptyAccount) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_EmptyAccount: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_EmptyAccount) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `ProofInstructionOffset`:
+	if err = decoder.Decode(&obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling ProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_EmptyAccount) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_EmptyAccount: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_EmptyAccount(buf []byte) (*ConfidentialTransferArg_EmptyAccount, error) {
+	obj := new(ConfidentialTransferArg_EmptyAccount)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_EmptyAccount) isConfidentialTransferArg() {}
+
+// Variant "deposit" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_Deposit struct {
+	Amount   uint64 `json:"amount"`
+	Decimals uint8  `json:"decimals"`
+}
+
+func (obj ConfidentialTransferArg_Deposit) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Amount`:
+	if err = encoder.Encode(obj.Amount); err != nil {
+		return fmt.Errorf("error while marshaling Amount:%w", err)
+	}
+	// Serialize `Decimals`:
+	if err = encoder.Encode(obj.Decimals); err != nil {
+		return fmt.Errorf("error while marshaling Decimals:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_Deposit) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_Deposit: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_Deposit) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Amount`:
+	if err = decoder.Decode(&obj.Amount); err != nil {
+		return fmt.Errorf("error while unmarshaling Amount:%w", err)
+	}
+	// Deserialize `Decimals`:
+	if err = decoder.Decode(&obj.Decimals); err != nil {
+		return fmt.Errorf("error while unmarshaling Decimals:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_Deposit) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_Deposit: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_Deposit(buf []byte) (*ConfidentialTransferArg_Deposit, error) {
+	obj := new(ConfidentialTransferArg_Deposit)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_Deposit) isConfidentialTransferArg() {}
+
+// Variant "withdraw" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_Withdraw struct {
+	Amount                         uint64    `json:"amount"`
+	Decimals                       uint8     `json:"decimals"`
+	NewDecryptableAvailableBalance [36]uint8 `json:"newDecryptableAvailableBalance"`
+	EqualityProofInstructionOffset int8      `json:"equalityProofInstructionOffset"`
+	RangeProofInstructionOffset    int8      `json:"rangeProofInstructionOffset"`
+}
+
+func (obj ConfidentialTransferArg_Withdraw) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `Amount`:
+	if err = encoder.Encode(obj.Amount); err != nil {
+		return fmt.Errorf("error while marshaling Amount:%w", err)
+	}
+	// Serialize `Decimals`:
+	if err = encoder.Encode(obj.Decimals); err != nil {
+		return fmt.Errorf("error while marshaling Decimals:%w", err)
+	}
+	// Serialize `NewDecryptableAvailableBalance`:
+	if err = encoder.Encode(obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while marshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	// Serialize `EqualityProofInstructionOffset`:
+	if err = encoder.Encode(obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Serialize `RangeProofInstructionOffset`:
+	if err = encoder.Encode(obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_Withdraw) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_Withdraw: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_Withdraw) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `Amount`:
+	if err = decoder.Decode(&obj.Amount); err != nil {
+		return fmt.Errorf("error while unmarshaling Amount:%w", err)
+	}
+	// Deserialize `Decimals`:
+	if err = decoder.Decode(&obj.Decimals); err != nil {
+		return fmt.Errorf("error while unmarshaling Decimals:%w", err)
+	}
+	// Deserialize `NewDecryptableAvailableBalance`:
+	if err = decoder.Decode(&obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	// Deserialize `EqualityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `RangeProofInstructionOffset`:
+	if err = decoder.Decode(&obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_Withdraw) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_Withdraw: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_Withdraw(buf []byte) (*ConfidentialTransferArg_Withdraw, error) {
+	obj := new(ConfidentialTransferArg_Withdraw)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_Withdraw) isConfidentialTransferArg() {}
+
+// Variant "transfer" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_Transfer struct {
+	NewSourceDecryptableAvailableBalance     [36]uint8 `json:"newSourceDecryptableAvailableBalance"`
+	TransferAmountAuditorCiphertextLo        [64]uint8 `json:"transferAmountAuditorCiphertextLo"`
+	TransferAmountAuditorCiphertextHi        [64]uint8 `json:"transferAmountAuditorCiphertextHi"`
+	EqualityProofInstructionOffset           int8      `json:"equalityProofInstructionOffset"`
+	CiphertextValidityProofInstructionOffset int8      `json:"ciphertextValidityProofInstructionOffset"`
+	RangeProofInstructionOffset              int8      `json:"rangeProofInstructionOffset"`
+}
+
+func (obj ConfidentialTransferArg_Transfer) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NewSourceDecryptableAvailableBalance`:
+	if err = encoder.Encode(obj.NewSourceDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while marshaling NewSourceDecryptableAvailableBalance:%w", err)
+	}
+	// Serialize `TransferAmountAuditorCiphertextLo`:
+	if err = encoder.Encode(obj.TransferAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while marshaling TransferAmountAuditorCiphertextLo:%w", err)
+	}
+	// Serialize `TransferAmountAuditorCiphertextHi`:
+	if err = encoder.Encode(obj.TransferAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while marshaling TransferAmountAuditorCiphertextHi:%w", err)
+	}
+	// Serialize `EqualityProofInstructionOffset`:
+	if err = encoder.Encode(obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Serialize `CiphertextValidityProofInstructionOffset`:
+	if err = encoder.Encode(obj.CiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling CiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Serialize `RangeProofInstructionOffset`:
+	if err = encoder.Encode(obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_Transfer) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_Transfer: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_Transfer) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NewSourceDecryptableAvailableBalance`:
+	if err = decoder.Decode(&obj.NewSourceDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling NewSourceDecryptableAvailableBalance:%w", err)
+	}
+	// Deserialize `TransferAmountAuditorCiphertextLo`:
+	if err = decoder.Decode(&obj.TransferAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while unmarshaling TransferAmountAuditorCiphertextLo:%w", err)
+	}
+	// Deserialize `TransferAmountAuditorCiphertextHi`:
+	if err = decoder.Decode(&obj.TransferAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while unmarshaling TransferAmountAuditorCiphertextHi:%w", err)
+	}
+	// Deserialize `EqualityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `CiphertextValidityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.CiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling CiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `RangeProofInstructionOffset`:
+	if err = decoder.Decode(&obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_Transfer) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_Transfer: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_Transfer(buf []byte) (*ConfidentialTransferArg_Transfer, error) {
+	obj := new(ConfidentialTransferArg_Transfer)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_Transfer) isConfidentialTransferArg() {}
+
+// Variant "apply_pending_balance" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_ApplyPendingBalance struct {
+	ExpectedPendingBalanceCreditCounter uint64    `json:"expectedPendingBalanceCreditCounter"`
+	NewDecryptableAvailableBalance      [36]uint8 `json:"newDecryptableAvailableBalance"`
+}
+
+func (obj ConfidentialTransferArg_ApplyPendingBalance) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `ExpectedPendingBalanceCreditCounter`:
+	if err = encoder.Encode(obj.ExpectedPendingBalanceCreditCounter); err != nil {
+		return fmt.Errorf("error while marshaling ExpectedPendingBalanceCreditCounter:%w", err)
+	}
+	// Serialize `NewDecryptableAvailableBalance`:
+	if err = encoder.Encode(obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while marshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_ApplyPendingBalance) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_ApplyPendingBalance: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_ApplyPendingBalance) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `ExpectedPendingBalanceCreditCounter`:
+	if err = decoder.Decode(&obj.ExpectedPendingBalanceCreditCounter); err != nil {
+		return fmt.Errorf("error while unmarshaling ExpectedPendingBalanceCreditCounter:%w", err)
+	}
+	// Deserialize `NewDecryptableAvailableBalance`:
+	if err = decoder.Decode(&obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_ApplyPendingBalance) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_ApplyPendingBalance: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_ApplyPendingBalance(buf []byte) (*ConfidentialTransferArg_ApplyPendingBalance, error) {
+	obj := new(ConfidentialTransferArg_ApplyPendingBalance)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_ApplyPendingBalance) isConfidentialTransferArg() {}
+
+// Variant "transfer_with_fee" of enum "ConfidentialTransferArg"
+type ConfidentialTransferArg_TransferWithFee struct {
+	NewSourceDecryptableAvailableBalance                   [36]uint8 `json:"newSourceDecryptableAvailableBalance"`
+	TransferAmountAuditorCiphertextLo                      [64]uint8 `json:"transferAmountAuditorCiphertextLo"`
+	TransferAmountAuditorCiphertextHi                      [64]uint8 `json:"transferAmountAuditorCiphertextHi"`
+	EqualityProofInstructionOffset                         int8      `json:"equalityProofInstructionOffset"`
+	TransferAmountCiphertextValidityProofInstructionOffset int8      `json:"transferAmountCiphertextValidityProofInstructionOffset"`
+	FeeSigmaProofInstructionOffset                         int8      `json:"feeSigmaProofInstructionOffset"`
+	FeeCiphertextValidityProofInstructionOffset            int8      `json:"feeCiphertextValidityProofInstructionOffset"`
+	RangeProofInstructionOffset                            int8      `json:"rangeProofInstructionOffset"`
+}
+
+func (obj ConfidentialTransferArg_TransferWithFee) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NewSourceDecryptableAvailableBalance`:
+	if err = encoder.Encode(obj.NewSourceDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while marshaling NewSourceDecryptableAvailableBalance:%w", err)
+	}
+	// Serialize `TransferAmountAuditorCiphertextLo`:
+	if err = encoder.Encode(obj.TransferAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while marshaling TransferAmountAuditorCiphertextLo:%w", err)
+	}
+	// Serialize `TransferAmountAuditorCiphertextHi`:
+	if err = encoder.Encode(obj.TransferAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while marshaling TransferAmountAuditorCiphertextHi:%w", err)
+	}
+	// Serialize `EqualityProofInstructionOffset`:
+	if err = encoder.Encode(obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Serialize `TransferAmountCiphertextValidityProofInstructionOffset`:
+	if err = encoder.Encode(obj.TransferAmountCiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling TransferAmountCiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Serialize `FeeSigmaProofInstructionOffset`:
+	if err = encoder.Encode(obj.FeeSigmaProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling FeeSigmaProofInstructionOffset:%w", err)
+	}
+	// Serialize `FeeCiphertextValidityProofInstructionOffset`:
+	if err = encoder.Encode(obj.FeeCiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling FeeCiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Serialize `RangeProofInstructionOffset`:
+	if err = encoder.Encode(obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialTransferArg_TransferWithFee) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialTransferArg_TransferWithFee: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialTransferArg_TransferWithFee) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NewSourceDecryptableAvailableBalance`:
+	if err = decoder.Decode(&obj.NewSourceDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling NewSourceDecryptableAvailableBalance:%w", err)
+	}
+	// Deserialize `TransferAmountAuditorCiphertextLo`:
+	if err = decoder.Decode(&obj.TransferAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while unmarshaling TransferAmountAuditorCiphertextLo:%w", err)
+	}
+	// Deserialize `TransferAmountAuditorCiphertextHi`:
+	if err = decoder.Decode(&obj.TransferAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while unmarshaling TransferAmountAuditorCiphertextHi:%w", err)
+	}
+	// Deserialize `EqualityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `TransferAmountCiphertextValidityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.TransferAmountCiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling TransferAmountCiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `FeeSigmaProofInstructionOffset`:
+	if err = decoder.Decode(&obj.FeeSigmaProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling FeeSigmaProofInstructionOffset:%w", err)
+	}
+	// Deserialize `FeeCiphertextValidityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.FeeCiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling FeeCiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `RangeProofInstructionOffset`:
+	if err = decoder.Decode(&obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_TransferWithFee) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialTransferArg_TransferWithFee: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialTransferArg_TransferWithFee(buf []byte) (*ConfidentialTransferArg_TransferWithFee, error) {
+	obj := new(ConfidentialTransferArg_TransferWithFee)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialTransferArg_TransferWithFee) isConfidentialTransferArg() {}
+
+type ConfidentialTransferArg_ConfigureAccountWithRegistry uint8
+
+func (obj ConfidentialTransferArg_ConfigureAccountWithRegistry) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *ConfidentialTransferArg_ConfigureAccountWithRegistry) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *ConfidentialTransferArg_ConfigureAccountWithRegistry) isConfidentialTransferArg() {}
+
+// The "isConfidentialMintBurnArg" interface for the "ConfidentialMintBurnArg" complex enum.
+type ConfidentialMintBurnArg interface {
+	isConfidentialMintBurnArg()
+}
+
+func DecodeConfidentialMintBurnArg(decoder *binary.Decoder) (ConfidentialMintBurnArg, error) {
+	enum, err := decoder.ReadInt8()
+	if err != nil {
+		return nil, fmt.Errorf("failed parsing ConfidentialMintBurnArg: %w", err)
+	}
+	switch enum {
+	case 0:
+		var obj ConfidentialMintBurnArg_InitializeMint
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialMintBurnArg_InitializeMint: %w", err)
+		}
+		return &obj, nil
+	case 1:
+		var obj ConfidentialMintBurnArg_RotateSupplyElgamalPubkey
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialMintBurnArg_RotateSupplyElgamalPubkey: %w", err)
+		}
+		return &obj, nil
+	case 2:
+		var obj ConfidentialMintBurnArg_UpdateDecryptableSupply
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialMintBurnArg_UpdateDecryptableSupply: %w", err)
+		}
+		return &obj, nil
+	case 3:
+		var obj ConfidentialMintBurnArg_Mint
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialMintBurnArg_Mint: %w", err)
+		}
+		return &obj, nil
+	case 4:
+		var obj ConfidentialMintBurnArg_Burn
+		if err = decoder.Decode(&obj); err != nil {
+			return nil, fmt.Errorf("failed parsing ConfidentialMintBurnArg_Burn: %w", err)
+		}
+		return &obj, nil
+	default:
+		return nil, fmt.Errorf("ConfidentialMintBurnArg: unknown enum index: %v", enum)
+	}
+}
+
+func EncodeConfidentialMintBurnArg(encoder *binary.Encoder, value ConfidentialMintBurnArg) (err error) {
+	switch value.(type) {
+	case *ConfidentialMintBurnArg_InitializeMint:
+		if err = encoder.WriteUint8(0); err != nil {
+			return err
+		}
+	case *ConfidentialMintBurnArg_RotateSupplyElgamalPubkey:
+		if err = encoder.WriteUint8(1); err != nil {
+			return err
+		}
+	case *ConfidentialMintBurnArg_UpdateDecryptableSupply:
+		if err = encoder.WriteUint8(2); err != nil {
+			return err
+		}
+	case *ConfidentialMintBurnArg_Mint:
+		if err = encoder.WriteUint8(3); err != nil {
+			return err
+		}
+	case *ConfidentialMintBurnArg_Burn:
+		if err = encoder.WriteUint8(4); err != nil {
+			return err
+		}
+	}
+	return encoder.Encode(value)
+}
+
+// Variant "initialize_mint" of enum "ConfidentialMintBurnArg"
+type ConfidentialMintBurnArg_InitializeMint struct {
+	SupplyElgamalPubkey solanago.PublicKey `json:"supplyElgamalPubkey"`
+	DecryptableSupply   [36]uint8          `json:"decryptableSupply"`
+}
+
+func (obj ConfidentialMintBurnArg_InitializeMint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `SupplyElgamalPubkey`:
+	if err = encoder.Encode(obj.SupplyElgamalPubkey); err != nil {
+		return fmt.Errorf("error while marshaling SupplyElgamalPubkey:%w", err)
+	}
+	// Serialize `DecryptableSupply`:
+	if err = encoder.Encode(obj.DecryptableSupply); err != nil {
+		return fmt.Errorf("error while marshaling DecryptableSupply:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialMintBurnArg_InitializeMint) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialMintBurnArg_InitializeMint: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialMintBurnArg_InitializeMint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `SupplyElgamalPubkey`:
+	if err = decoder.Decode(&obj.SupplyElgamalPubkey); err != nil {
+		return fmt.Errorf("error while unmarshaling SupplyElgamalPubkey:%w", err)
+	}
+	// Deserialize `DecryptableSupply`:
+	if err = decoder.Decode(&obj.DecryptableSupply); err != nil {
+		return fmt.Errorf("error while unmarshaling DecryptableSupply:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialMintBurnArg_InitializeMint) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialMintBurnArg_InitializeMint: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialMintBurnArg_InitializeMint(buf []byte) (*ConfidentialMintBurnArg_InitializeMint, error) {
+	obj := new(ConfidentialMintBurnArg_InitializeMint)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialMintBurnArg_InitializeMint) isConfidentialMintBurnArg() {}
+
+// Variant "rotate_supply_elgamal_pubkey" of enum "ConfidentialMintBurnArg"
+type ConfidentialMintBurnArg_RotateSupplyElgamalPubkey struct {
+	NewSupplyElgamalPubkey solanago.PublicKey `json:"newSupplyElgamalPubkey"`
+	ProofInstructionOffset int8               `json:"proofInstructionOffset"`
+}
+
+func (obj ConfidentialMintBurnArg_RotateSupplyElgamalPubkey) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NewSupplyElgamalPubkey`:
+	if err = encoder.Encode(obj.NewSupplyElgamalPubkey); err != nil {
+		return fmt.Errorf("error while marshaling NewSupplyElgamalPubkey:%w", err)
+	}
+	// Serialize `ProofInstructionOffset`:
+	if err = encoder.Encode(obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling ProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialMintBurnArg_RotateSupplyElgamalPubkey) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialMintBurnArg_RotateSupplyElgamalPubkey: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialMintBurnArg_RotateSupplyElgamalPubkey) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NewSupplyElgamalPubkey`:
+	if err = decoder.Decode(&obj.NewSupplyElgamalPubkey); err != nil {
+		return fmt.Errorf("error while unmarshaling NewSupplyElgamalPubkey:%w", err)
+	}
+	// Deserialize `ProofInstructionOffset`:
+	if err = decoder.Decode(&obj.ProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling ProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialMintBurnArg_RotateSupplyElgamalPubkey) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialMintBurnArg_RotateSupplyElgamalPubkey: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialMintBurnArg_RotateSupplyElgamalPubkey(buf []byte) (*ConfidentialMintBurnArg_RotateSupplyElgamalPubkey, error) {
+	obj := new(ConfidentialMintBurnArg_RotateSupplyElgamalPubkey)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialMintBurnArg_RotateSupplyElgamalPubkey) isConfidentialMintBurnArg() {}
+
+// Variant "update_decryptable_supply" of enum "ConfidentialMintBurnArg"
+type ConfidentialMintBurnArg_UpdateDecryptableSupply struct {
+	NewDecryptableSupply [36]uint8 `json:"newDecryptableSupply"`
+}
+
+func (obj ConfidentialMintBurnArg_UpdateDecryptableSupply) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NewDecryptableSupply`:
+	if err = encoder.Encode(obj.NewDecryptableSupply); err != nil {
+		return fmt.Errorf("error while marshaling NewDecryptableSupply:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialMintBurnArg_UpdateDecryptableSupply) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialMintBurnArg_UpdateDecryptableSupply: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialMintBurnArg_UpdateDecryptableSupply) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NewDecryptableSupply`:
+	if err = decoder.Decode(&obj.NewDecryptableSupply); err != nil {
+		return fmt.Errorf("error while unmarshaling NewDecryptableSupply:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialMintBurnArg_UpdateDecryptableSupply) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialMintBurnArg_UpdateDecryptableSupply: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialMintBurnArg_UpdateDecryptableSupply(buf []byte) (*ConfidentialMintBurnArg_UpdateDecryptableSupply, error) {
+	obj := new(ConfidentialMintBurnArg_UpdateDecryptableSupply)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialMintBurnArg_UpdateDecryptableSupply) isConfidentialMintBurnArg() {}
+
+// Variant "mint" of enum "ConfidentialMintBurnArg"
+type ConfidentialMintBurnArg_Mint struct {
+	NewDecryptableSupply                     [36]uint8 `json:"newDecryptableSupply"`
+	MintAmountAuditorCiphertextLo            [64]uint8 `json:"mintAmountAuditorCiphertextLo"`
+	MintAmountAuditorCiphertextHi            [64]uint8 `json:"mintAmountAuditorCiphertextHi"`
+	EqualityProofInstructionOffset           int8      `json:"equalityProofInstructionOffset"`
+	CiphertextValidityProofInstructionOffset int8      `json:"ciphertextValidityProofInstructionOffset"`
+	RangeProofInstructionOffset              int8      `json:"rangeProofInstructionOffset"`
+}
+
+func (obj ConfidentialMintBurnArg_Mint) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NewDecryptableSupply`:
+	if err = encoder.Encode(obj.NewDecryptableSupply); err != nil {
+		return fmt.Errorf("error while marshaling NewDecryptableSupply:%w", err)
+	}
+	// Serialize `MintAmountAuditorCiphertextLo`:
+	if err = encoder.Encode(obj.MintAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while marshaling MintAmountAuditorCiphertextLo:%w", err)
+	}
+	// Serialize `MintAmountAuditorCiphertextHi`:
+	if err = encoder.Encode(obj.MintAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while marshaling MintAmountAuditorCiphertextHi:%w", err)
+	}
+	// Serialize `EqualityProofInstructionOffset`:
+	if err = encoder.Encode(obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Serialize `CiphertextValidityProofInstructionOffset`:
+	if err = encoder.Encode(obj.CiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling CiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Serialize `RangeProofInstructionOffset`:
+	if err = encoder.Encode(obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialMintBurnArg_Mint) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialMintBurnArg_Mint: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialMintBurnArg_Mint) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NewDecryptableSupply`:
+	if err = decoder.Decode(&obj.NewDecryptableSupply); err != nil {
+		return fmt.Errorf("error while unmarshaling NewDecryptableSupply:%w", err)
+	}
+	// Deserialize `MintAmountAuditorCiphertextLo`:
+	if err = decoder.Decode(&obj.MintAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while unmarshaling MintAmountAuditorCiphertextLo:%w", err)
+	}
+	// Deserialize `MintAmountAuditorCiphertextHi`:
+	if err = decoder.Decode(&obj.MintAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while unmarshaling MintAmountAuditorCiphertextHi:%w", err)
+	}
+	// Deserialize `EqualityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `CiphertextValidityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.CiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling CiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `RangeProofInstructionOffset`:
+	if err = decoder.Decode(&obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialMintBurnArg_Mint) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialMintBurnArg_Mint: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialMintBurnArg_Mint(buf []byte) (*ConfidentialMintBurnArg_Mint, error) {
+	obj := new(ConfidentialMintBurnArg_Mint)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialMintBurnArg_Mint) isConfidentialMintBurnArg() {}
+
+// Variant "burn" of enum "ConfidentialMintBurnArg"
+type ConfidentialMintBurnArg_Burn struct {
+	NewDecryptableAvailableBalance           [36]uint8 `json:"newDecryptableAvailableBalance"`
+	BurnAmountAuditorCiphertextLo            [64]uint8 `json:"burnAmountAuditorCiphertextLo"`
+	BurnAmountAuditorCiphertextHi            [64]uint8 `json:"burnAmountAuditorCiphertextHi"`
+	EqualityProofInstructionOffset           int8      `json:"equalityProofInstructionOffset"`
+	CiphertextValidityProofInstructionOffset int8      `json:"ciphertextValidityProofInstructionOffset"`
+	RangeProofInstructionOffset              int8      `json:"rangeProofInstructionOffset"`
+}
+
+func (obj ConfidentialMintBurnArg_Burn) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+	// Serialize `NewDecryptableAvailableBalance`:
+	if err = encoder.Encode(obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while marshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	// Serialize `BurnAmountAuditorCiphertextLo`:
+	if err = encoder.Encode(obj.BurnAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while marshaling BurnAmountAuditorCiphertextLo:%w", err)
+	}
+	// Serialize `BurnAmountAuditorCiphertextHi`:
+	if err = encoder.Encode(obj.BurnAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while marshaling BurnAmountAuditorCiphertextHi:%w", err)
+	}
+	// Serialize `EqualityProofInstructionOffset`:
+	if err = encoder.Encode(obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Serialize `CiphertextValidityProofInstructionOffset`:
+	if err = encoder.Encode(obj.CiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling CiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Serialize `RangeProofInstructionOffset`:
+	if err = encoder.Encode(obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while marshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj ConfidentialMintBurnArg_Burn) Marshal() ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	encoder := binary.NewBorshEncoder(buf)
+	err := obj.MarshalWithEncoder(encoder)
+	if err != nil {
+		return nil, fmt.Errorf("error while encoding ConfidentialMintBurnArg_Burn: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
+func (obj *ConfidentialMintBurnArg_Burn) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+	// Deserialize `NewDecryptableAvailableBalance`:
+	if err = decoder.Decode(&obj.NewDecryptableAvailableBalance); err != nil {
+		return fmt.Errorf("error while unmarshaling NewDecryptableAvailableBalance:%w", err)
+	}
+	// Deserialize `BurnAmountAuditorCiphertextLo`:
+	if err = decoder.Decode(&obj.BurnAmountAuditorCiphertextLo); err != nil {
+		return fmt.Errorf("error while unmarshaling BurnAmountAuditorCiphertextLo:%w", err)
+	}
+	// Deserialize `BurnAmountAuditorCiphertextHi`:
+	if err = decoder.Decode(&obj.BurnAmountAuditorCiphertextHi); err != nil {
+		return fmt.Errorf("error while unmarshaling BurnAmountAuditorCiphertextHi:%w", err)
+	}
+	// Deserialize `EqualityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.EqualityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling EqualityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `CiphertextValidityProofInstructionOffset`:
+	if err = decoder.Decode(&obj.CiphertextValidityProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling CiphertextValidityProofInstructionOffset:%w", err)
+	}
+	// Deserialize `RangeProofInstructionOffset`:
+	if err = decoder.Decode(&obj.RangeProofInstructionOffset); err != nil {
+		return fmt.Errorf("error while unmarshaling RangeProofInstructionOffset:%w", err)
+	}
+	return nil
+}
+
+func (obj *ConfidentialMintBurnArg_Burn) Unmarshal(buf []byte) error {
+	err := obj.UnmarshalWithDecoder(binary.NewBorshDecoder(buf))
+	if err != nil {
+		return fmt.Errorf("error while unmarshaling ConfidentialMintBurnArg_Burn: %w", err)
+	}
+	return nil
+}
+
+func UnmarshalConfidentialMintBurnArg_Burn(buf []byte) (*ConfidentialMintBurnArg_Burn, error) {
+	obj := new(ConfidentialMintBurnArg_Burn)
+	err := obj.Unmarshal(buf)
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
+}
+
+func (_ *ConfidentialMintBurnArg_Burn) isConfidentialMintBurnArg() {}

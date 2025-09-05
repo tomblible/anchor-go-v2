@@ -41,6 +41,15 @@ func (obj *Revoke) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *Revoke) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *Revoke) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *Revoke) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -51,13 +60,6 @@ func (*Revoke) TypeID() binary.TypeID {
 
 func (*Revoke) NewInstance() programparser.Instruction {
 	return new(Revoke)
-}
-
-func (obj *Revoke) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 2 {
-		return nil
-	}
-	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "revoke" instruction.

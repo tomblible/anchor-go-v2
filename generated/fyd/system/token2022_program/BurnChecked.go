@@ -28,7 +28,7 @@ type BurnChecked struct {
 	Source solanago.PublicKey `bin:"-"`
 	// [1] = [writable] mint
 	Mint solanago.PublicKey `bin:"-"`
-	// [2] = [] owner
+	// [2] = [,signer] owner
 	Owner solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
@@ -68,6 +68,15 @@ func (obj *BurnChecked) SetAccounts(accounts solanago.PublicKeySlice) (err error
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *BurnChecked) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *BurnChecked) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Owner}
+}
+
 func (obj *BurnChecked) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -78,13 +87,6 @@ func (*BurnChecked) TypeID() binary.TypeID {
 
 func (*BurnChecked) NewInstance() programparser.Instruction {
 	return new(BurnChecked)
-}
-
-func (obj *BurnChecked) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "burn_checked" instruction.
@@ -131,9 +133,9 @@ func NewBurnCheckedInstruction(
 		// [1] = [writable] mint
 		// The token mint.
 		metas_[1] = solanago.NewAccountMeta(mint, true, false)
-		// [2] = [] owner
+		// [2] = [,signer] owner
 		// The account's owner/delegate.
-		metas_[2] = solanago.NewAccountMeta(owner, false, false)
+		metas_[2] = solanago.NewAccountMeta(owner, false, true)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}

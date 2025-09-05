@@ -64,6 +64,15 @@ func (obj *InitializeMultisig) SetAccounts(accounts solanago.PublicKeySlice) (er
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *InitializeMultisig) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *InitializeMultisig) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Signers}
+}
+
 func (obj *InitializeMultisig) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -74,13 +83,6 @@ func (*InitializeMultisig) TypeID() binary.TypeID {
 
 func (*InitializeMultisig) NewInstance() programparser.Instruction {
 	return new(InitializeMultisig)
-}
-
-func (obj *InitializeMultisig) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "initialize_multisig" instruction.

@@ -20,7 +20,7 @@ type SetAuthority struct {
 	// Accounts:
 	// [0] = [writable] subject
 	Subject solanago.PublicKey `bin:"-"`
-	// [1] = [] authority
+	// [1] = [,signer] authority
 	Authority solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
@@ -78,6 +78,15 @@ func (obj *SetAuthority) SetAccounts(accounts solanago.PublicKeySlice) (err erro
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *SetAuthority) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *SetAuthority) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Authority}
+}
+
 func (obj *SetAuthority) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -88,13 +97,6 @@ func (*SetAuthority) TypeID() binary.TypeID {
 
 func (*SetAuthority) NewInstance() programparser.Instruction {
 	return new(SetAuthority)
-}
-
-func (obj *SetAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 2 {
-		return nil
-	}
-	return obj.PublicKeySlice[2:]
 }
 
 // Builds a "set_authority" instruction.
@@ -148,9 +150,9 @@ func NewSetAuthorityInstruction(
 		// [0] = [writable] subject
 		// The mint or account to change the authority of.
 		metas_[0] = solanago.NewAccountMeta(subject, true, false)
-		// [1] = [] authority
+		// [1] = [,signer] authority
 		// The current authority of the mint or account.
-		metas_[1] = solanago.NewAccountMeta(authority, false, false)
+		metas_[1] = solanago.NewAccountMeta(authority, false, true)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}

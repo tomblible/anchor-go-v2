@@ -44,6 +44,15 @@ func (obj *WithdrawExcessLamports) SetAccounts(accounts solanago.PublicKeySlice)
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *WithdrawExcessLamports) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *WithdrawExcessLamports) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Authority}
+}
+
 func (obj *WithdrawExcessLamports) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -54,13 +63,6 @@ func (*WithdrawExcessLamports) TypeID() binary.TypeID {
 
 func (*WithdrawExcessLamports) NewInstance() programparser.Instruction {
 	return new(WithdrawExcessLamports)
-}
-
-func (obj *WithdrawExcessLamports) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "withdraw_excess_lamports" instruction.

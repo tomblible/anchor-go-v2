@@ -44,6 +44,15 @@ func (obj *CreateNativeMint) SetAccounts(accounts solanago.PublicKeySlice) (err 
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *CreateNativeMint) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *CreateNativeMint) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.FundingAccount}
+}
+
 func (obj *CreateNativeMint) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -54,13 +63,6 @@ func (*CreateNativeMint) TypeID() binary.TypeID {
 
 func (*CreateNativeMint) NewInstance() programparser.Instruction {
 	return new(CreateNativeMint)
-}
-
-func (obj *CreateNativeMint) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "create_native_mint" instruction.

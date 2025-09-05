@@ -57,6 +57,15 @@ func (obj *InitializeAccount) SetAccounts(accounts solanago.PublicKeySlice) (err
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *InitializeAccount) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *InitializeAccount) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *InitializeAccount) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -67,13 +76,6 @@ func (*InitializeAccount) TypeID() binary.TypeID {
 
 func (*InitializeAccount) NewInstance() programparser.Instruction {
 	return new(InitializeAccount)
-}
-
-func (obj *InitializeAccount) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 4 {
-		return nil
-	}
-	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "initialize_account" instruction.

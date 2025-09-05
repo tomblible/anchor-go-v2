@@ -31,7 +31,7 @@ type TransferChecked struct {
 	Mint solanago.PublicKey `bin:"-"`
 	// [2] = [writable] destination
 	Destination solanago.PublicKey `bin:"-"`
-	// [3] = [] owner
+	// [3] = [,signer] owner
 	Owner solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
@@ -72,6 +72,15 @@ func (obj *TransferChecked) SetAccounts(accounts solanago.PublicKeySlice) (err e
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *TransferChecked) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *TransferChecked) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Owner}
+}
+
 func (obj *TransferChecked) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -82,13 +91,6 @@ func (*TransferChecked) TypeID() binary.TypeID {
 
 func (*TransferChecked) NewInstance() programparser.Instruction {
 	return new(TransferChecked)
-}
-
-func (obj *TransferChecked) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 4 {
-		return nil
-	}
-	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "transfer_checked" instruction.
@@ -139,9 +141,9 @@ func NewTransferCheckedInstruction(
 		// [2] = [writable] destination
 		// The destination account.
 		metas_[2] = solanago.NewAccountMeta(destination, true, false)
-		// [3] = [] owner
+		// [3] = [,signer] owner
 		// The source account's owner/delegate.
-		metas_[3] = solanago.NewAccountMeta(owner, false, false)
+		metas_[3] = solanago.NewAccountMeta(owner, false, true)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}

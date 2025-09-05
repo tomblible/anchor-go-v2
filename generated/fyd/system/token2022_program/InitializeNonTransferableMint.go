@@ -38,6 +38,15 @@ func (obj *InitializeNonTransferableMint) SetAccounts(accounts solanago.PublicKe
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *InitializeNonTransferableMint) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *InitializeNonTransferableMint) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *InitializeNonTransferableMint) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -48,13 +57,6 @@ func (*InitializeNonTransferableMint) TypeID() binary.TypeID {
 
 func (*InitializeNonTransferableMint) NewInstance() programparser.Instruction {
 	return new(InitializeNonTransferableMint)
-}
-
-func (obj *InitializeNonTransferableMint) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 1 {
-		return nil
-	}
-	return obj.PublicKeySlice[1:]
 }
 
 // Builds a "initialize_non_transferable_mint" instruction.

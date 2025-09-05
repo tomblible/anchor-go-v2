@@ -44,6 +44,15 @@ func (obj *ThawAccount) SetAccounts(accounts solanago.PublicKeySlice) (err error
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *ThawAccount) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *ThawAccount) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *ThawAccount) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -54,13 +63,6 @@ func (*ThawAccount) TypeID() binary.TypeID {
 
 func (*ThawAccount) NewInstance() programparser.Instruction {
 	return new(ThawAccount)
-}
-
-func (obj *ThawAccount) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "thaw_account" instruction.

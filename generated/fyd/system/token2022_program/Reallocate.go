@@ -73,6 +73,15 @@ func (obj *Reallocate) SetAccounts(accounts solanago.PublicKeySlice) (err error)
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *Reallocate) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *Reallocate) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Payer, obj.Owner}
+}
+
 func (obj *Reallocate) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -83,13 +92,6 @@ func (*Reallocate) TypeID() binary.TypeID {
 
 func (*Reallocate) NewInstance() programparser.Instruction {
 	return new(Reallocate)
-}
-
-func (obj *Reallocate) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 4 {
-		return nil
-	}
-	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "reallocate" instruction.

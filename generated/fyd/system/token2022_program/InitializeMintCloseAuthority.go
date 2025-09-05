@@ -47,6 +47,15 @@ func (obj *InitializeMintCloseAuthority) SetAccounts(accounts solanago.PublicKey
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *InitializeMintCloseAuthority) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *InitializeMintCloseAuthority) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *InitializeMintCloseAuthority) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -57,13 +66,6 @@ func (*InitializeMintCloseAuthority) TypeID() binary.TypeID {
 
 func (*InitializeMintCloseAuthority) NewInstance() programparser.Instruction {
 	return new(InitializeMintCloseAuthority)
-}
-
-func (obj *InitializeMintCloseAuthority) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 1 {
-		return nil
-	}
-	return obj.PublicKeySlice[1:]
 }
 
 // Builds a "initialize_mint_close_authority" instruction.

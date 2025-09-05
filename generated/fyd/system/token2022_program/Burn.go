@@ -54,6 +54,15 @@ func (obj *Burn) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *Burn) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *Burn) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *Burn) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -64,13 +73,6 @@ func (*Burn) TypeID() binary.TypeID {
 
 func (*Burn) NewInstance() programparser.Instruction {
 	return new(Burn)
-}
-
-func (obj *Burn) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "burn" instruction.

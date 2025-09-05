@@ -29,7 +29,7 @@ type ApproveChecked struct {
 	Mint solanago.PublicKey `bin:"-"`
 	// [2] = [] delegate
 	Delegate solanago.PublicKey `bin:"-"`
-	// [3] = [] owner
+	// [3] = [,signer] owner
 	Owner solanago.PublicKey `bin:"-"`
 	// PublicKeySlice
 	solanago.PublicKeySlice `bin:"-"`
@@ -70,6 +70,15 @@ func (obj *ApproveChecked) SetAccounts(accounts solanago.PublicKeySlice) (err er
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *ApproveChecked) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *ApproveChecked) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Owner}
+}
+
 func (obj *ApproveChecked) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -80,13 +89,6 @@ func (*ApproveChecked) TypeID() binary.TypeID {
 
 func (*ApproveChecked) NewInstance() programparser.Instruction {
 	return new(ApproveChecked)
-}
-
-func (obj *ApproveChecked) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 4 {
-		return nil
-	}
-	return obj.PublicKeySlice[4:]
 }
 
 // Builds a "approve_checked" instruction.
@@ -137,9 +139,9 @@ func NewApproveCheckedInstruction(
 		// [2] = [] delegate
 		// The delegate.
 		metas_[2] = solanago.NewAccountMeta(delegate, false, false)
-		// [3] = [] owner
+		// [3] = [,signer] owner
 		// The source account owner.
-		metas_[3] = solanago.NewAccountMeta(owner, false, false)
+		metas_[3] = solanago.NewAccountMeta(owner, false, true)
 		// append remaining metas
 		metas_ = append(metas_, remaining__...)
 	}

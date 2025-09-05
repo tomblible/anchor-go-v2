@@ -10,10 +10,10 @@ import (
 	programparser "github.com/yydsqu/solana-sdk/program_parser"
 )
 
-// Builds a "initialize_permanent_delegate" instruction.
+// Builds a "permanent_delegate" instruction.
 
 // Initialize the permanent delegate on a new mint.
-type InitializePermanentDelegate struct {
+type PermanentDelegate struct {
 	// Params:
 	Delegate solanago.PublicKey
 	// Accounts:
@@ -23,7 +23,7 @@ type InitializePermanentDelegate struct {
 	solanago.PublicKeySlice `bin:"-"`
 }
 
-func (obj InitializePermanentDelegate) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
+func (obj PermanentDelegate) MarshalWithEncoder(encoder *binary.Encoder) (err error) {
 	// Serialize `delegateParam`:
 	if err = encoder.Encode(obj.Delegate); err != nil {
 		return fmt.Errorf("error while marshaling delegateParam:%w", err)
@@ -31,7 +31,7 @@ func (obj InitializePermanentDelegate) MarshalWithEncoder(encoder *binary.Encode
 	return nil
 }
 
-func (obj *InitializePermanentDelegate) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
+func (obj *PermanentDelegate) UnmarshalWithDecoder(decoder *binary.Decoder) (err error) {
 	// Deserialize `Delegate`:
 	if err = decoder.Decode(&obj.Delegate); err != nil {
 		return fmt.Errorf("error while unmarshaling Delegate:%w", err)
@@ -39,7 +39,7 @@ func (obj *InitializePermanentDelegate) UnmarshalWithDecoder(decoder *binary.Dec
 	return nil
 }
 
-func (obj *InitializePermanentDelegate) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
+func (obj *PermanentDelegate) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	if len(accounts) < 1 {
 		return fmt.Errorf("too few accounts, expect %d actual %d", 1, len(accounts))
 	}
@@ -47,28 +47,30 @@ func (obj *InitializePermanentDelegate) SetAccounts(accounts solanago.PublicKeyS
 	obj.PublicKeySlice = accounts
 	return nil
 }
-func (obj *InitializePermanentDelegate) PublicKeys() solanago.PublicKeySlice {
+
+func (obj *PermanentDelegate) Accounts() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
 
-func (*InitializePermanentDelegate) TypeID() binary.TypeID {
-	return binary.TypeIDFromBytes(Instruction_InitializePermanentDelegate)
+func (obj *PermanentDelegate) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
 }
 
-func (*InitializePermanentDelegate) NewInstance() programparser.Instruction {
-	return new(InitializePermanentDelegate)
+func (obj *PermanentDelegate) PublicKeys() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
 }
 
-func (obj *InitializePermanentDelegate) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 1 {
-		return nil
-	}
-	return obj.PublicKeySlice[1:]
+func (*PermanentDelegate) TypeID() binary.TypeID {
+	return binary.TypeIDFromBytes(Instruction_PermanentDelegate)
 }
 
-// Builds a "initialize_permanent_delegate" instruction.
+func (*PermanentDelegate) NewInstance() programparser.Instruction {
+	return new(PermanentDelegate)
+}
+
+// Builds a "permanent_delegate" instruction.
 // Initialize the permanent delegate on a new mint.
-func NewInitializePermanentDelegateInstruction(
+func NewPermanentDelegateInstruction(
 	// Params:
 	delegateParam solanago.PublicKey,
 
@@ -84,7 +86,7 @@ func NewInitializePermanentDelegateInstruction(
 	)
 
 	// Encode the instruction discriminator.
-	if err = enc__.WriteBytes(Instruction_InitializePermanentDelegate[:], false); err != nil {
+	if err = enc__.WriteBytes(Instruction_PermanentDelegate[:], false); err != nil {
 		return nil, fmt.Errorf("failed to write instruction discriminator: %w", err)
 	}
 
@@ -111,9 +113,9 @@ func NewInitializePermanentDelegateInstruction(
 	), nil
 }
 
-// Builds a "BuildInitializePermanentDelegate" instruction.
+// Builds a "BuildPermanentDelegate" instruction.
 // Initialize the permanent delegate on a new mint.
-func BuildInitializePermanentDelegate(
+func BuildPermanentDelegate(
 	// Params:
 	delegateParam solanago.PublicKey,
 
@@ -121,7 +123,7 @@ func BuildInitializePermanentDelegate(
 	mint solanago.PublicKey,
 	remaining__ ...*solanago.AccountMeta,
 ) *solanago.GenericInstruction {
-	instruction_, _ := NewInitializePermanentDelegateInstruction(
+	instruction_, _ := NewPermanentDelegateInstruction(
 		delegateParam,
 		mint,
 		remaining__...,

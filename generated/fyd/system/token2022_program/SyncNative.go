@@ -42,6 +42,15 @@ func (obj *SyncNative) SetAccounts(accounts solanago.PublicKeySlice) (err error)
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *SyncNative) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *SyncNative) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{}
+}
+
 func (obj *SyncNative) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -52,13 +61,6 @@ func (*SyncNative) TypeID() binary.TypeID {
 
 func (*SyncNative) NewInstance() programparser.Instruction {
 	return new(SyncNative)
-}
-
-func (obj *SyncNative) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 1 {
-		return nil
-	}
-	return obj.PublicKeySlice[1:]
 }
 
 // Builds a "sync_native" instruction.

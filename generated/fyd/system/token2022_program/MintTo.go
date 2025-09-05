@@ -54,6 +54,15 @@ func (obj *MintTo) SetAccounts(accounts solanago.PublicKeySlice) (err error) {
 	obj.PublicKeySlice = accounts
 	return nil
 }
+
+func (obj *MintTo) Accounts() solanago.PublicKeySlice {
+	return obj.PublicKeySlice
+}
+
+func (obj *MintTo) SignerAccounts() solanago.PublicKeySlice {
+	return solanago.PublicKeySlice{obj.Authority}
+}
+
 func (obj *MintTo) PublicKeys() solanago.PublicKeySlice {
 	return obj.PublicKeySlice
 }
@@ -64,13 +73,6 @@ func (*MintTo) TypeID() binary.TypeID {
 
 func (*MintTo) NewInstance() programparser.Instruction {
 	return new(MintTo)
-}
-
-func (obj *MintTo) GetRemainingAccounts() solanago.PublicKeySlice {
-	if len(obj.PublicKeySlice) <= 3 {
-		return nil
-	}
-	return obj.PublicKeySlice[3:]
 }
 
 // Builds a "mint_to" instruction.
