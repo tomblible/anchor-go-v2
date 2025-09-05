@@ -1,19 +1,30 @@
 {
-  "version": "0.9.1",
-  "name": "spl_token_2022",
+  "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+  "metadata": {
+    "name": "spl_token_2022",
+    "version": "0.9.1",
+    "spec": "0.1.0"
+  },
   "instructions": [
     {
-      "name": "initializeMint",
+      "name": "initialize_mint",
+      "discriminator": [
+        209,
+        42,
+        195,
+        4,
+        129,
+        85,
+        209,
+        44
+      ],
       "accounts": [
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
+          "name": "rent"
         }
       ],
       "args": [
@@ -22,63 +33,65 @@
           "type": "u8"
         },
         {
-          "name": "mintAuthority",
-          "type": "publicKey"
+          "name": "mint_authority",
+          "type": "pubkey"
         },
         {
-          "name": "freezeAuthority",
+          "name": "freeze_authority",
           "type": {
-            "option": "publicKey"
+            "option": "pubkey"
           }
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 0
-      }
+      ]
     },
     {
-      "name": "initializeAccount",
+      "name": "initialize_account",
+      "discriminator": [
+        74,
+        115,
+        99,
+        93,
+        197,
+        69,
+        103,
+        7
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         },
         {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": false
+          "name": "owner"
         },
         {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
+          "name": "rent"
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 1
-      }
+      "args": []
     },
     {
-      "name": "initializeMultisig",
+      "name": "initialize_multisig",
+      "discriminator": [
+        220,
+        130,
+        117,
+        21,
+        27,
+        227,
+        78,
+        213
+      ],
       "accounts": [
         {
           "name": "multisig",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
+          "name": "rent"
         }
       ],
       "args": [
@@ -86,29 +99,32 @@
           "name": "m",
           "type": "u8"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 2
-      }
+      ]
     },
     {
       "name": "transfer",
+      "discriminator": [
+        163,
+        52,
+        200,
+        231,
+        140,
+        3,
+        69,
+        186
+      ],
       "accounts": [
         {
           "name": "source",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "destination",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -116,29 +132,31 @@
           "name": "amount",
           "type": "u64"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 3
-      }
+      ]
     },
     {
       "name": "approve",
+      "discriminator": [
+        69,
+        74,
+        217,
+        36,
+        115,
+        117,
+        97,
+        76
+      ],
       "accounts": [
         {
           "name": "source",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "delegate",
-          "isMut": false,
-          "isSigner": false
+          "name": "delegate"
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -146,87 +164,99 @@
           "name": "amount",
           "type": "u64"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 4
-      }
+      ]
     },
     {
       "name": "revoke",
+      "discriminator": [
+        170,
+        23,
+        31,
+        34,
+        133,
+        173,
+        93,
+        242
+      ],
       "accounts": [
         {
           "name": "source",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 5
-      }
+      "args": []
     },
     {
-      "name": "setAuthority",
+      "name": "set_authority",
+      "discriminator": [
+        133,
+        250,
+        37,
+        21,
+        110,
+        163,
+        26,
+        121
+      ],
       "accounts": [
         {
           "name": "owned",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         },
         {
           "name": "signer",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
         {
-          "name": "authorityType",
+          "name": "authority_type",
           "type": {
-            "defined": "AuthorityType"
+            "defined": {
+              "name": "AuthorityType"
+            }
           }
         },
         {
-          "name": "newAuthority",
+          "name": "new_authority",
           "type": {
-            "option": "publicKey"
+            "option": "pubkey"
           }
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 6
-      }
+      ]
     },
     {
-      "name": "mintTo",
+      "name": "mint_to",
+      "discriminator": [
+        241,
+        34,
+        48,
+        186,
+        37,
+        179,
+        123,
+        192
+      ],
       "accounts": [
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -234,29 +264,32 @@
           "name": "amount",
           "type": "u64"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 7
-      }
+      ]
     },
     {
       "name": "burn",
+      "discriminator": [
+        116,
+        110,
+        29,
+        56,
+        107,
+        219,
+        42,
+        93
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -264,109 +297,117 @@
           "name": "amount",
           "type": "u64"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 8
-      }
+      ]
     },
     {
-      "name": "closeAccount",
+      "name": "close_account",
+      "discriminator": [
+        125,
+        255,
+        149,
+        14,
+        110,
+        34,
+        72,
+        24
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "destination",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 9
-      }
+      "args": []
     },
     {
-      "name": "freezeAccount",
+      "name": "freeze_account",
+      "discriminator": [
+        253,
+        75,
+        82,
+        133,
+        167,
+        238,
+        43,
+        130
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 10
-      }
+      "args": []
     },
     {
-      "name": "thawAccount",
+      "name": "thaw_account",
+      "discriminator": [
+        115,
+        152,
+        79,
+        213,
+        213,
+        169,
+        184,
+        35
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 11
-      }
+      "args": []
     },
     {
-      "name": "transferChecked",
+      "name": "transfer_checked",
+      "discriminator": [
+        119,
+        250,
+        202,
+        24,
+        253,
+        135,
+        244,
+        121
+      ],
       "accounts": [
         {
           "name": "source",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         },
         {
           "name": "destination",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -378,34 +419,34 @@
           "name": "decimals",
           "type": "u8"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 12
-      }
+      ]
     },
     {
-      "name": "approveChecked",
+      "name": "approve_checked",
+      "discriminator": [
+        47,
+        197,
+        254,
+        42,
+        58,
+        201,
+        58,
+        109
+      ],
       "accounts": [
         {
           "name": "source",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         },
         {
-          "name": "delegate",
-          "isMut": false,
-          "isSigner": false
+          "name": "delegate"
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -417,29 +458,32 @@
           "name": "decimals",
           "type": "u8"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 13
-      }
+      ]
     },
     {
-      "name": "mintToChecked",
+      "name": "mint_to_checked",
+      "discriminator": [
+        229,
+        236,
+        36,
+        240,
+        118,
+        225,
+        45,
+        125
+      ],
       "accounts": [
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -451,29 +495,32 @@
           "name": "decimals",
           "type": "u8"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 14
-      }
+      ]
     },
     {
-      "name": "burnChecked",
+      "name": "burn_checked",
+      "discriminator": [
+        198,
+        121,
+        200,
+        102,
+        120,
+        208,
+        155,
+        178
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": [
@@ -485,94 +532,106 @@
           "name": "decimals",
           "type": "u8"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 15
-      }
+      ]
     },
     {
-      "name": "initializeAccount2",
+      "name": "initialize_account2",
+      "discriminator": [
+        8,
+        182,
+        149,
+        144,
+        185,
+        31,
+        209,
+        105
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         },
         {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
+          "name": "rent"
         }
       ],
       "args": [
         {
           "name": "owner",
-          "type": "publicKey"
+          "type": "pubkey"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 16
-      }
+      ]
     },
     {
-      "name": "syncNative",
+      "name": "sync_native",
+      "discriminator": [
+        155,
+        219,
+        36,
+        36,
+        239,
+        128,
+        21,
+        65
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 17
-      }
+      "args": []
     },
     {
-      "name": "initializeAccount3",
+      "name": "initialize_account3",
+      "discriminator": [
+        23,
+        142,
+        140,
+        135,
+        21,
+        160,
+        133,
+        64
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         }
       ],
       "args": [
         {
           "name": "owner",
-          "type": "publicKey"
+          "type": "pubkey"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 18
-      }
+      ]
     },
     {
-      "name": "initializeMultisig2",
+      "name": "initialize_multisig2",
+      "discriminator": [
+        81,
+        239,
+        73,
+        39,
+        27,
+        148,
+        2,
+        146
+      ],
       "accounts": [
         {
           "name": "multisig",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "name": "signer"
         }
       ],
       "args": [
@@ -580,19 +639,24 @@
           "name": "m",
           "type": "u8"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 19
-      }
+      ]
     },
     {
-      "name": "initializeMint2",
+      "name": "initialize_mint2",
+      "discriminator": [
+        95,
+        108,
+        198,
+        210,
+        72,
+        243,
+        143,
+        235
+      ],
       "accounts": [
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         }
       ],
       "args": [
@@ -601,58 +665,71 @@
           "type": "u8"
         },
         {
-          "name": "mintAuthority",
-          "type": "publicKey"
+          "name": "mint_authority",
+          "type": "pubkey"
         },
         {
-          "name": "freezeAuthority",
+          "name": "freeze_authority",
           "type": {
-            "option": "publicKey"
+            "option": "pubkey"
           }
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 20
-      }
+      ]
     },
     {
-      "name": "getAccountDataSize",
+      "name": "get_account_data_size",
+      "discriminator": [
+        16,
+        177,
+        210,
+        128,
+        21,
+        45,
+        111,
+        31
+      ],
       "accounts": [
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 21
-      }
+      "args": []
     },
     {
-      "name": "initializeImmutableOwner",
+      "name": "initialize_immutable_owner",
+      "discriminator": [
+        141,
+        50,
+        15,
+        44,
+        195,
+        247,
+        34,
+        60
+      ],
       "accounts": [
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "token_account",
+          "writable": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 22
-      }
+      "args": []
     },
     {
-      "name": "amountToUiAmount",
+      "name": "amount_to_ui_amount",
+      "discriminator": [
+        160,
+        145,
+        200,
+        98,
+        242,
+        156,
+        30,
+        90
+      ],
       "accounts": [
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         }
       ],
       "args": [
@@ -660,380 +737,401 @@
           "name": "amount",
           "type": "u64"
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 23
-      }
+      ]
     },
     {
-      "name": "uiAmountToAmount",
+      "name": "ui_amount_to_amount",
+      "discriminator": [
+        173,
+        243,
+        64,
+        4,
+        103,
+        31,
+        56,
+        52
+      ],
       "accounts": [
         {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
+          "name": "mint"
         }
       ],
       "args": [
         {
-          "name": "uiAmount",
+          "name": "ui_amount",
           "type": {
-            "defined": "&'astr"
+            "defined": {
+              "name": "&'astr"
+            }
           }
         }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 24
-      }
+      ]
     },
     {
-      "name": "initializeMintCloseAuthority",
+      "name": "initialize_mint_close_authority",
+      "discriminator": [
+        117,
+        167,
+        56,
+        158,
+        201,
+        160,
+        209,
+        109
+      ],
       "accounts": [
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         }
       ],
       "args": [
         {
-          "name": "closeAuthority",
+          "name": "close_authority",
           "type": {
-            "option": "publicKey"
+            "option": "pubkey"
           }
         }
+      ]
+    },
+    {
+      "name": "transfer_fee_extension",
+      "discriminator": [
+        132,
+        44,
+        205,
+        74,
+        4,
+        24,
+        175,
+        66
       ],
-      "discriminant": {
-        "type": "u8",
-        "value": 25
-      }
+      "accounts": [],
+      "args": []
     },
     {
-      "name": "transferFeeExtension",
+      "name": "confidential_transfer_extension",
+      "discriminator": [
+        233,
+        52,
+        214,
+        169,
+        129,
+        187,
+        5,
+        195
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 26
-      }
+      "args": []
     },
     {
-      "name": "confidentialTransferExtension",
+      "name": "default_account_state_extension",
+      "discriminator": [
+        131,
+        241,
+        230,
+        206,
+        21,
+        136,
+        171,
+        237
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 27
-      }
-    },
-    {
-      "name": "defaultAccountStateExtension",
-      "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 28
-      }
+      "args": []
     },
     {
       "name": "reallocate",
+      "discriminator": [
+        79,
+        177,
+        5,
+        90,
+        135,
+        125,
+        234,
+        85
+      ],
       "accounts": [
         {
           "name": "account",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program"
         },
         {
           "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 29
-      }
+      "args": []
     },
     {
-      "name": "memoTransferExtension",
+      "name": "memo_transfer_extension",
+      "discriminator": [
+        245,
+        101,
+        240,
+        237,
+        20,
+        206,
+        121,
+        196
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 30
-      }
+      "args": []
     },
     {
-      "name": "createNativeMint",
+      "name": "create_native_mint",
+      "discriminator": [
+        114,
+        254,
+        53,
+        96,
+        51,
+        248,
+        117,
+        109
+      ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "crateNativeMint",
-          "isMut": true,
-          "isSigner": false
+          "name": "crate_native_mint",
+          "writable": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program"
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 31
-      }
+      "args": []
     },
     {
-      "name": "initializeNonTransferableMint",
+      "name": "initialize_non_transferable_mint",
+      "discriminator": [
+        242,
+        68,
+        44,
+        126,
+        194,
+        231,
+        206,
+        200
+      ],
       "accounts": [
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 32
-      }
+      "args": []
     },
     {
-      "name": "interestBearingMintExtension",
+      "name": "interest_bearing_mint_extension",
+      "discriminator": [
+        223,
+        172,
+        18,
+        217,
+        59,
+        211,
+        47,
+        98
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 33
-      }
+      "args": []
     },
     {
-      "name": "cpiGuardExtension",
+      "name": "cpi_guard_extension",
+      "discriminator": [
+        101,
+        124,
+        187,
+        245,
+        161,
+        203,
+        219,
+        82
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 34
-      }
+      "args": []
     },
     {
-      "name": "initializePermanentDelegate",
+      "name": "initialize_permanent_delegate",
+      "discriminator": [
+        98,
+        200,
+        9,
+        70,
+        17,
+        203,
+        130,
+        60
+      ],
       "accounts": [
         {
           "name": "mint",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         }
       ],
       "args": [
         {
           "name": "delegate",
-          "type": "publicKey"
+          "type": "pubkey"
         }
+      ]
+    },
+    {
+      "name": "transfer_hook_extension",
+      "discriminator": [
+        7,
+        185,
+        133,
+        157,
+        165,
+        240,
+        214,
+        4
       ],
-      "discriminant": {
-        "type": "u8",
-        "value": 35
-      }
-    },
-    {
-      "name": "transferHookExtension",
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 36
-      }
+      "args": []
     },
     {
-      "name": "confidentialTransferFeeExtension",
+      "name": "confidential_transfer_fee_extension",
+      "discriminator": [
+        215,
+        84,
+        196,
+        244,
+        44,
+        48,
+        66,
+        56
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 37
-      }
+      "args": []
     },
     {
-      "name": "withdrawExcessLamports",
+      "name": "withdraw_excess_lamports",
+      "discriminator": [
+        221,
+        166,
+        235,
+        25,
+        123,
+        95,
+        232,
+        59
+      ],
       "accounts": [
         {
           "name": "source",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "destination",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 38
-      }
+      "args": []
     },
     {
-      "name": "metadataPointerExtension",
+      "name": "metadata_pointer_extension",
+      "discriminator": [
+        130,
+        92,
+        206,
+        92,
+        28,
+        241,
+        249,
+        71
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 39
-      }
+      "args": []
     },
     {
-      "name": "groupPointerExtension",
+      "name": "group_pointer_extension",
+      "discriminator": [
+        62,
+        165,
+        39,
+        172,
+        166,
+        224,
+        167,
+        179
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 40
-      }
+      "args": []
     },
     {
-      "name": "groupMemberPointerExtension",
+      "name": "group_member_pointer_extension",
+      "discriminator": [
+        113,
+        229,
+        99,
+        35,
+        48,
+        40,
+        56,
+        193
+      ],
       "accounts": [],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 41
-      }
+      "args": []
     }
   ],
   "accounts": [
     {
       "name": "Mint",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "mintAuthority",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "supply",
-            "type": "u64"
-          },
-          {
-            "name": "decimals",
-            "type": "u8"
-          },
-          {
-            "name": "isInitialized",
-            "type": "bool"
-          },
-          {
-            "name": "freezeAuthority",
-            "type": {
-              "option": "publicKey"
-            }
-          }
-        ]
-      }
+      "discriminator": [
+        80,
+        188,
+        245,
+        20,
+        95,
+        138,
+        57,
+        156
+      ]
     },
     {
       "name": "Account",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "mint",
-            "type": "publicKey"
-          },
-          {
-            "name": "owner",
-            "type": "publicKey"
-          },
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "delegate",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "state",
-            "type": {
-              "defined": "AccountState"
-            }
-          },
-          {
-            "name": "isNative",
-            "type": {
-              "option": "u64"
-            }
-          },
-          {
-            "name": "delegatedAmount",
-            "type": "u64"
-          },
-          {
-            "name": "closeAuthority",
-            "type": {
-              "option": "publicKey"
-            }
-          }
-        ]
-      }
+      "discriminator": [
+        113,
+        66,
+        224,
+        54,
+        188,
+        119,
+        240,
+        101
+      ]
     },
     {
       "name": "Multisig",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "m",
-            "type": "u8"
-          },
-          {
-            "name": "n",
-            "type": "u8"
-          },
-          {
-            "name": "isInitialized",
-            "type": "bool"
-          },
-          {
-            "name": "signers",
-            "type": {
-              "array": [
-                "publicKey",
-                11
-              ]
-            }
-          }
-        ]
-      }
+      "discriminator": [
+        224,
+        116,
+        121,
+        186,
+        68,
+        161,
+        79,
+        236
+      ]
     }
   ],
   "types": [
@@ -1058,7 +1156,6 @@
       "name": "AccountType",
       "type": {
         "kind": "enum",
-        "size": "u8",
         "variants": [
           {
             "name": "Uninitialized"
@@ -1131,10 +1228,12 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "ExtensionType",
+            "name": "extension_type",
             "type": {
               "vec": {
-                "defined": "ExtensionType"
+                "defined": {
+                  "name": "ExtensionType"
+                }
               }
             }
           }
@@ -1145,7 +1244,6 @@
       "name": "ExtensionTypeWithFields",
       "type": {
         "kind": "enum",
-        "size": "u16",
         "variants": [
           {
             "name": "Uninitialized"
@@ -1154,31 +1252,35 @@
             "name": "TransferFeeConfig",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "transferFeeConfigAuthority",
-                "type": "publicKey"
+                "name": "transfer_fee_config_authority",
+                "type": "pubkey"
               },
               {
-                "name": "withdrawWithheldAuthority",
-                "type": "publicKey"
+                "name": "withdraw_withheld_authority",
+                "type": "pubkey"
               },
               {
-                "name": "withheldAmount",
+                "name": "withheld_amount",
                 "type": "u64"
               },
               {
-                "name": "olderTransferFee",
+                "name": "older_transfer_fee",
                 "type": {
-                  "defined": "TransferFee"
+                  "defined": {
+                    "name": "TransferFee"
+                  }
                 }
               },
               {
-                "name": "newerTransferFee",
+                "name": "newer_transfer_fee",
                 "type": {
-                  "defined": "TransferFee"
+                  "defined": {
+                    "name": "TransferFee"
+                  }
                 }
               }
             ]
@@ -1187,11 +1289,11 @@
             "name": "TransferFeeAmount",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "withheldAmount",
+                "name": "withheld_amount",
                 "type": "u64"
               }
             ]
@@ -1200,12 +1302,12 @@
             "name": "MintCloseAuthority",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "closeAuthority",
-                "type": "publicKey"
+                "name": "close_authority",
+                "type": "pubkey"
               }
             ]
           },
@@ -1213,20 +1315,20 @@
             "name": "ConfidentialTransferMint",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "authority",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
-                "name": "autoApproveNewAccounts",
+                "name": "auto_approve_new_accounts",
                 "type": "bool"
               },
               {
-                "name": "auditorElgamalPubkey",
-                "type": "publicKey"
+                "name": "auditor_elgamal_pubkey",
+                "type": "pubkey"
               }
             ]
           },
@@ -1234,7 +1336,7 @@
             "name": "ConfidentialTransferAccount",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
@@ -1243,7 +1345,7 @@
               },
               {
                 "name": "elgamal_pubkey",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
                 "name": "pending_balance_lo",
@@ -1311,13 +1413,15 @@
             "name": "DefaultAccountState",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "defaultAccountState",
+                "name": "default_account_state",
                 "type": {
-                  "defined": "AccountState"
+                  "defined": {
+                    "name": "AccountState"
+                  }
                 }
               }
             ]
@@ -1326,7 +1430,7 @@
             "name": "ImmutableOwner",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               }
             ]
@@ -1335,11 +1439,11 @@
             "name": "MemoTransfer",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "requireIncomingTransferMemos",
+                "name": "require_incoming_transfer_memos",
                 "type": "bool"
               }
             ]
@@ -1348,7 +1452,7 @@
             "name": "NonTransferable",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               }
             ]
@@ -1357,27 +1461,27 @@
             "name": "InterestBearingConfig",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "rateAuthority",
-                "type": "publicKey"
+                "name": "rate_authority",
+                "type": "pubkey"
               },
               {
-                "name": "initializationTimestamp",
+                "name": "initialization_timestamp",
                 "type": "i64"
               },
               {
-                "name": "preUpdateAverageRate",
+                "name": "pre_update_average_rate",
                 "type": "i16"
               },
               {
-                "name": "lastUpdateTimestamp",
+                "name": "last_update_timestamp",
                 "type": "i64"
               },
               {
-                "name": "currentRate",
+                "name": "current_rate",
                 "type": "i16"
               }
             ]
@@ -1386,11 +1490,11 @@
             "name": "CpiGuard",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "lockCpi",
+                "name": "lock_cpi",
                 "type": "bool"
               }
             ]
@@ -1399,12 +1503,12 @@
             "name": "PermanentDelegate",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "delegate",
-                "type": "publicKey"
+                "type": "pubkey"
               }
             ]
           },
@@ -1412,7 +1516,7 @@
             "name": "NonTransferableAccount",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               }
             ]
@@ -1421,16 +1525,16 @@
             "name": "TransferHook",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "authority",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
-                "name": "programId",
-                "type": "publicKey"
+                "name": "program_id",
+                "type": "pubkey"
               }
             ]
           },
@@ -1438,7 +1542,7 @@
             "name": "TransferHookAccount",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
@@ -1451,23 +1555,23 @@
             "name": "ConfidentialTransferFeeConfig",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "authority",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
-                "name": "withdrawWithheldAuthorityElgamalPubkey",
-                "type": "publicKey"
+                "name": "withdraw_withheld_authority_elgamal_pubkey",
+                "type": "pubkey"
               },
               {
-                "name": "harvestToMintEnabled",
+                "name": "harvest_to_mint_enabled",
                 "type": "bool"
               },
               {
-                "name": "withheldAmount",
+                "name": "withheld_amount",
                 "type": {
                   "array": [
                     "u8",
@@ -1481,11 +1585,11 @@
             "name": "ConfidentialTransferFeeAmount",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "withheldAmount",
+                "name": "withheld_amount",
                 "type": {
                   "array": [
                     "u8",
@@ -1499,16 +1603,16 @@
             "name": "MetadataPointer",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "authority",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
-                "name": "metadataAddress",
-                "type": "publicKey"
+                "name": "metadata_address",
+                "type": "pubkey"
               }
             ]
           },
@@ -1516,16 +1620,16 @@
             "name": "GroupPointer",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "authority",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
-                "name": "groupAddress",
-                "type": "publicKey"
+                "name": "group_address",
+                "type": "pubkey"
               }
             ]
           },
@@ -1533,23 +1637,23 @@
             "name": "TokenGroup",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
-                "name": "updateAuthority",
-                "type": "publicKey"
+                "name": "update_authority",
+                "type": "pubkey"
               },
               {
                 "name": "mint",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
                 "name": "size",
                 "type": "u32"
               },
               {
-                "name": "maxSize",
+                "name": "max_size",
                 "type": "u32"
               }
             ]
@@ -1558,16 +1662,16 @@
             "name": "GroupMemberPointer",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "authority",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
-                "name": "memberAddress",
-                "type": "publicKey"
+                "name": "member_address",
+                "type": "pubkey"
               }
             ]
           },
@@ -1575,19 +1679,19 @@
             "name": "TokenGroupMember",
             "fields": [
               {
-                "name": "extensionLength",
+                "name": "extension_length",
                 "type": "u16"
               },
               {
                 "name": "mint",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
                 "name": "group",
-                "type": "publicKey"
+                "type": "pubkey"
               },
               {
-                "name": "memberNumber",
+                "name": "member_number",
                 "type": "u32"
               }
             ]
@@ -1685,11 +1789,11 @@
             "type": "u64"
           },
           {
-            "name": "maximumFee",
+            "name": "maximum_fee",
             "type": "u64"
           },
           {
-            "name": "transferFeeBasisPoints",
+            "name": "transfer_fee_basis_points",
             "type": "u16"
           }
         ]
@@ -1701,7 +1805,7 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "BasisPoints",
+            "name": "basis_points",
             "type": {
               "array": [
                 "u8",
@@ -1711,12 +1815,117 @@
           }
         ]
       }
+    },
+    {
+      "name": "Mint",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint_authority",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "supply",
+            "type": "u64"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          },
+          {
+            "name": "is_initialized",
+            "type": "bool"
+          },
+          {
+            "name": "freeze_authority",
+            "type": {
+              "option": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Account",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "delegate",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "AccountState"
+              }
+            }
+          },
+          {
+            "name": "is_native",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "delegated_amount",
+            "type": "u64"
+          },
+          {
+            "name": "close_authority",
+            "type": {
+              "option": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Multisig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "m",
+            "type": "u8"
+          },
+          {
+            "name": "n",
+            "type": "u8"
+          },
+          {
+            "name": "is_initialized",
+            "type": "bool"
+          },
+          {
+            "name": "signers",
+            "type": {
+              "array": [
+                "pubkey",
+                11
+              ]
+            }
+          }
+        ]
+      }
     }
-  ],
-  "metadata": {
-    "origin": "shank",
-    "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
-    "binaryVersion": "0.9.1",
-    "libVersion": "0.9.1"
-  }
+  ]
 }
